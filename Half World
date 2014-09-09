@@ -4,6 +4,12 @@ files?
 
 Should we just copy and paste?
 
+  /**
+  * Compliation takes place on your own machine. It's exactly like in CSC 2100 where you compile using command line.
+  * 
+  * We will eventually move to a makefile system for easier compilation. I'll introduce you to it. :)
+  **/
+
 
 ***************************
 
