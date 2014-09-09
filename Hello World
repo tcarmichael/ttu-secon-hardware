@@ -7,3 +7,9 @@ my first program
 *****************************
 Playing Etch a Sketch
   Is there a way to move from letter to letter without leaving a mark?
+  
+  /**
+  * Unfortunately, no. Sorry!
+  * 
+  * We may be able to write the letter small enough so that it won't be too noticeable though.
+  **/
