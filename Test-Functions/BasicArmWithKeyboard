@@ -1,0 +1,195 @@
+char foo;
+#include <Servo.h>
+#include <math.h>
+
+//#define DEBUG
+
+//comment to disable the Force Sensitive Resister on the gripper
+//#define FSRG
+
+//FSRG pin Must be analog!!
+#define FSRG_pin A1
+
+//Select which arm by uncommenting the corresponding line
+//#define AL5A
+#define AL5B
+//#define AL5D
+
+//uncomment for digital servos in the Shoulder and Elbow
+//that use a range of 900ms to 2100ms
+//#define DIGITAL_RANGE
+
+#ifdef AL5A
+const float A = 3.75;
+const float B = 4.25;
+#elif defined AL5B
+const float A = 4.75;
+const float B = 5.00;
+#elif defined AL5D
+const float A = 5.75;
+const float B = 7.375;
+#endif
+
+
+
+//Arm Servo pins
+#define Base_pin 2
+#define Shoulder_pin 3
+#define Elbow_pin 4
+#define Wrist_pin 5
+#define Gripper_pin 7
+#define WristR_pin 6
+
+
+//Radians to Degrees constant
+const float rtod = 57.295779;
+
+//Arm Speed Variables
+float Speed = 0.1;
+int sps = 1;
+
+//Servo Objects
+Servo Elb;
+Servo Shldr;
+Servo Wrist;
+Servo Base;
+Servo WristR;
+Servo Gripper;
+
+//Arm Current Pos
+float X = 4;
+float Y = 4;
+int Z = 90;
+int G = 90;
+int WR = 90;
+float WA = 90;
+
+//Arm temp pos
+float tmpx = 3.90;
+float tmpy = 2.80;
+int tmpz = 90;
+int tmpg = 150;
+float tmpwa = 75;
+int tmpwr = -5;
+
+int incomingByte=0;
+
+boolean mode = true;
+
+void setup()
+{
+  Serial.begin(115200);
+
+Base.attach(Base_pin);
+Shldr.attach(Shoulder_pin);
+Elb.attach(Elbow_pin);
+Wrist.attach(Wrist_pin);
+Gripper.attach(Gripper_pin);
+WristR.attach(WristR_pin);
+// Out Position, down position, base rotation, wrist rotation, not sure, 
+}
+
+
+
+
+
+void loop()
+{
+
+  // check that there's something in the serial buffer
+  if (Serial.available() > 0) {
+    // read the byte and store it in our variable 
+    // the byte sent is actually an ascii value
+    incomingByte = Serial.read();
+    // note the upper casing of each letter!
+    // each letter turns a motor different way.
+    if (incomingByte == 'Q') {
+    tmpx=tmpx-.1;
+    } 
+    if (incomingByte == 'W') {
+     tmpx=tmpx+.1; 
+    }
+    if (incomingByte == 'E') {
+     tmpy=tmpy-.1;
+    } 
+    if (incomingByte == 'R') {
+    tmpy=tmpy+.1;
+    }
+    if (incomingByte == 'A') {
+    tmpz=tmpz-5;
+    } 
+    if (incomingByte == 'S') {
+    tmpz=tmpz+5; 
+    }
+    if (incomingByte == 'D') {
+    tmpg=tmpg-5;
+    } 
+    if (incomingByte == 'F') {
+    tmpg=tmpg+5; 
+    }
+    if (incomingByte == 'Z') {
+    tmpwa=tmpwa-5;
+    } 
+    if (incomingByte == 'X') {
+    tmpwa=tmpwa+5; 
+    }
+    if (incomingByte == 'C') {
+    tmpwr=tmpwr-5;
+    } 
+    if (incomingByte == 'V') {
+    tmpwr=tmpwr+5; 
+    }
+   
+   Serial.println(tmpx);
+   Serial.println(tmpy);
+   Serial.println(tmpz);
+   Serial.println(tmpg);
+   Serial.println(tmpwa);
+   Serial.println(tmpwr);
+   Serial.println("New");
+  }  
+  Arm(tmpx,tmpy,tmpz,tmpg,tmpwr,tmpwa);
+}
+
+
+
+
+int Arm(float x, float y, float z, int g, float wa, int wr) //Here's all the Inverse Kinematics to control the arm
+{
+  float M = sqrt((y*y)+(x*x));
+  if(M <= 0)
+    return 1;
+  float A1 = atan(y/x);
+  if(x <= 0)
+    return 1;
+  float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
+  float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
+  float Shoulder = A1 + A2;
+  Elbow = Elbow * rtod;
+  Shoulder = Shoulder * rtod;
+  if((int)Elbow <= 0 || (int)Shoulder <= 0)
+    return 1;
+  float Wris = abs(wa - Elbow - Shoulder) - 90;
+#ifdef DIGITAL_RANGE
+  Elb.writeMicroseconds(map(180 - Elbow, 0, 180, 900, 2100  ));
+  Shldr.writeMicroseconds(map(Shoulder, 0, 180, 900, 2100));
+#else
+  Elb.write(180 - Elbow);
+  Shldr.write(Shoulder);
+#endif
+  Wrist.write(180 - Wris);
+  Base.write(z);
+  WristR.write(wr);
+  #ifndef FSRG
+  Gripper.write(g);
+  #endif
+  Y = tmpy;
+  X = tmpx;
+  Z = tmpz;
+  WA = tmpwa;
+  #ifndef FSRG
+  G = tmpg;
+  #endif
+  WR = tmpwr;
+  return 0; 
+}
