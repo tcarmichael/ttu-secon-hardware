@@ -7,10 +7,10 @@
 
 #define Kp 0.01   // experiment to determine this, start by something small that just makes your bot follow the line at a slow speed
 #define Kd 0.1 // experiment to determine this, slowly increase the speeds and adjust this value. ( Note: Kp < Kd) 
-#define rightMaxSpeed 40 // max speed of the robot
-#define leftMaxSpeed 40 // max speed of the robot
-#define rightBaseSpeed 15 // this is the speed at which the motors should spin when the robot is perfectly on the line
-#define leftBaseSpeed 15  // this is the speed at which the motors should spin when the robot is perfectly on the line
+#define rightMaxSpeed 45 // max speed of the robot
+#define leftMaxSpeed 45 // max speed of the robot
+#define rightBaseSpeed 20 // this is the speed at which the motors should spin when the robot is perfectly on the line
+#define leftBaseSpeed 20  // this is the speed at which the motors should spin when the robot is perfectly on the line
 #define NUM_SENSORS  5     // number of sensors used
 #define TIMEOUT       2500  // waits for 2500 us for sensor outputs to go low
 
