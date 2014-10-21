@@ -51,7 +51,7 @@ void mecanumControl::mecRun(float magnitude, float angle, float rotation) {
     
   // send the voltages to the motor driver
   // to motor1
-  if(VN1 = 0){
+  if(VN1 == 0){
 	//motor1->setSpeed(abs(VN1));
     motor1->run(RELEASE);
   }
@@ -65,7 +65,7 @@ void mecanumControl::mecRun(float magnitude, float angle, float rotation) {
   }
   
   // to motor2
-  if(VN2 = 0){
+  if(VN2 == 0){
 	//motor2->setSpeed(abs(VN2));
     motor2->run(RELEASE);
   }
@@ -79,7 +79,7 @@ void mecanumControl::mecRun(float magnitude, float angle, float rotation) {
   }
 	
   // to motor3
-  if(VN3 = 0){
+  if(VN3 == 0){
 	//motor3->setSpeed(abs(VN3));
     motor3->run(RELEASE);
   }
@@ -93,7 +93,7 @@ void mecanumControl::mecRun(float magnitude, float angle, float rotation) {
   }
   
   // to motor4
-  if(VN4 = 0){
+  if(VN4 == 0){
 	//motor4->setSpeed(abs(VN4));
     motor4->run(RELEASE);
   }
