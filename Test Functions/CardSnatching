@@ -19,7 +19,7 @@ void setup() {
   
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
   int pulselen;
-  for (int servoIndex = 0; servoIndex < NUM_SERVOS; servoIndex++)
+  for (int servoIndex = 5; servoIndex >= 0; servoIndex--)
   {
     pulselen = map(starting2[servoIndex],0,180,SERVOMIN,SERVOMAX);
     pwm.setPWM(servoIndex,0,pulselen);
@@ -29,19 +29,26 @@ void setup() {
   for (int servoIndex = 0; servoIndex < NUM_SERVOS; servoIndex++)
   {
     pulselen = map(starting[servoIndex],0,180,SERVOMIN,SERVOMAX);
+    if (servoIndex == 1)
+    {
+      pulselen = map(110,0,180,SERVOMIN,SERVOMAX);
+      pwm.setPWM(servoIndex,0,pulselen);
+      delay(1000);
+    }
+    pulselen = map(starting[servoIndex],0,180,SERVOMIN,SERVOMAX);
     pwm.setPWM(servoIndex,0,pulselen);
     delay(1000);
   }
   pulselen = map(150,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(2,0,pulselen);
-  delay(1000);
+  delay(500);
   pulselen = map(110,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(2,0,pulselen);
-  delay(1000);
+  delay(500);
   pulselen = map(90,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(3,0,pulselen);  
-  delay(1000);
-  pulselen = map(80,0,180,SERVOMIN,SERVOMAX);
+  delay(500);
+  pulselen = map(70,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(3,0,pulselen);
   
 }
