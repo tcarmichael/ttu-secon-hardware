@@ -41,6 +41,8 @@ void setup() {
 		Serial.print(qtrrc.calibratedMaximumOn[i]);
 		Serial.println();
 	}
+	
+	mecanum.begin();
 } 
 
 int lastError = 0;
