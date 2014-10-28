@@ -9,8 +9,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // our servo # counter
 uint8_t servonum = 0;
 const int NUM_SERVOS = 6; //for first arm
-int starting[NUM_SERVOS] = {180,85,110,118,90,90};
-int starting2[NUM_SERVOS] = {0,90,112,110,90,90};
+int starting[NUM_SERVOS] = {180,80,108,118,90,90};
+int starting2[NUM_SERVOS] = {10,80,113,118,14,60};
 
 void setup() {
 
@@ -20,7 +20,7 @@ void setup() {
   
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
   int pulselen;
-  for (int servoIndex = 0; servoIndex < NUM_SERVOS; servoIndex++)
+  for (int servoIndex = 5; servoIndex >= 0; servoIndex--)
   {
     pulselen = map(starting[servoIndex],0,180,SERVOMIN,SERVOMAX);
     pwm.setPWM(servoIndex,0,pulselen);
@@ -52,7 +52,7 @@ void makeSpace()
 {
   // new letter
   delay(3000);
-  int pulselen = map(90,0,180,SERVOMIN,SERVOMAX);
+  int pulselen = map(80,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(5,0,pulselen); // release knob
   delay(500);
   pulselen = map(175,0,180,SERVOMIN,SERVOMAX);
@@ -64,7 +64,7 @@ void makeSpace()
   pulselen = map(14,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(4,0,pulselen); //scroll over
   delay(500);
-  pulselen = map(90,0,180,SERVOMIN,SERVOMAX);
+  pulselen = map(80,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(5,0,pulselen); // release knob
   delay(500);
   pulselen = map(180,0,180,SERVOMIN,SERVOMAX);
@@ -114,18 +114,24 @@ void letterE()
 void down()
 {
   // vertical line
-  delay(3000);
-  int pulselen = map(90,0,180,SERVOMIN,SERVOMAX);
+  delay(1000);
+  int pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(15,0,pulselen); // release knob
   delay(500);
   pulselen = map(175,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(14,0,pulselen); // rotate wrist
   delay(500);
-  pulselen = map(98,0,180,SERVOMIN,SERVOMAX);
+  pulselen = map(80,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(15,0,pulselen); // grab knob
   delay(500);
-  pulselen = map(14,0,180,SERVOMIN,SERVOMAX);
+  pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(14,0,pulselen); //scroll over
+  delay(500);
+  pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(15,0,pulselen); // release knob
+  delay(500);
+  pulselen = map(14,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(14,0,pulselen); // rotate wrist
   delay(500);
 }
 
