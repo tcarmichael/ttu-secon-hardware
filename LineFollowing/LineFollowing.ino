@@ -5,11 +5,11 @@
 #include <QTRSensors.h>
 #include <Adafruit_MotorShield.h>
 
-const int followerOffset = 3500;
+const int FOLLOWER_OFFSET = 3500;
 
 // PID constants
-const double Kp = 1.0f / followerOffset; // experiment to determine this, start by something small that just makes your bot follow the line at a slow speed
-const double Kd = 0.001f; // experiment to determine this, slowly increase the speeds and adjust this value. ( Note: Kp < Kd)
+const double Kp = 1.0f / FOLLOWER_OFFSET; // experiment to determine this, start by something small that just makes your bot follow the line at a slow speed
+const double Kd = 0.0005f; // experiment to determine this, slowly increase the speeds and adjust this value. ( Note: Kp < Kd)
 
 // Line follower connections
 const int NUM_SENSORS = 8;     // number of sensors used
@@ -52,25 +52,29 @@ void loop() {
 
 	// Calculate the error
 	// Positive error is to the left; negative error is to the right
-	int error = position - followerOffset;
+	int error = position - FOLLOWER_OFFSET;
 
 	// Convert the error into a motor speed
-	double motorSpeed = Kp * error + Kd * (error - lastError);
+	double rotation = Kp * error + Kd * (error - lastError);
 
 	lastError = error;
 
 	// Bounds-checking
-	motorSpeed = (motorSpeed > 1) ? 1 : motorSpeed;
-	motorSpeed = (motorSpeed < -1) ? -1 : motorSpeed;
+	rotation = (rotation > 1) ? 1 : rotation;
+	rotation = (rotation < -1) ? -1 : rotation;
 	
 	// Send the speed
-	mecanum.mecRun(0.75, 0, motorSpeed);
-
+	if (error == -FOLLOWER_OFFSET || error == FOLLOWER_OFFSET) {
+		mecanum.mecRun(0, 0, rotation);
+	} else {
+		mecanum.mecRun(0.75, 0, rotation);
+	}
+	
 	// Display the results
 	Serial.print(position);
 	Serial.print(' ');
 	Serial.print(error);
 	Serial.print(' ');
-	Serial.print(motorSpeed);
+	Serial.print(rotation);
 	Serial.println();
 }
