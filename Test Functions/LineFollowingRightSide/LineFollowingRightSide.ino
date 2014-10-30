@@ -64,13 +64,13 @@ void loop() {
 	// Bounds-checking
 	rotation = (rotation > 1) ? 1 : rotation;
 	rotation = (rotation < -1) ? -1 : rotation;
+
+	double speed = 0.75 * (1.0-abs(error)/((double) FOLLOWER_OFFSET));
+	speed = (speed > 1) ? 1 : speed;
+	speed = (speed < 0) ? 0 : speed;
 	
 	// Send the speed
-	if (error == -FOLLOWER_OFFSET || error == FOLLOWER_OFFSET) {
-		mecanum.mecRun(0, PI_4*2, rotation);
-	} else {
-		mecanum.mecRun(0.75, PI_4*2, rotation);
-	}
+	mecanum.mecRun(speed, PI_4*2, rotation);
 	
 	// Display the results
 	Serial.print(position);
@@ -78,5 +78,7 @@ void loop() {
 	Serial.print(error);
 	Serial.print(' ');
 	Serial.print(rotation);
+	Serial.print(' ');
+	Serial.print(speed);
 	Serial.println();
 }
