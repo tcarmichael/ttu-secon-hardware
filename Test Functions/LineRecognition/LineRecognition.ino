@@ -28,11 +28,11 @@
 // last seen by sensor 5 before being lost.
 
 
-#define NUM_SENSORS   5     // number of sensors used
+#define NUM_SENSORS   8     // number of sensors used
 #define TIMEOUT       2500  // waits for 2500 microseconds for sensor outputs to go low
 
 // sensors 0 through 7 are connected to digital pins 3 through 10, respectively
-QTRSensorsRC qtrrc((unsigned char[]) {12, 11, 13, 3, 2},
+QTRSensorsRC qtrrc((unsigned char[]) {38, 40, 42, 44, 46, 48, 50, 52},
   NUM_SENSORS, TIMEOUT); 
 unsigned int sensorValues[NUM_SENSORS];
 
@@ -71,7 +71,7 @@ void loop()
   // read calibrated sensor values and obtain a measure of the line position from 0 to 5000
   // To get raw sensor values, call:
   //  qtrrc.read(sensorValues); instead of unsigned int position = qtrrc.readLine(sensorValues);
-  unsigned int position = qtrrc.readLine(sensorValues);
+  unsigned int position = qtrrc.readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
   // print the sensor values as numbers from 0 to 1000, where 0 means maximum reflectance and
   // 1000 means minimum reflectance, followed by the line position
