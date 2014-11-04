@@ -16,6 +16,20 @@ NewClassReplaceThisWhenItIsWritten lineFollowerControl;
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
 
+bool allWhite(unsigned int[] sensor) {
+
+	const int NUM_SENSORS = 8;
+	const int THRESHOLD = 200;
+	
+	for (int i = 0; i < NUM_SENSORS; i++) {
+		if (sensor[i] > THRESHOLD) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
 void setup() {
 	Serial.begin(9600);
 	Serial.println("Starting calibration");
