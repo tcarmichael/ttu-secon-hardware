@@ -1,6 +1,4 @@
-ttu-secon-hardware
+Arm Code
 ==================
 
-The code repository for the first-place SECON Hardware team
-
-This section should be used to contain all of the code related to the arms
+This section should be used to contain all of the code related to the arms. Additionally sub folders have been created for each individual game.
