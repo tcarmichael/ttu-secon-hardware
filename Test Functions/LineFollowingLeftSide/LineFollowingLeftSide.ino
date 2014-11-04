@@ -14,7 +14,7 @@ const double Kd = 0.0005f; // experiment to determine this, slowly increase the 
 // Line follower connections
 const int NUM_SENSORS = 8;     // number of sensors used
 const int EMITTER_PIN = 8;     // Line-following sensor emitter
-unsigned char SENSOR_PINS[] = {52, 50, 48, 46, 44, 42, 40, 38};
+unsigned char SENSOR_PINS[] = {38, 40, 42, 44, 46, 48, 50, 52};
 const unsigned int TIMEOUT = 2000;
 
 QTRSensorsRC qtrrc(SENSOR_PINS, NUM_SENSORS, TIMEOUT);
@@ -64,13 +64,13 @@ void loop() {
 	// Bounds-checking
 	rotation = (rotation > 1) ? 1 : rotation;
 	rotation = (rotation < -1) ? -1 : rotation;
+
+	double speed = 0.75 * (1.0-abs(error)/((double) FOLLOWER_OFFSET));
+	speed = (speed > 1) ? 1 : speed;
+	speed = (speed < 0) ? 0 : speed;
 	
 	// Send the speed
-	if (error == -FOLLOWER_OFFSET || error == FOLLOWER_OFFSET) {
-		mecanum.mecRun(0, PI_4*6, rotation);
-	} else {
-		mecanum.mecRun(0.5, PI_4*6, rotation);
-	}
+	mecanum.mecRun(speed, PI_4*2, rotation);
 	
 	// Display the results
 	Serial.print(position);
@@ -78,5 +78,7 @@ void loop() {
 	Serial.print(error);
 	Serial.print(' ');
 	Serial.print(rotation);
+	Serial.print(' ');
+	Serial.print(position);
 	Serial.println();
 }
