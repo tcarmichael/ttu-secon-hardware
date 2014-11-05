@@ -13,8 +13,8 @@ const double Kd = 0.0005f; // experiment to determine this, slowly increase the 
 
 // Line follower connections
 const int NUM_SENSORS = 8;     // number of sensors used
-const int EMITTER_PIN = 8;     // Line-following sensor emitter
-unsigned char SENSOR_PINS[] = {38, 40, 42, 44, 46, 48, 50, 52};
+const int EMITTER_PIN = 31;     // Line-following sensor emitter
+unsigned char SENSOR_PINS[] = {39,38,37,36,35,34,33,32};
 const unsigned int TIMEOUT = 2000;
 
 QTRSensorsRC qtrrc(SENSOR_PINS, NUM_SENSORS, TIMEOUT);
