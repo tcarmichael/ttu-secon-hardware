@@ -5,6 +5,8 @@
 #include <QTRSensors.h>
 #include <Adafruit_MotorShield.h>
 
+#include "LineFollowControl.h"
+
 const int FOLLOWER_OFFSET = 3500;
 
 // PID constants
@@ -13,7 +15,7 @@ const double Kd = 0.0005f; // experiment to determine this, slowly increase the 
 
 const int NUM_SENSORS = 8;
 
-NewClassReplaceThisWhenItIsWritten lineFollowerControl;
+LineFollowControl lineFollowerControl;
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
@@ -41,11 +43,6 @@ void setup() {
 
 	// Calibrate the line-following sensor
 	delay(500);
-
-	for (int i = 0; i < 400; i++) {
-		lineFollowerControl.getFrontSensor().calibrate();
-		lineFollowerControl.getLeftSensor().calibrate();
-	}
 	
 	mecanum.begin();
 	
@@ -58,7 +55,7 @@ void followLine() {
 	
 	do {
 		// Read the line follower
-		int position = lineFollowerControl.getSensor().readLine(sensors, QTR_EMITTERS_ON, 1);
+		int position = lineFollowerControl.getCurrentSensor().readLine(sensors, QTR_EMITTERS_ON, 1);
 
 		// Calculate the error
 		// Positive error is to the left; negative error is to the right
@@ -82,4 +79,8 @@ void followLine() {
 		mecanum.mecRun(speed, 0, rotation);
 	} while (!allWhite(lineFollowerControl.getLeftSensor()));
 	
+}
+
+void loop() {
+	// Empty
 }
