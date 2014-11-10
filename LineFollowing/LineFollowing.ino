@@ -14,10 +14,10 @@ const double Kd = 0.0005f; // experiment to determine this, slowly increase the 
 // Line follower connections
 const int NUM_SENSORS = 8;     // number of sensors used
 const int EMITTER_PIN = 40;     // Line-following sensor emitter
-unsigned char SENSOR_PINS[] = {22, 24, 26, 28, 30, 32, 34, 36};
+unsigned char SENSOR_PINS[] = {48,47,46,45,44,43,42,41};
 const unsigned int TIMEOUT = 2000;
 
-QTRSensorsRC qtrrc(SENSOR_PINS, NUM_SENSORS, TIMEOUT);
+QTRSensorsRC qtrrc(SENSOR_PINS, NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
@@ -30,7 +30,7 @@ void setup() {
 	delay(500);
 
 	for (int i = 0; i < 400; i++) {
-		qtrrc.calibrate();
+		qtrrc.calibrate(QTR_EMITTERS_ON);
 	}
 
 	// Print the calibration minimum and maximum values measured when emitters were on
@@ -69,7 +69,7 @@ void loop() {
 	if (error == -FOLLOWER_OFFSET || error == FOLLOWER_OFFSET) {
 		mecanum.mecRun(0, 0, rotation);
 	} else {
-		mecanum.mecRun(0.75, 0, rotation);
+		mecanum.mecRun(0.6, 0, rotation);
 	}
 	
 	// Display the results
