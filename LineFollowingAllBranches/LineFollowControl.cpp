@@ -4,7 +4,9 @@
 
 #include "LineFollowControl.h"
 
-LineFollowControl::LineFollowControl() {
+LineFollowControl::LineFollowControl(Mecanum mecanum) {
+
+	mecanumControl = mecanum;
 
 	const int NUM_SENSORS = 8;
 	const int TIMEOUT = 2000;
@@ -77,22 +79,22 @@ void LineFollowControl::setSide(int side) {
 	}
 }
 
-void LineFollowControl::followUntilWhite(QTRSensorsRC follow, Mecanum mecanum) {
+void LineFollowControl::followUntilWhite() {
 	int lastError = 0;
 
 	do {
-		lastError = update(follow, mecanum, lastError);
-	} while (!allWhite(follow));
+		lastError = update(getCurrentSensor(), lastError);
+	} while (!allWhite(getCurrentSensor()));
 }
 
-void LineFollowControl::followUntilLine(QTRSensorsRC follow, Mecanum mecanum, QTRSensorsRC wait) {
+void LineFollowControl::followUntilLine(QTRSensorsRC wait) {
 	const int NUM_SENSORS = 8;
 	unsigned int sensors[NUM_SENSORS];
 	int lastError = 0;
 	int waitPosition = 0;
 
 	do {
-		lastError = update(follow, mecanum, lastError);
+		lastError = update(getCurrentSensor(), lastError);
 
 		waitPosition = wait.readLine(sensors, QTR_EMITTERS_ON, 1);
 	} while (waitPosition > 50 || waitPosition < -50);
@@ -111,10 +113,8 @@ QTRSensorsRC LineFollowControl::getRightSensor() {
 QTRSensorsRC LineFollowControl::getLeftSensor() {
 	return arrays[LEFT];
 }
-
 QTRSensorsRC LineFollowControl::getBackSensor() {
 	return arrays[BACK];
-
 }
 
 double LineFollowControl::getCurrentAngle() {
@@ -139,7 +139,7 @@ bool LineFollowControl::allWhite(QTRSensorsRC sensor) {
 	return true;
 }
 
-int LineFollowControl::update(QTRSensorsRC array, Mecanum mecanum, int lastError) {
+int LineFollowControl::update(QTRSensorsRC array, int lastError) {
 
 	const int NUM_SENSORS = 8;
 
@@ -170,7 +170,7 @@ int LineFollowControl::update(QTRSensorsRC array, Mecanum mecanum, int lastError
 	speed = (speed < 0) ? 0 : speed;
 
 	// Send the speed
-	mecanum.mecRun(speed, 0, rotation);
+	mecanumControl.mecRun(speed, 0, rotation);
 
 	// Output the values
 	Serial.print("Error: ");

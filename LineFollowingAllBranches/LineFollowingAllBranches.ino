@@ -1,15 +1,13 @@
 #include "LineFollowControl.h"
-#include <Mecanum.h>
-
-#include <Wire.h>
-
-#include <QTRSensors.h>
-#include <Adafruit_MotorShield.h>
-
-LineFollowControl lineFollowerControl;
+#include "Mecanum.h"
+#include "Wire.h"
+#include "QTRSensors.h"
+#include "Adafruit_MotorShield.h"
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
+
+LineFollowControl lineFollowerControl(mecanum);
 
 void setup() {
 	Serial.begin(9600);
@@ -21,7 +19,6 @@ void setup() {
 	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
-	mecanum.begin();
 	
 	// Begin line following
 	Serial.println("Starting line following");
@@ -32,7 +29,8 @@ void followLine() {
 	// Follow the front line sensor until it detects all white
 	Serial.println("Following the front line sensor");
 	delay(1000);
-	lineFollowerControl.followUntilWhite(lineFollowerControl.getFrontSensor(), mecanum);
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	lineFollowerControl.followUntilWhite();
 }
 
 void loop() {

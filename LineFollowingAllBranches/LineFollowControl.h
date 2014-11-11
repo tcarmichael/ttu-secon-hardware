@@ -16,7 +16,14 @@ class LineFollowControl
 {
 
 public:
-	LineFollowControl();
+	// Constant data members
+	static const int FRONT = 0;
+	static const int RIGHT = 1;
+	static const int LEFT = 2;
+	static const int BACK = 3;
+
+	// Functions
+	LineFollowControl(Mecanum);
 
 	void calibrate();
 
@@ -30,25 +37,22 @@ public:
 
 	double getCurrentAngle();
 
-	void followUntilWhite(QTRSensorsRC follow, Mecanum mecanum);
-	void followUntilLine(QTRSensorsRC follow, Mecanum mecanum, QTRSensorsRC wait);
+	void followUntilWhite();
+	void followUntilLine(QTRSensorsRC wait);
 
 private:
-	// Data members
+	// Constant data members
 	static const int NUM_ARRAYS = 4;
-	static const int FRONT = 0;
-	static const int RIGHT = 1;
-	static const int LEFT = 2;
-	static const int BACK = 3;
 
 	// Variable data members
 	int currentSide;
 	double currentAngle;
 	QTRSensorsRC arrays[NUM_ARRAYS];
+	Mecanum mecanumControl;
 
 	// Functions
 	bool allWhite(QTRSensorsRC array);
-	int update(QTRSensorsRC array, Mecanum mecanum, int lastError);
+	int update(QTRSensorsRC array, int lastError);
 };
 
 #endif
