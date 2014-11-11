@@ -7,12 +7,11 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
 
 // our servo # counter
-uint8_t servonum = 0;
 const int NUM_SERVOS = 6; //for first arm
-int starting[NUM_SERVOS] = {180,80,108,118,90,60}; //horizontal knob arm
-int starting2[NUM_SERVOS] = {2,80,113,118,14,60}; //vertical knob arm
-int hknob[NUM_SERVOS] = {10,11,12,13,14,15}; //servo pins for horizontal knob arm
-int vknob[NUM_SERVOS] = {0,1,2,3,4,5}; //servo pins for vertical knob arm
+int final[NUM_SERVOS] = {180,80,108,118,90,60}; //horizontal knob arm rear arm
+int final2[NUM_SERVOS] = {2,80,113,118,14,60}; //vertical knob arm front arm
+const int Rear_Arm[NUM_SERVOS] = {10,11,12,13,14,15}; //servo pins for horizontal knob arm
+const int Front_Arm[NUM_SERVOS] = {0,1,2,3,4,5}; //servo pins for vertical knob arm
 
 void setup() {
 
@@ -24,20 +23,20 @@ void setup() {
   int pulselen;
   for (int servoIndex = 5; servoIndex >= 0; servoIndex--)
   {
-    pulselen = map(starting[servoIndex],0,180,SERVOMIN,SERVOMAX);
-    pwm.setPWM(hknob[servoIndex],0,pulselen);
-    pulselen = map(starting2[servoIndex],0,180,SERVOMIN,SERVOMAX);
-    pwm.setPWM(vknob[servoIndex],0,pulselen);
+    pulselen = map(final[servoIndex],0,180,SERVOMIN,SERVOMAX);
+    pwm.setPWM(Rear_Arm[servoIndex],0,pulselen);
+    pulselen = map(final2[servoIndex],0,180,SERVOMIN,SERVOMAX);
+    pwm.setPWM(Front_Arm[servoIndex],0,pulselen);
     delay(15);
   }
   delay(5000);
   // set wrist
   pulselen = map(170,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   delay(2000);
   // close claw
   pulselen = map(75,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[5],0,pulselen);
+  pwm.setPWM(Rear_Arm[5],0,pulselen);
   delay(1000);
   
   letterI();
@@ -55,25 +54,25 @@ void makeSpace()
   // new letter
   delay(3000);
   int pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[5],0,pulselen); // release knob
+  pwm.setPWM(Rear_Arm[5],0,pulselen); // release knob
   delay(500);
   pulselen = map(175,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen); // rotate wrist
+  pwm.setPWM(Rear_Arm[4],0,pulselen); // rotate wrist
   delay(500);
   pulselen = map(75,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[5],0,pulselen); // grab knob
+  pwm.setPWM(Rear_Arm[5],0,pulselen); // grab knob
   delay(500);
   pulselen = map(14,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen); //scroll over
+  pwm.setPWM(Rear_Arm[4],0,pulselen); //scroll over
   delay(500);
   pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[5],0,pulselen); // release knob
+  pwm.setPWM(Rear_Arm[5],0,pulselen); // release knob
   delay(500);
   pulselen = map(180,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen); // rotate wrist
+  pwm.setPWM(Rear_Arm[4],0,pulselen); // rotate wrist
   delay(500);
   pulselen = map(75,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[5],0,pulselen); // grab knob
+  pwm.setPWM(Rear_Arm[5],0,pulselen); // grab knob
   delay(500);
   
 }
@@ -82,18 +81,18 @@ void letterI()
 {
   // draw I
   int pulselen = map(30,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   delay(500);
   pulselen = map(115,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   delay(500);
   down();
   delay(500);
   pulselen = map(170,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   delay(500);
   pulselen = map(30,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
 }
 
 void letterE()
@@ -103,14 +102,14 @@ void letterE()
   for (int i = 0; i < 2; i++)
   {
   pulselen = map(40,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   delay(500); // horizontal forward
   pulselen = map(180,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen); // horizontal back
+  pwm.setPWM(Rear_Arm[4],0,pulselen); // horizontal back
   down();
   }
   pulselen = map(40,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(hknob[4],0,pulselen);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
   
 }
 void down()
@@ -118,22 +117,22 @@ void down()
   // vertical line
   delay(1000);
   int pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[5],0,pulselen); // release knob
+  pwm.setPWM(Front_Arm[5],0,pulselen); // release knob
   delay(500);
   pulselen = map(175,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[4],0,pulselen); // rotate wrist
+  pwm.setPWM(Front_Arm[4],0,pulselen); // rotate wrist
   delay(500);
   pulselen = map(90,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[5],0,pulselen); // grab knob
+  pwm.setPWM(Front_Arm[5],0,pulselen); // grab knob
   delay(500);
   pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[4],0,pulselen); //scroll over
+  pwm.setPWM(Front_Arm[4],0,pulselen); //scroll over
   delay(500);
   pulselen = map(60,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[5],0,pulselen); // release knob
+  pwm.setPWM(Front_Arm[5],0,pulselen); // release knob
   delay(500);
   pulselen = map(14,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(vknob[4],0,pulselen); // rotate wrist
+  pwm.setPWM(Front_Arm[4],0,pulselen); // rotate wrist
   delay(500);
 }
 
