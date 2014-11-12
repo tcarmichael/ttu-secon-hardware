@@ -16,6 +16,7 @@
 #define USBCON
 #define USB_MANUFACTURER "\"Unknown\""
 #define USB_PRODUCT "\"Arduino Due\""
+#define _VMDEBUG 1
 #define ARDUINO 158
 #define ARDUINO_MAIN
 #define printf iprintf

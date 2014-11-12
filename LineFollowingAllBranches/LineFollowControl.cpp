@@ -4,16 +4,16 @@
 
 #include "LineFollowControl.h"
 
-LineFollowControl::LineFollowControl(Mecanum mecanum) {
+LineFollowControl::LineFollowControl(Mecanum* mecanum) {
 
 	mecanumControl = mecanum;
 
 	const int NUM_SENSORS = 8;
 	const int TIMEOUT = 2000;
 
-	unsigned char frontSensors[] = { 41, 42, 43, 44, 45, 46, 47, 48 };
+	unsigned char frontSensors[] = { 48,47,46,45,44,43,42,41 };
 	const int frontEmitter = 40;
-	arrays[FRONT] = QTRSensorsRC(
+	arrays[FRONT] = new QTRSensorsRC(
 		frontSensors,
 		NUM_SENSORS,
 		TIMEOUT,
@@ -22,7 +22,7 @@ LineFollowControl::LineFollowControl(Mecanum mecanum) {
 
 	unsigned char rightSensors[] = { 23, 24, 25, 26, 27, 28, 29, 30 };
 	const int rightEmitter = 22;
-	arrays[RIGHT] = QTRSensorsRC(
+	arrays[RIGHT] = new QTRSensorsRC(
 		rightSensors,
 		NUM_SENSORS,
 		TIMEOUT,
@@ -31,7 +31,7 @@ LineFollowControl::LineFollowControl(Mecanum mecanum) {
 
 	unsigned char leftSensors[] = { 39, 38, 37, 36, 35, 34, 33, 32 };
 	const int leftEmitter = 31;
-	arrays[LEFT] = QTRSensorsRC(
+	arrays[LEFT] = new QTRSensorsRC(
 		leftSensors,
 		NUM_SENSORS,
 		TIMEOUT,
@@ -52,7 +52,7 @@ void LineFollowControl::calibrate() {
 	// Calibrate the line sensors
 	for (int i = 0; i < 400; i++) {
 		for (int array = 0; array < NUM_ARRAYS - 1; array++) {
-			arrays[array].calibrate();
+			arrays[array]->calibrate();
 		}
 	}
 }
@@ -83,37 +83,45 @@ void LineFollowControl::followUntilWhite() {
 	int lastError = 0;
 
 	do {
-		lastError = update(getCurrentSensor(), lastError);
+		lastError = update(lastError);
 	} while (!allWhite(getCurrentSensor()));
+
+	// Turn off the motors
+	mecanumControl->mecRun(0, 0, 0);
 }
 
-void LineFollowControl::followUntilLine(QTRSensorsRC wait) {
+void LineFollowControl::followUntilLine(int side) {
+	const int THRESHOLD = 200;
 	const int NUM_SENSORS = 8;
 	unsigned int sensors[NUM_SENSORS];
 	int lastError = 0;
 	int waitPosition = 0;
 
 	do {
-		lastError = update(getCurrentSensor(), lastError);
+		lastError = update(lastError);
 
-		waitPosition = wait.readLine(sensors, QTR_EMITTERS_ON, 1);
-	} while (waitPosition > 50 || waitPosition < -50);
+		waitPosition = arrays[side]->readLine(sensors, QTR_EMITTERS_ON, 1);
+		Serial.println(waitPosition);
+	} while (waitPosition > THRESHOLD || waitPosition < -THRESHOLD);
+
+	// Turn off the motors
+	mecanumControl->mecRun(0, 0, 0);
 }
 
-QTRSensorsRC LineFollowControl::getCurrentSensor() {
+QTRSensorsRC* LineFollowControl::getCurrentSensor() {
 	return arrays[currentSide];
 }
 
-QTRSensorsRC LineFollowControl::getFrontSensor() {
+QTRSensorsRC* LineFollowControl::getFrontSensor() {
 	return arrays[FRONT];
 }
-QTRSensorsRC LineFollowControl::getRightSensor() {
+QTRSensorsRC* LineFollowControl::getRightSensor() {
 	return arrays[RIGHT];
 }
-QTRSensorsRC LineFollowControl::getLeftSensor() {
+QTRSensorsRC* LineFollowControl::getLeftSensor() {
 	return arrays[LEFT];
 }
-QTRSensorsRC LineFollowControl::getBackSensor() {
+QTRSensorsRC* LineFollowControl::getBackSensor() {
 	return arrays[BACK];
 }
 
@@ -121,17 +129,17 @@ double LineFollowControl::getCurrentAngle() {
 	return currentAngle;
 }
 
-bool LineFollowControl::allWhite(QTRSensorsRC sensor) {
+bool LineFollowControl::allWhite(QTRSensorsRC* sensor) {
 
 	const int NUM_SENSORS = 8;
 	const int THRESHOLD = 800;
 
 	unsigned int sensorValues[NUM_SENSORS];
 
-	sensor.readCalibrated(sensorValues);
+	sensor->readCalibrated(sensorValues);
 
 	for (int i = 0; i < NUM_SENSORS; i++) {
-		if (sensorValues[i] < THRESHOLD) {
+		if (sensorValues[i] > THRESHOLD) {
 			return false;
 		}
 	}
@@ -139,7 +147,7 @@ bool LineFollowControl::allWhite(QTRSensorsRC sensor) {
 	return true;
 }
 
-int LineFollowControl::update(QTRSensorsRC array, int lastError) {
+int LineFollowControl::update(int lastError) {
 
 	const int NUM_SENSORS = 8;
 
@@ -151,7 +159,7 @@ int LineFollowControl::update(QTRSensorsRC array, int lastError) {
 	const double Kd = 0.0005f; // experiment to determine this, slowly increase the speeds and adjust this value. ( Note: Kp < Kd)
 
 	// Read the line follower
-	int position = array.readLine(sensors, QTR_EMITTERS_ON, 1);
+	int position = getCurrentSensor()->readLine(sensors, QTR_EMITTERS_ON, 1);
 
 	// Calculate the error
 	// Positive error is to the left; negative error is to the right
@@ -170,11 +178,27 @@ int LineFollowControl::update(QTRSensorsRC array, int lastError) {
 	speed = (speed < 0) ? 0 : speed;
 
 	// Send the speed
-	mecanumControl.mecRun(speed, 0, rotation);
+	mecanumControl->mecRun(speed, currentAngle, rotation);
 
 	// Output the values
 	Serial.print("Error: ");
-	Serial.println(error);
+	Serial.print(error);
+	Serial.print("\tSpeed: ");
+	Serial.print(speed);
+	Serial.print("\tRotation: ");
+	Serial.print(rotation);
+	Serial.println();
 
 	return error;
+}
+
+
+void LineFollowControl::followInfinitely()
+{
+	int lastError = 0;
+
+	// Infinite loop
+	while(true) {
+		update(lastError);
+	}
 }

@@ -23,22 +23,22 @@ public:
 	static const int BACK = 3;
 
 	// Functions
-	LineFollowControl(Mecanum);
+	LineFollowControl(Mecanum*);
 
 	void calibrate();
 
 	void setSide(int);
 
-	QTRSensorsRC getCurrentSensor();
-	QTRSensorsRC getFrontSensor();
-	QTRSensorsRC getRightSensor();
-	QTRSensorsRC getLeftSensor();
-	QTRSensorsRC getBackSensor();
+	QTRSensorsRC* getCurrentSensor();
+	QTRSensorsRC* getFrontSensor();
+	QTRSensorsRC* getRightSensor();
+	QTRSensorsRC* getLeftSensor();
+	QTRSensorsRC* getBackSensor();
 
 	double getCurrentAngle();
 
 	void followUntilWhite();
-	void followUntilLine(QTRSensorsRC wait);
+	void followUntilLine(int);
 
 private:
 	// Constant data members
@@ -47,12 +47,14 @@ private:
 	// Variable data members
 	int currentSide;
 	double currentAngle;
-	QTRSensorsRC arrays[NUM_ARRAYS];
-	Mecanum mecanumControl;
+	QTRSensorsRC* arrays[NUM_ARRAYS];
+	Mecanum* mecanumControl;
 
 	// Functions
-	bool allWhite(QTRSensorsRC array);
-	int update(QTRSensorsRC array, int lastError);
+	bool allWhite(QTRSensorsRC* array);
+	int update(int lastError);
+public:
+	void followInfinitely();
 };
 
 #endif
