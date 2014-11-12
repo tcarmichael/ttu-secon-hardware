@@ -24,12 +24,8 @@ void setup() {
   Serial.begin(9600);
   pwm.begin();
   pwm.setPWMFreq(60);
- // int a,b,c,d,e,f;
- // a = Rear_Arm[0]; b = Rear_Arm[1]; c = Rear_Arm[2];
- // d = Rear_Arm[3]; e = Rear_Arm[4]; f = Rear_Arm[5];
- // int arm[NUM_SERVOS] = {a,c,b,d,e,f};
-  
-  //smooth(start,newposition,Rear_Arm,SERVOMIN,SERVOMAX);
+ 
+  smooth(start,newposition,Rear_Arm,SERVOMIN,SERVOMAX);
   
 }
 
@@ -39,31 +35,32 @@ void loop() {
 }
 
 //minimum and maximum is SERVOMIN and SEVRVOMAX from arm program
-//void smooth(int start[],int newposition[],const int arm[],const int minimum, const int maximum)
-//{
-//  int a,b,c,d,e,f;
-//  [a,b,c,d,e,f] = arm;
-//  arm = [a,c,b,d,e,f];
-//  int pulselen;
-//  for(int servoIndex = sizeof(start)-1; servoIndex >= 0; servoIndex--)
-//  {
-//    if(start[servoIndex] < newposition[servoIndex])
-//    {
-//      for(int rotate = start[servoIndex]; rotate <= newposition[servoIndex]; rotate++)
-//      {
-//        pulselen = map(rotate,0,180,minimum,maximum);
-//        pwm.setPWM(arm[servoIndex],0,pulselen);
-//        delay(15);
-//      }
-//    }
-//    else
-//    {
-//      for(int rotate = start[servoIndex]; rotate >= newposition[servoIndex]; rotate++)
-//      {
-//        pulselen = map(rotate,0,180,minimum,maximum);
-//        pwm.setPWM(arm[servoIndex],0,pulselen);
-//        delay(15);
-//      }
-//    }
-//  }
-//}
+void smooth(int start[],int newposition[],const int arm[],const int minimum, const int maximum)
+{
+  int a,b,c,d,e,f;
+  a = Rear_Arm[0]; b = Rear_Arm[1]; c = Rear_Arm[2];
+  d = Rear_Arm[3]; e = Rear_Arm[4]; f = Rear_Arm[5];
+  int newarm[NUM_SERVOS] = {a,c,b,d,e,f};
+  int pulselen;
+  for(int servoIndex = sizeof(start)-1; servoIndex >= 0; servoIndex--)
+  {
+    if(start[servoIndex] < newposition[servoIndex])
+    {
+      for(int rotate = start[servoIndex]; rotate <= newposition[servoIndex]; rotate++)
+      {
+        pulselen = map(rotate,0,180,minimum,maximum);
+        pwm.setPWM(newarm[servoIndex],0,pulselen);
+        delay(15);
+      }
+    }
+    else
+    {
+      for(int rotate = start[servoIndex]; rotate >= newposition[servoIndex]; rotate++)
+      {
+        pulselen = map(rotate,0,180,minimum,maximum);
+        pwm.setPWM(newarm[servoIndex],0,pulselen);
+        delay(15);
+      }
+    }
+  }
+}
