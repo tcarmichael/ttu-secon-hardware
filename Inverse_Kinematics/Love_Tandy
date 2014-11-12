@@ -1,0 +1,129 @@
+//This Shall serve as the basic template for future Arm code
+char foo;
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include <Mecanum.h>
+//Had an issue on Justins Comp where a duplication was occuring
+//#include <Adafruit_PWMServoDriver.h>
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
+
+#define DEBUG
+const float AB = 4.75;
+const float BC = 5.75;
+const float CT = 4.750;
+const int NUM_SERVOS = 6; 
+const int Front_Arm[NUM_SERVOS] = {10,11,12,13,14,15};
+const int Rear_Arm[NUM_SERVOS] = {0,1,2,3,4,5};
+const float rtod = 57.295779;
+
+
+void setup() {
+   Serial.begin(9600);
+   pwm.begin();
+   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+   int pulselen;
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+	Arm_Rear(5,5,0,90,90,90);
+	delay(1500);
+	Arm_Rear(6,5,0,90,90,90);
+	delay(1500);
+	Arm_Rear(7,5,0,90,90,90);
+	delay(1500);
+	Arm_Rear(8,5,0,90,90,90);
+	delay(1500);
+
+	Arm_Rear(9,5,0,90,90,90);
+	delay(1500);
+	Arm_Rear(10,5,0,90,90,90);
+	delay(1500);
+
+
+}
+
+
+
+int Arm_Rear(float End_Effector_x, float End_Effector_y, float End_Effector_z, float  Gripper_Rotation, float  Wrist_Rotation, float Wrist_Angle) //Here's all the Inverse Kinematics to control the arm
+{
+	int pulselen;
+	float Shoulder;
+	float Elbow;
+	float  Wrist;
+	float Base_Rotation;
+  
+	float Cx=End_Effector_x+CT*cos(Wrist_Angle/rtod);
+	float Cy=End_Effector_y+CT*sin(Wrist_Angle/rtod);
+	
+	float ThetaAc=atan(Cy/Cx);
+	float AC=sqrt(Cx*Cx+Cy*Cy);
+	float s=(AB+BC+AC)/2;
+	float SArea=sqrt(s*(s-AB)*(s-BC)*(s-AC));
+	float Avar=asin(2*s/(AB*AC));
+	float Bvar=asin(2*s/(AB*BC));
+	float Cvar=asin(2*s/(AC*BC));
+
+
+/*	int pulselen;
+
+  float M = sqrt((End_Effector_y*End_Effector_y)+(End_Effector_x*End_Effector_x));
+  if(M <= 0)
+    return 1;
+  float A1 = atan(End_Effector_y/End_Effector_x);
+  if(End_Effector_x <= 0)
+    return 1;
+  float A2 = acos((AB*AB-BC*BC+M*M)/((AB*2)*M));
+  float Elbow = acos((AB*AB+BC*BC-M*M)/((AB*2)*BC));
+  float Shoulder = A1 + A2;
+  Elbow = 180-Elbow * rtod;
+  Shoulder = Shoulder * rtod;
+  if((int)Elbow <= 0 || (int)Shoulder <= 0)
+    return 1;
+  float Wrist = 180- abs(Wrist_Angle - Elbow - Shoulder);
+	*/
+
+	Shoulder=rtod*(ThetaAc+Avar);
+	Elbow=180-rtod*Bvar;
+	Wrist=rtod*(Cvar+(180/rtod-Wrist_Angle/rtod - ThetaAc));
+	
+
+	
+	Serial.print(" Shoulder: ");
+	Serial.print(Shoulder);
+		Serial.print(" Elbow: " );
+		Serial.print(Elbow);
+	Serial.print(" Wrist: ");
+	Serial.print(Wrist);
+	Serial.print("\n \n");
+
+  pulselen = map(Shoulder,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[1],0,pulselen);
+  delay(100);
+  
+  pulselen = map(Elbow,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[2],0,pulselen);
+  delay(100);
+  
+  
+  pulselen = map(Wrist,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[3],0,pulselen);
+  delay(100);
+
+  /*pulselen = map(Base_Rotation,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[0],0,pulselen);
+  delay(1000);
+
+  pulselen = map(Wrist,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[4],0,pulselen);
+ delay(1000);
+  pulselen = map(Gripper_Rotation,0,180,SERVOMIN,SERVOMAX);
+  pwm.setPWM(Rear_Arm[5],0,pulselen);
+  delay(1000);*/
+  return 0; 
+}
