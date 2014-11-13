@@ -32,7 +32,7 @@
 #define TIMEOUT       2500  // waits for 2500 microseconds for sensor outputs to go low
 
 // sensors 0 through 7 are connected to digital pins 3 through 10, respectively
-QTRSensorsRC qtrrc((unsigned char[]) {38, 40, 42, 44, 46, 48, 50, 52},
+QTRSensorsRC qtrrc((unsigned char[]) {32,33,34,35,36,37,38,39},
   NUM_SENSORS, TIMEOUT); 
 unsigned int sensorValues[NUM_SENSORS];
 
@@ -47,6 +47,8 @@ void setup()
 
   // print the calibration minimum values measured when emitters were on
   Serial.begin(9600);
+  Serial.println("Calibrating");
+  delay(1000);
   for (int i = 0; i < NUM_SENSORS; i++)
   {
     Serial.print(qtrrc.calibratedMinimumOn[i]);
@@ -72,7 +74,6 @@ void loop()
   // To get raw sensor values, call:
   //  qtrrc.read(sensorValues); instead of unsigned int position = qtrrc.readLine(sensorValues);
   unsigned int position = qtrrc.readLine(sensorValues, QTR_EMITTERS_ON, 1);
-
   // print the sensor values as numbers from 0 to 1000, where 0 means maximum reflectance and
   // 1000 means minimum reflectance, followed by the line position
   for (unsigned char i = 0; i < NUM_SENSORS; i++)
