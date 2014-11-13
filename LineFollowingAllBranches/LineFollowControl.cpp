@@ -202,3 +202,40 @@ void LineFollowControl::followInfinitely()
 		update(lastError);
 	}
 }
+
+
+void LineFollowControl::defaultCalibration(void)
+{
+	// Front
+	unsigned int frontCalibratedMax[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[FRONT]->calibratedMaximumOn = frontCalibratedMax;
+
+	unsigned int frontCalibratedMin[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[FRONT]->calibratedMinimumOn = frontCalibratedMin;
+
+	// Left
+	unsigned int leftCalibratedMax[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[LEFT]->calibratedMaximumOn = leftCalibratedMax;
+
+	unsigned int leftCalibratedMin[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[LEFT]->calibratedMinimumOn = leftCalibratedMin;
+
+	// Right
+	unsigned int rightCalibratedMax[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[RIGHT]->calibratedMaximumOn = rightCalibratedMax;
+
+	unsigned int rightCalibratedMin[] = {
+		0, 0, 0, 0, 0, 0, 0, 0
+	};
+	arrays[RIGHT]->calibratedMinimumOn = rightCalibratedMin;
+}

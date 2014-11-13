@@ -19,7 +19,7 @@ void setup() {
 	// Calibrate the line followers
 	Serial.println("Calibrating");
 	delay(500);
-	lineFollowerControl.calibrate();
+	lineFollowerControl.defaultCalibration();
 	
 	// Begin line following
 	Serial.println("Starting line following");

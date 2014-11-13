@@ -55,6 +55,7 @@ private:
 	int update(int lastError);
 public:
 	void followInfinitely();
+	void defaultCalibration(void);
 };
 
 #endif
