@@ -1,4 +1,3 @@
-
 char foo;
 #include <math.h>
 #include <Wire.h>
@@ -20,15 +19,15 @@ const int Rear_Arm[NUM_SERVOS] = {0,1,2,3,4,5};
 
 
 
-const float A = 4.75;
-const float B = 5.00;
+const double A = 4.75;
+const double B = 5.00;
 
 
 //Radians to Degrees constant
-const float rtod = 57.295779;
+const double rtod = 57.295779;
 
 //Arm Speed Variables
-float Speed = 1.0;
+double Speed = 1.0;
 int sps = 3;
 
 
@@ -48,11 +47,97 @@ void setup()
 
 void loop()
 {
-	 Arm_Rear_Home();
-	//Rear_Arm_IK( 0, 4, 0, 90,90,-90);
+	Arm_Rear_Home();
+        delay(1500);
+        void makeSpace()
+{
+	// new letter
+	delay(3000);
+	int pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(175, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(75, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+	pulselen = map(14, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); //scroll over
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(75, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+
+}
+
+void letterI()
+{
+	// draw I
+	int pulselen = map(30, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	pulselen = map(115, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	down();
+	delay(500);
+	pulselen = map(170, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	pulselen = map(30, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+}
+
+void letterE()
+{
+	int pulselen;
+	//draw E
+	for (int i = 0; i < 2; i++)
+	{
+		pulselen = map(40, 0, 180, SERVOMIN, SERVOMAX);
+		pwm.setPWM(Rear_Arm[4], 0, pulselen);
+		delay(500); // horizontal forward
+		pulselen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+		pwm.setPWM(Rear_Arm[4], 0, pulselen); // horizontal back
+		down();
+	}
+	pulselen = map(40, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+
+}
+void down()
+{
+	// vertical line
+	delay(1000);
+	int pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(175, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(90, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); //scroll over
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(14, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+}
+
+
 	//delay(1500);
-	//Rear_Arm_IK( 4, 0, 0, 90,90,-90 );
-//	delay(1500);
 	//zero_yz();
 	//zero_xy();
 	/*Arm(4, 3, 50, 90, 90, -75);
@@ -63,31 +148,29 @@ void loop()
 }
 
 
-
-
-int Rear_Arm_IK(float x, float y, float z, int g, float wr, int wa) // Note xy are coordinates in the ground plane and z is the vertical plane
+int Rear_Arm_IK(double x, double y, double z, int g, double wr, int wa) // Note xy are coordinates in the ground plane and z is the vertical plane
 {
-	float r=sqrt(x*x+y*y);
+	double r=sqrt(x*x+y*y);
 	//z=z+r*(.5);
 	//wa=wa+1.5*r;
-	float Base_Rotation=degrees(atan(y/x));
-	float M = sqrt((z*z)+(r*r));
+	double Base_Rotation=degrees(atan(y/x));
+	double M = sqrt((z*z)+(r*r));
 	if(M <= 0)
 	 return 1;
-	float A1 = atan(z/r);
+	double A1 = atan(z/r);
 	if(r <= 0)
 	  return 1;
-	float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
-	float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
-	float Shoulder = A1 + A2;
+	double A2 = acos((A*A-B*B+M*M)/((A*2)*M));
+	double Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
+	double Shoulder = A1 + A2;
 	Elbow = Elbow * rtod;
 	Shoulder = Shoulder * rtod;
 	if((int)Elbow <= 0 || (int)Shoulder <= 0)
 	 return 1;
-	float Wris = abs(wa - Elbow - Shoulder) - 90;
+	double Wris = abs(wa - Elbow - Shoulder) - 90;
 
 
-	float pulselen;
+	double pulselen;
   
   pulselen = map(Shoulder,0,180,SERVOMIN,SERVOMAX);
   pwm.setPWM(Rear_Arm[1],0,pulselen);
@@ -118,7 +201,7 @@ int Rear_Arm_IK(float x, float y, float z, int g, float wr, int wa) // Note xy a
 
 
 
-void Front_Arm_IK(float x, float y, float z, int g, float wr, int wa)
+void Front_Arm_IK(double x, double y, double z, int g, double wr, int wa)
 {
 }
 
@@ -162,6 +245,20 @@ void Etch_Pull()
 }
 void Etch_Grasp()
 {
+  //make sure front arm is rotated so that the servo box
+  // is out of the way from the rear arm.
+}
+void Etch_Play()
+{
+  // assumes the knobs have already been grasped with the
+  // front arm rotated with the servo box away from the rear arm
+  letterI();
+  makeSpace();
+  letterE();
+  makeSpace();
+  letterE();
+  makeSpace();
+  letterE();
 }
 void Simon_Play()
 {
@@ -171,6 +268,7 @@ void Simon_Grab()
 }
 void Card_Grab()
 {
+  //will need to rewrite when arm is on chassis
 }
 void Rubiks_Grab()
 {
@@ -185,4 +283,90 @@ void Arm_Front_Home()
 void Arm_Rear_Home()
 {
 	Rear_Arm_IK(3,0,3,90,90,-90);
+}
+void makeSpace()
+{
+	// new letter
+	delay(3000);
+	int pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(175, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(75, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+	pulselen = map(14, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); //scroll over
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(75, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+
+}
+
+void letterI()
+{
+	// draw I
+	int pulselen = map(30, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	pulselen = map(115, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	down();
+	delay(500);
+	pulselen = map(170, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+	delay(500);
+	pulselen = map(30, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+}
+
+void letterE()
+{
+	int pulselen;
+	//draw E
+	for (int i = 0; i < 2; i++)
+	{
+		pulselen = map(40, 0, 180, SERVOMIN, SERVOMAX);
+		pwm.setPWM(Rear_Arm[4], 0, pulselen);
+		delay(500); // horizontal forward
+		pulselen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+		pwm.setPWM(Rear_Arm[4], 0, pulselen); // horizontal back
+		down();
+	}
+	pulselen = map(40, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+
+}
+void down()
+{
+	// vertical line
+	delay(1000);
+	int pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(175, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
+	pulselen = map(90, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // grab knob
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); //scroll over
+	delay(500);
+	pulselen = map(60, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen); // release knob
+	delay(500);
+	pulselen = map(14, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen); // rotate wrist
+	delay(500);
 }
