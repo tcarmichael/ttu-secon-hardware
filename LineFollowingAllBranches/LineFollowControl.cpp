@@ -100,9 +100,11 @@ void LineFollowControl::followUntilLine(int side) {
 	do {
 		lastError = update(lastError);
 
-		waitPosition = arrays[side]->readLine(sensors, QTR_EMITTERS_ON, 1);
-		Serial.println(waitPosition);
-	} while (waitPosition > THRESHOLD || waitPosition < -THRESHOLD);
+		// Beware of magic number
+		arrays[side]->read(sensors, QTR_EMITTERS_ON);
+		Serial.println(sensors[3]);
+		Serial.println(sensors[4]);
+	} while (sensors[3] > 800 || sensors[4] > 800);
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
@@ -206,36 +208,45 @@ void LineFollowControl::followInfinitely()
 
 void LineFollowControl::defaultCalibration(void)
 {
-	// Front
+	// Initialize front
+	arrays[FRONT]->calibratedMaximumOn = new unsigned int[8];
+	arrays[FRONT]->calibratedMinimumOn = new unsigned int[8];
 	unsigned int frontCalibratedMax[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
-	arrays[FRONT]->calibratedMaximumOn = frontCalibratedMax;
-
 	unsigned int frontCalibratedMin[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		360, 256, 255, 218, 154, 180, 244, 269
 	};
-	arrays[FRONT]->calibratedMinimumOn = frontCalibratedMin;
 
-	// Left
+	// Initialize left
+	arrays[LEFT]->calibratedMaximumOn = new unsigned int[8];
+	arrays[LEFT]->calibratedMinimumOn = new unsigned int[8];
 	unsigned int leftCalibratedMax[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		1920, 1770, 1070, 2000, 1110, 1460, 1550, 1730
 	};
-	arrays[LEFT]->calibratedMaximumOn = leftCalibratedMax;
-
 	unsigned int leftCalibratedMin[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		130, 130, 79, 91, 91, 130, 130, 156
 	};
-	arrays[LEFT]->calibratedMinimumOn = leftCalibratedMin;
 
-	// Right
+	// Initialize right
+	arrays[RIGHT]->calibratedMaximumOn = new unsigned int[8];
+	arrays[RIGHT]->calibratedMinimumOn = new unsigned int[8];
 	unsigned int rightCalibratedMax[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
-	arrays[RIGHT]->calibratedMaximumOn = rightCalibratedMax;
-
 	unsigned int rightCalibratedMin[] = {
-		0, 0, 0, 0, 0, 0, 0, 0
+		346, 205, 192, 218, 192, 192, 218, 231
 	};
-	arrays[RIGHT]->calibratedMinimumOn = rightCalibratedMin;
+
+	// Write to the new arrays
+	for (int i = 0; i < 8; i++) {
+		arrays[FRONT]->calibratedMaximumOn[i] = frontCalibratedMax[i];
+		arrays[FRONT]->calibratedMinimumOn[i] = frontCalibratedMin[i];
+
+		arrays[LEFT]->calibratedMaximumOn[i] = leftCalibratedMax[i];
+		arrays[LEFT]->calibratedMinimumOn[i] = leftCalibratedMin[i];
+
+		arrays[RIGHT]->calibratedMaximumOn[i] = rightCalibratedMax[i];
+		arrays[RIGHT]->calibratedMinimumOn[i] = rightCalibratedMin[i];
+	}
 }

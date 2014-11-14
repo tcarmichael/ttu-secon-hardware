@@ -33,8 +33,20 @@ void followLine() {
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	Serial.println("Finished line following");
+
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	lineFollowerControl.followUntilWhite();
+	Serial.println("Done");
 }
 
 void loop() {
-	// Empty
+	/*QTRSensorsRC* sensor = lineFollowerControl.getLeftSensor();
+
+	unsigned int sensorValues[8];
+	sensor->read(sensorValues);
+	for (int i = 0; i < 8; i++) {
+		Serial.print(sensorValues[i]);
+		Serial.print(' ');
+	}
+	Serial.println();*/
 }
