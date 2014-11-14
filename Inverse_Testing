@@ -56,21 +56,6 @@ Servo Base;
 Servo WristR;
 Servo Gripper;
 
-//Arm Current Pos
-float X = 4;
-float Y = 4;
-int Z = 90;
-int G = 90;
-int WR = 90;
-float WA = 0;
-
-//Arm temp pos
-float tmpx = 4;
-float tmpy = 4;
-int tmpz = 90;
-int tmpg = 90;
-int tmpwr = 90;
-float tmpwa = 0;
 
 
 boolean mode = true;
@@ -144,14 +129,7 @@ int Rear_Arm_IK(float x, float y, float z, int g, float wr, int wa) // Note xy a
   #ifndef FSRG
   Gripper.write(g);
   #endif
-  Y = tmpy;
-  X = tmpx;
-  Z = tmpz;
-  WA = tmpwa;
-  #ifndef FSRG
-  G = tmpg;
-  #endif
-  WR = tmpwr;
+  
   return 0; 
 }
 
