@@ -1,207 +1,186 @@
-
-
+#include <Servo.h>
 char foo;
 #include <math.h>
 #include <Wire.h>
-//#include <Adafruit_PWMServoDriver.h>
-#include <Adafruit_MotorShield.h>
-#include <Mecanum.h>
-
-
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-
-#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
-
 //#define DEBUG
 
-// our servo # counter
-uint8_t servonum = 0;
-const int NUM_SERVOS = 6; //for first arm
-int starting[NUM_SERVOS]={0, 130, 140, 175, 90, 90};
-int starting2[NUM_SERVOS]={180, 130, 140, 175, 90, 90};
+//comment to disable the Force Sensitive Resister on the gripper
+//#define FSRG
 
+//FSRG pin Must be analog!!
+#define FSRG_pin A1
+
+//Select which arm by uncommenting the corresponding line
+//#define AL5A
+//#define AL5B
+#define AL5B
+
+//uncomment for digital servos in the Shoulder and Elbow
+//that use a range of 900ms to 2100ms
+//#define DIGITAL_RANGE
+
+#ifdef AL5A
+const float A = 3.75;
+const float B = 4.25;
+#elif defined AL5B
 const float A = 4.75;
 const float B = 5.00;
+#elif defined AL5D
+const float A = 5.75;
+const float B = 7.375;
+#endif
+
+
 
 //Arm Servo pins
-#define Rear_Base_pin 0
-#define Rear_Shoulder_pin 1
-#define Rear_Elbow_pin 2
-#define Rear_Wrist_pin 3
-#define Rear_WristR_pin 4
-#define Rear_Gripper_pin 5
+#define Base_pin 2
+#define Shoulder_pin 3
+#define Elbow_pin 4
+#define Wrist_pin 5
+#define Gripper_pin 7
+#define WristR_pin 6
 
-#define Front_Base_pin 0
-#define Front_Shoulder_pin 1
-#define Front_Elbow_pin 2
-#define Front_Wrist_pin 3
-#define Front_WristR_pin 4
-#define Front_Gripper_pin 5
 
 //Radians to Degrees constant
 const float rtod = 57.295779;
-int incomingByte=0;
 
+//Arm Speed Variables
+float Speed = 1.0;
+int sps = 3;
+
+//Servo Objects
+Servo Elb;
+Servo Shldr;
+Servo Wrist;
+Servo Base;
+Servo WristR;
+Servo Gripper;
+
+//Arm Current Pos
+float X = 4;
+float Y = 4;
+int Z = 90;
+int G = 90;
+int WR = 90;
+float WA = 0;
+
+//Arm temp pos
+float tmpx = 4;
+float tmpy = 4;
+int tmpz = 90;
+int tmpg = 90;
+int tmpwr = 90;
+float tmpwa = 0;
 
 
 boolean mode = true;
 
-
-
-
-
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
+Base.attach(Base_pin);
+Shldr.attach(Shoulder_pin);
+Elb.attach(Elbow_pin);
+Wrist.attach(Wrist_pin);
+Gripper.attach(Gripper_pin);
+WristR.attach(WristR_pin);
+
+}
+
+
+
+
+int Arm(float x, float y, float z, int g, float wr, int wa) //Here's all the Inverse Kinematics to control the arm
+{
   
-
-  pwm.begin();
-  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
-  int pulselen;
-  
-  /*for (int servoIndex = 5; servoIndex >= 0; servoIndex--)
-  {
-    pulselen = map(starting[servoIndex],0,180,SERVOMIN,SERVOMAX);
-    pwm.setPWM(servoIndex,0,pulselen);
-    pulselen = map(starting2[servoIndex],0,180,SERVOMIN,SERVOMAX);
-    pwm.setPWM(servoIndex+10,0,pulselen);
-     Serial.println("16 channel Servo test!");
-    delay(15);
-  }*/
-  
- /* Mecanum mecanum;
-
-
-  mecanum.mecRun(0,0,0);*/
-   
-   Arm(2,2,0, 90,150,90);
-   delay(1500);
-  /*Serial.print("test");
-  Arm(1,4,0,90,0,90);
-  delay(1500);
-  Arm(1.5,4,0,90,0,90);
-  delay(1500);
-  Arm(2,4,0,90,0,90);
-  delay(1500);
-  Arm(2.5,4,0,90,0,90);
-  delay(1500);
-  Arm(3,4,0,90,0,90);
-  delay(1500);
-  Arm(3.5,4,0,90,0,90);
-  delay(1500);
-  Arm(4,4,0,90,0,90);
-  delay(1500);
-  Arm(4.5,4,0,90,0,90);
-  delay(1500);*/
-
-
-
+	x=x-1;
+	y=y+x*(.5);
+	float M = sqrt((y*y)+(x*x));
+  if(M <= 0)
+    return 1;
+  float A1 = atan(y/x);
+  if(x <= 0)
+    return 1;
+  float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
+  float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
+  float Shoulder = A1 + A2;
+  Elbow = Elbow * rtod;
+  Shoulder = Shoulder * rtod;
+  if((int)Elbow <= 0 || (int)Shoulder <= 0)
+    return 1;
+  float Wris = abs(wa - Elbow - Shoulder) - 90;
+#ifdef DIGITAL_RANGE
+  Elb.writeMicroseconds(map(180 - Elbow, 0, 180, 900, 2100  ));
+  Shldr.writeMicroseconds(map(Shoulder, 0, 180, 900, 2100));
+#else
+  Elb.write(180 - Elbow);
+  Shldr.write(Shoulder);
+#endif
+  Wrist.write(180 - Wris);
+  Base.write(z);
+  WristR.write(wr);
+  #ifndef FSRG
+  Gripper.write(g);
+  #endif
+  Y = tmpy;
+  X = tmpx;
+  Z = tmpz;
+  WA = tmpwa;
+  #ifndef FSRG
+  G = tmpg;
+  #endif
+  WR = tmpwr;
+  return 0; 
+}
 
 
 void loop()
 {
 
-  // check that there's something in the serial buffer
-  if (Serial.available() > 0) {
-    // read the byte and store it in our variable 
-    // the byte sent is actually an ascii value
-    incomingByte = Serial.read();
-    // note the upper casing of each letter!
-    // each letter turns a motor different way.
+	//zero_x();
+	//zero_y();
+	/*Arm(4, 3, 50, 90, 90, -75);
+	delay(1500);
+	Arm(4, 0, 50, 90, 90, -75);
+	delay(1500);*/
+	circle();
+}
+
+void zero_x()
+{
+  for( double yaxis = -5; yaxis < 5; yaxis += .1 ) {
+    Arm( 5, yaxis, 127.0, 90,90,-75 );
+    delay( 10 );
+  }
+  for( double yaxis = 5; yaxis > -5; yaxis -= .1 ) {
+    Arm( 5, yaxis, 127.0, 90,90,-75);
+    delay( 10 );
   }
 }
 
 
-
-
-int Arm_Rear(float x, float y, float z, int g, float wa, int wr) //Here's all the Inverse Kinematics to control the arm
+void circle()
 {
-  int pulselen;
-  float M = sqrt((y*y)+(x*x));
-  if(M <= 0)
-    return 1;
-  float A1 = atan(y/x);
-  if(x <= 0)
-    return 1;
-  float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
-  float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
-  float Shoulder = A1 + A2;
-  Elbow = Elbow * rtod;
-  Shoulder = Shoulder * rtod;
-  if((int)Elbow <= 0 || (int)Shoulder <= 0)
-    return 1;
-  float Wris = abs(wa - Elbow - Shoulder);
-
-  
-  pulselen = map(180 - Elbow,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_Elbow_pin,0,pulselen);
-  
-  pulselen = map(Shoulder,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_Shoulder_pin,0,pulselen);
-  
-  
-  pulselen = map(180 - Wris,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_Wrist_pin,0,pulselen);
-  
-
-  pulselen = map(z,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_Base_pin,0,pulselen);
-  
-
-  pulselen = map(wr,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_WristR_pin,0,pulselen);
- 
-  pulselen = map(g,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Rear_Gripper_pin,0,pulselen);
-  return 0; 
+  #define RADIUS 4
+  //float angle = 0;
+  float zaxis,yaxis;
+  for( float angle = 0.0; angle < 360.0; angle += 1.0 ) {
+      yaxis = RADIUS * sin( radians( angle ))+3 ;
+      zaxis = RADIUS * cos( radians( angle ))+3;
+      Arm( zaxis,yaxis , 127, 90,90,-75 );
+      delay( 1 );
+  }
 }
 
-
-int Arm_Front(float x, float y, float z, int g, float wa, int wr) //Here's all the Inverse Kinematics to control the arm
+void zero_y()
 {
-  int pulselen;
-  float M = sqrt((y*y)+(x*x));
-  if(M <= 0)
-    return 1;
-  float A1 = atan(y/x);
-  if(x <= 0)
-    return 1;
-  float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
-  float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
-  float Shoulder = A1 + A2;
-  Elbow = Elbow * rtod;
-  Shoulder = Shoulder * rtod;
-  if((int)Elbow <= 0 || (int)Shoulder <= 0)
-    return 1;
-  float Wris = abs(wa - Elbow - Shoulder);
-
-  
-  pulselen = map(180 - Elbow,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_Elbow_pin,0,pulselen);
-  
-  pulselen = map(Shoulder,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_Shoulder_pin,0,pulselen);
-  
-  
-  pulselen = map(180 - Wris,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_Wrist_pin,0,pulselen);
-  
-
-  pulselen = map(z,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_Base_pin,0,pulselen);
-  
-
-  pulselen = map(wr,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_WristR_pin,0,pulselen);
- 
-  pulselen = map(g,0,180,SERVOMIN,SERVOMAX);
-  pwm.setPWM(Front_Gripper_pin,0,pulselen);
- 
-  return 0; 
+  for( double xaxis = 4; xaxis < 10; xaxis += .1 ) {
+	  Arm( xaxis, -5, 127.0, 90,90,-75 );
+    delay( 10 );
+  }
+  for( double xaxis = 10; xaxis > 4; xaxis -= .1 ) {
+    Arm(xaxis, -5, 127.0, 90,90,-75);
+    delay( 10 );
+  }
 }
-
-
-
-
