@@ -91,16 +91,37 @@ WristR.attach(WristR_pin);
 
 
 
-int Arm(float x, float y, float z, int g, float wr, int wa) //Here's all the Inverse Kinematics to control the arm
+
+
+void loop()
 {
-  
-	x=x-1;
-	y=y+x*(.5);
-	float M = sqrt((y*y)+(x*x));
+	Rear_Arm_IK( 0, 4, 0, 90,90,-80 );
+		delay(1500);
+Rear_Arm_IK( 4, 0, 0, 90,90,-80 );
+			delay(1500);
+	//zero_yz();
+	//zero_y();
+	/*Arm(4, 3, 50, 90, 90, -75);
+	delay(1500);
+	Arm(4, 0, 50, 90, 90, -75);
+	delay(1500);*/
+	
+}
+
+
+
+
+int Rear_Arm_IK(float x, float y, float z, int g, float wr, int wa) // Note xy are coordinates in the ground plane and z is the vertical plane
+{
+	float r=sqrt(x*x+y*y);
+	z=z+r*(.5);
+	//wa=wa+1.5*r;
+	float Base_Rotation=degrees(atan(y/x));
+	float M = sqrt((z*z)+(r*r));
   if(M <= 0)
     return 1;
-  float A1 = atan(y/x);
-  if(x <= 0)
+  float A1 = atan(z/r);
+  if(r <= 0)
     return 1;
   float A2 = acos((A*A-B*B+M*M)/((A*2)*M));
   float Elbow = acos((A*A+B*B-M*M)/((A*2)*B));
@@ -118,7 +139,7 @@ int Arm(float x, float y, float z, int g, float wr, int wa) //Here's all the Inv
   Shldr.write(Shoulder);
 #endif
   Wrist.write(180 - Wris);
-  Base.write(z);
+  Base.write(Base_Rotation);
   WristR.write(wr);
   #ifndef FSRG
   Gripper.write(g);
@@ -135,52 +156,71 @@ int Arm(float x, float y, float z, int g, float wr, int wa) //Here's all the Inv
 }
 
 
-void loop()
-{
 
-	//zero_x();
-	//zero_y();
-	/*Arm(4, 3, 50, 90, 90, -75);
-	delay(1500);
-	Arm(4, 0, 50, 90, 90, -75);
-	delay(1500);*/
-	circle();
+void Front_Arm_IK(float x, float y, float z, int g, float wr, int wa)
+{
 }
 
-void zero_x()
+void zero_xy()
 {
-  for( double yaxis = -5; yaxis < 5; yaxis += .1 ) {
-    Arm( 5, yaxis, 127.0, 90,90,-75 );
-    delay( 10 );
+  for( double zaxis = 0; zaxis < 5; zaxis += .1 ) {
+	  Rear_Arm_IK( 0, 4, zaxis, 90,90,-75 );
+    delay( 100 );
   }
-  for( double yaxis = 5; yaxis > -5; yaxis -= .1 ) {
-    Arm( 5, yaxis, 127.0, 90,90,-75);
-    delay( 10 );
+  for( double zaxis = 5; zaxis > 0; zaxis -= .1 ) {
+    Rear_Arm_IK( 0,4 , zaxis, 90,90,-75);
+    delay( 100 );
   }
 }
 
-
-void circle()
-{
-  #define RADIUS 4
-  //float angle = 0;
-  float zaxis,yaxis;
-  for( float angle = 0.0; angle < 360.0; angle += 1.0 ) {
-      yaxis = RADIUS * sin( radians( angle ))+3 ;
-      zaxis = RADIUS * cos( radians( angle ))+3;
-      Arm( zaxis,yaxis , 127, 90,90,-75 );
-      delay( 1 );
-  }
-}
-
-void zero_y()
+void zero_yz()
 {
   for( double xaxis = 4; xaxis < 10; xaxis += .1 ) {
-	  Arm( xaxis, -5, 127.0, 90,90,-75 );
-    delay( 10 );
+	  Rear_Arm_IK( xaxis, 4, 0, 90,90,-75 );
+    delay( 100 );
   }
   for( double xaxis = 10; xaxis > 4; xaxis -= .1 ) {
-    Arm(xaxis, -5, 127.0, 90,90,-75);
-    delay( 10 );
+    Rear_Arm_IK(xaxis, 4, 0, 90,90,-75);
+    delay( 100);
   }
+}
+void zero_xz()
+{
+  for( double yaxis = 4; yaxis < 10; yaxis += .1 ) {
+	  Rear_Arm_IK( 4, yaxis, 0, 90,90,-75 );
+    delay( 100 );
+  }
+  for( double yaxis = 10; yaxis > 4; yaxis -= .1 ) {
+    Rear_Arm_IK(4, yaxis, 0, 90,90,-75);
+    delay( 100);
+  }
+}
+
+void Etch_Pull()
+{
+}
+void Etch_Grasp()
+{
+}
+void Simon_Play()
+{
+}
+void Simon_Grab()
+{
+}
+void Card_Grab()
+{
+}
+void Rubiks_Grab()
+{
+}
+void Rubiks_Rotate()
+{
+}
+void Arm_Front_Home()
+{
+}
+
+void Arm_Rear_Home()
+{
 }
