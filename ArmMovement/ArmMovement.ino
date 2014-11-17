@@ -18,8 +18,9 @@ void setup()
 	delay(1500);
 
 	control.begin();
-	control.frontHomeLeft();
-	//control.Etch.Etch_Play();
+	control.frontHomeRight();
+	control.RearHomeRight();
+	control.Etch.Etch_Play();
 }
 
 void loop()

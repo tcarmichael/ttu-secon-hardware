@@ -127,7 +127,7 @@ int ArmControl::rearArm(double x, double y, double z, int g, double wr, int wa)
 
 void ArmControl::frontHomeRight()
 {
-	frontArm(-1, 0, 2, 90, 90, -30);
+	frontArm(1, 0, 2, 90, 90, -30);
 	delay(1500);
 }
 

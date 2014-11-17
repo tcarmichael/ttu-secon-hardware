@@ -28,7 +28,7 @@ void EtchControl::makeSpace()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], 75);
+	parent->setPosition(parent->Rear_Arm[5], 80);
 	delay(500);
 
 	// Scroll over
@@ -44,7 +44,7 @@ void EtchControl::makeSpace()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], 75);
+	parent->setPosition(parent->Rear_Arm[5], 80);
 	delay(500);
 }
 
@@ -90,7 +90,7 @@ void EtchControl::down()
 	delay(1000);
 
 	// Release knob
-	parent->setPosition(parent->Front_Arm[5], 60);
+	parent->setPosition(parent->Front_Arm[5], 50);
 	delay(500);
 
 	// Rotate wrist
@@ -98,7 +98,7 @@ void EtchControl::down()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Front_Arm[5], 90);
+	parent->setPosition(parent->Front_Arm[5], 65);
 	delay(500);
 
 	// Scroll over
@@ -106,7 +106,7 @@ void EtchControl::down()
 	delay(500);
 
 	// Release knob
-	parent->setPosition(parent->Front_Arm[5], 60);
+	parent->setPosition(parent->Front_Arm[5], 50);
 	delay(500);
 
 	// Rotate wrist
