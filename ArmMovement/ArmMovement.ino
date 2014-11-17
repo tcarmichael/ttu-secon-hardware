@@ -13,9 +13,13 @@ void setup()
 	Serial.begin(115200);
 
 	Mecanum mecanum;
-	mecanum.begin();
+	//mecanum.begin();
 	mecanum.mecRun(0, 0, 0);
 	delay(1500);
+
+	control.begin();
+	control.frontHomeLeft();
+	//control.Etch.Etch_Play();
 }
 
 void loop()
@@ -27,6 +31,7 @@ void loop()
 	Arm_Front_Home_Left();
 	Arm_Front_Flip_To_Right();
 	Arm_Front_Home_Right();*/
+	//control.rearArm(3,1,0,90,90,-90);
 
 	
 }

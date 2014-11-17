@@ -1,11 +1,11 @@
 #include "ArmControl.h"
 
 
-void ArmControl::RubiksControl::Grab()
+void RubiksControl::Grab()
 {
 }
 
 
-void ArmControl::RubiksControl::Rotate()
+void RubiksControl::Rotate()
 {
 }

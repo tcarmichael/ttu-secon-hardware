@@ -1,11 +1,11 @@
 #include "ArmControl.h"
 
 
-void ArmControl::SimonControl::Play()
+void SimonControl::Play()
 {
 }
 
 
-void ArmControl::SimonControl::Grab()
+void SimonControl::Grab()
 {
 }

@@ -47,6 +47,7 @@ public:
 	RubiksControl Rubiks;
 	CardControl Card;
 
+	void begin();
 	void flipFlop(void);
 	int frontArm(double x, double y, double z, int g, double wr, int wa);
 	int rearArm(double x, double y, double z, int g, double wr, int wa);
@@ -63,6 +64,7 @@ public:
 	void ZeroXY();
 	void ZeroYZ();
 	void ZeroXZ();
+	void Rear_Smooth_Move(double x1, double y1, double z1, int g1, double wr1, int wa1, double x2, double y2, double z2, int g2, double wr2, int wa2, double time);
 };
 
 #endif
