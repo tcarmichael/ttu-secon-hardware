@@ -116,6 +116,29 @@ void EtchControl::down()
 
 void EtchControl::Pull()
 {
+	parent->RearHomeRight();
+
+	for (double i = -1; i > -8.5; i -= .1)
+	{
+		parent->rearArm(i, 2, 0, 90, 90, -90);
+		delay(10);
+	}
+	parent->rearArm(-8, 2, 0, 90, 90, -90);
+	delay(1500);
+	for (double i = 0; i > -3.2; i -= .05)
+	{
+		parent->rearArm(-8.5, 1.8, i, 90, 90, -90);
+		delay(10);
+	}
+	parent->rearArm(-8.5, 1.8, -3.2, 90, 90, -90);
+	delay(1500);
+
+	for (double i = -8.5; i < -5; i += .05)
+	{
+		parent->rearArm(i, 1.8, -3.5, 90, 85, -90);
+		delay(10);
+	}
+	delay(1500);
 }
 
 

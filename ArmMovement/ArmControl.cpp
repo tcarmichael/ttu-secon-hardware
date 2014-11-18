@@ -4,7 +4,7 @@
 
 #include "ArmControl.h"
 
-const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 12 intentionally
+const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 10 intentionally
 const int ArmControl::Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
 
 const double ArmControl::A = 4.75;
@@ -68,6 +68,7 @@ int ArmControl::frontArm(double x, double y, double z, int g, double wr, int wa)
 	setPosition(Front_Arm[0], Base_Rotation);
 	setPosition(Front_Arm[4], wr);
 	setPosition(Front_Arm[5], g);
+	
 
 	return 0;
 }
@@ -77,6 +78,7 @@ void ArmControl::setPosition(int pin, int position)
 {
 	int pulseLength = map(position, 0, 180, SERVOMIN, SERVOMAX);
 	pwm.setPWM(pin, 0, pulseLength);
+
 }
 
 

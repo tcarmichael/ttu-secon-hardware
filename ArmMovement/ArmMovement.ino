@@ -15,12 +15,11 @@ void setup()
 	Mecanum mecanum;
 	//mecanum.begin();
 	mecanum.mecRun(0, 0, 0);
-	delay(1500);
-
-	control.begin();
-	control.frontHomeRight();
-	control.RearHomeRight();
-	control.Etch.Etch_Play();
+	//control.RearHomeRight();
+	//control.frontHomeRight();
+	//control.FrontFlipToLeft();
+	control.Etch.Pull();
+	//control.Etch.Etch_Play();
 }
 
 void loop()
