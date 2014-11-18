@@ -47,11 +47,14 @@ private:
 	// Variable data members
 	int currentSide;
 	double currentAngle;
+	double Kp;
+	double Kd;
+	double Ki;
 	QTRSensorsRC* arrays[NUM_ARRAYS];
 	Mecanum* mecanumControl;
 
 	// Functions
-	bool allWhite(QTRSensorsRC* array);
+	int whiteCount(QTRSensorsRC* array);
 	int update(int lastError);
 public:
 	void followInfinitely();

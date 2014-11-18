@@ -20,7 +20,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) {
 		frontEmitter
 		);
 
-	unsigned char rightSensors[] = { 23, 24, 25, 26, 27, 28, 29, 30 };
+	unsigned char rightSensors[] = { 30, 29, 28, 27, 26, 25, 24, 23 };
 	const int rightEmitter = 22;
 	arrays[RIGHT] = new QTRSensorsRC(
 		rightSensors,
@@ -59,18 +59,34 @@ void LineFollowControl::calibrate() {
 
 void LineFollowControl::setSide(int side) {
 	currentSide = side;
+	const double FOLLOWER_OFFSET = 3500.0;
 
 	switch (side) {
 	case FRONT:
 		currentAngle = 0;
+
+		Kp = 1.0 / FOLLOWER_OFFSET;
+		Kd = 0;
+		//Kd = 0.0005;
 		break;
 
 	case RIGHT:
 		currentAngle = PI_4 * 2;
+
+		Kp = 0.9 / FOLLOWER_OFFSET;
+		//Kp = 0;
+		//Kd = 0.0;
+		Kd = 0.005;
+		//Kd = 0.006;
 		break;
 
 	case LEFT:
 		currentAngle = PI_4 * 6;
+
+		//Kp = 1.0 / FOLLOWER_OFFSET;
+		Kp = 0.0;
+		Kd = 3.0;
+		//Kd = 0.006;
 		break;
 
 	case BACK:
@@ -84,27 +100,38 @@ void LineFollowControl::followUntilWhite() {
 
 	do {
 		lastError = update(lastError);
-	} while (!allWhite(getCurrentSensor()));
+	} while (whiteCount(getCurrentSensor()) != 8);
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
 }
 
 void LineFollowControl::followUntilLine(int side) {
-	const int THRESHOLD = 200;
+	int lastError = 0;
 	const int NUM_SENSORS = 8;
 	unsigned int sensors[NUM_SENSORS];
-	int lastError = 0;
-	int waitPosition = 0;
 
-	do {
-		lastError = update(lastError);
+	if (currentSide == RIGHT || currentSide == LEFT) {
+		// Follow line until the sensor crosses the line
+		do {
+			lastError = update(lastError);
+		} while (whiteCount(getCurrentSensor()) < 5);
 
-		// Beware of magic number
-		arrays[side]->read(sensors, QTR_EMITTERS_ON);
-		Serial.println(sensors[3]);
-		Serial.println(sensors[4]);
-	} while (sensors[3] > 800 || sensors[4] > 800);
+		// Stay at the same velocity until the other line sensors detect a line
+		do {
+			// Beware of magic number
+			arrays[side]->read(sensors, QTR_EMITTERS_ON);
+		} while (sensors[3] > 800 || sensors[4] > 800);
+	}
+	else {
+
+		do {
+			lastError = update(lastError);
+
+			// Beware of magic number
+			arrays[side]->read(sensors, QTR_EMITTERS_ON);
+		} while (sensors[3] > 800 || sensors[4] > 800);
+	}
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
@@ -131,34 +158,39 @@ double LineFollowControl::getCurrentAngle() {
 	return currentAngle;
 }
 
-bool LineFollowControl::allWhite(QTRSensorsRC* sensor) {
+int LineFollowControl::whiteCount(QTRSensorsRC* sensor) {
 
 	const int NUM_SENSORS = 8;
-	const int THRESHOLD = 800;
+	const int THRESHOLD = 400;
+	int whiteCount = 0;
 
 	unsigned int sensorValues[NUM_SENSORS];
 
 	sensor->readCalibrated(sensorValues);
 
+	/*for (int i = 0; i < NUM_SENSORS; i++) {
+		Serial.print(sensorValues[i]);
+		Serial.print(' ');
+	}
+	Serial.println();*/
+
 	for (int i = 0; i < NUM_SENSORS; i++) {
-		if (sensorValues[i] > THRESHOLD) {
-			return false;
+
+		if (sensorValues[i] < THRESHOLD) {
+			whiteCount++;
 		}
 	}
 
-	return true;
+	return whiteCount;
 }
 
 int LineFollowControl::update(int lastError) {
-
+	Serial.println(Kp);
+	Serial.println(Kd);
 	const int NUM_SENSORS = 8;
 
 	unsigned int sensors[NUM_SENSORS];
 	const int FOLLOWER_OFFSET = 3500;
-
-	// PID constants
-	const double Kp = 1.0f / FOLLOWER_OFFSET; // experiment to determine this, start by something small that just makes your bot follow the line at a slow speed
-	const double Kd = 0.0005f; // experiment to determine this, slowly increase the speeds and adjust this value. ( Note: Kp < Kd)
 
 	// Read the line follower
 	int position = getCurrentSensor()->readLine(sensors, QTR_EMITTERS_ON, 1);
@@ -175,21 +207,32 @@ int LineFollowControl::update(int lastError) {
 	rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 0.6 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
-	speed = (speed > 1) ? 1 : speed;
+	double speed = 1.5 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	//speed = (speed > 1) ? 1 : speed;
 	speed = (speed < 0) ? 0 : speed;
 
 	// Send the speed
 	mecanumControl->mecRun(speed, currentAngle, rotation);
 
+	/*if (error == FOLLOWER_OFFSET || error == -FOLLOWER_OFFSET) {
+		mecanumControl->mecRun(0, currentAngle, rotation);
+	}
+	else {
+		mecanumControl->mecRun(0.6, currentAngle, rotation);
+	}*/
+	/*for (int i = 0; i < 8; i++) {
+		Serial.print(sensors[i]);
+		Serial.print(' ');
+	}*/
+
 	// Output the values
-	Serial.print("Error: ");
+	/*Serial.print("Error: ");
 	Serial.print(error);
-	Serial.print("\tSpeed: ");
-	Serial.print(speed);
+	//Serial.print("\tSpeed: ");
+	//Serial.print(speed);
 	Serial.print("\tRotation: ");
 	Serial.print(rotation);
-	Serial.println();
+	Serial.println();*/
 
 	return error;
 }
@@ -219,13 +262,13 @@ void LineFollowControl::defaultCalibration(void)
 	};
 
 	// Initialize left
-	arrays[LEFT]->calibratedMaximumOn = new unsigned int[8];
 	arrays[LEFT]->calibratedMinimumOn = new unsigned int[8];
-	unsigned int leftCalibratedMax[] = {
-		1920, 1770, 1070, 2000, 1110, 1460, 1550, 1730
-	};
+	arrays[LEFT]->calibratedMaximumOn = new unsigned int[8];
 	unsigned int leftCalibratedMin[] = {
-		130, 130, 79, 91, 91, 130, 130, 156
+		120, 130, 79, 60, 60, 100, 100, 120
+	};
+	unsigned int leftCalibratedMax[] = {
+		2000, 1300, 1200, 1100, 1000, 1300, 1400, 1500
 	};
 
 	// Initialize right
@@ -235,7 +278,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		346, 205, 192, 218, 192, 192, 218, 231
+		231, 218, 192, 192, 218, 192, 205, 346
 	};
 
 	// Write to the new arrays
