@@ -1,9 +1,8 @@
 #include <Arduino.h>
 #include <Mecanum.h>
 
-Mecanum::Mecanum() {
-	// Initialize the motor shield
-	Moto_Shield = Adafruit_MotorShield();
+void Mecanum::begin() {
+
 	Moto_Shield.begin();
 
 	// Initialize the motors
@@ -16,7 +15,6 @@ Mecanum::Mecanum() {
 // input angle has to be between 0 and 2 PI
 // input rotation has to be between -1 and 1
 void Mecanum::mecRun(double magnitude, double angle, double rotation) {
-  
   // Wheel 1 is front left, wheel 2 is front right
   // Wheel 3 is rear left, wheel4 is rear right
   // Voltage multiplier for each wheels.
@@ -42,8 +40,6 @@ void Mecanum::mecRun(double magnitude, double angle, double rotation) {
 			motors[i]->run(FORWARD);
 		} else if (voltages[i] < 0) {
 			motors[i]->run(BACKWARD);
-		} else {
-			motors[i]->run(RELEASE);
 		}
 
 		// Set the motor speed

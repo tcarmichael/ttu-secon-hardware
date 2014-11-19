@@ -6,14 +6,15 @@
 
 // Pi / 4
 // Used for the wheel rotation formulas
-const double PI_4 = 0.78539816;
+const double PI_4 = PI/4;
 
 
 class Mecanum
 {
 	public:
-		Mecanum();
+		Mecanum() {};
 		void mecRun(double magnitude, double angle, double rotation);
+		void begin();
 
 	private:
 		Adafruit_MotorShield Moto_Shield;
