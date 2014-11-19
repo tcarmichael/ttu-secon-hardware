@@ -52,6 +52,10 @@ extern "C" void __cxa_pure_virtual() {;}
 //
 void followLine();
 //
+void MoveInSquare();
+void SpeedRamping();
+void FollowSide();
+void ReadSensorData();
 void Arm_Front_Home_Right();
 void Arm_Rear_Home_Right();
 int Rear_Arm_IK(double x, double y, double z, int g, double wr, int wa);

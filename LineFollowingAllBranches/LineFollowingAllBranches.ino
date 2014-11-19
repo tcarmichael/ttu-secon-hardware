@@ -70,22 +70,38 @@ void followLine() {
 }
 
 void loop() {
+	//ReadSensorData();
+	//FollowSide();
+	//SpeedRamping();
+	//MoveInSquare();
+}
+
+void MoveInSquare() {
+	for (int i = 0; i < 4; i++) {
+		mecanum.mecRun(3.0, 1.57*i, 0);
+		delay(1000);
+	}
+}
+
+void SpeedRamping() {
+	for (double speed = 0; speed < 1.5; speed += 0.1) {
+		mecanum.mecRun(speed, 3 * PI / 2, 0.00);
+		delay(50);
+	}
+
+	mecanum.mecRun(2.0, 3 * PI / 2, 0.00);
+	delay(2000);
+}
+
+void FollowSide() {
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followInfinitely();
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
-	/*for (double speed = 0; speed < 1.5; speed += 0.1) {
-		mecanum.mecRun(speed, 3*PI/2, 0.00);
-		delay(50);
-	}
+}
 
-	mecanum.mecRun(2.0, 3*PI / 2, 0.00);
-	delay(2000);*/
-	/*for (int i = 0; i < 4; i++) {
-		mecanum.mecRun(3.0, 1.57*i, 0);
-		delay(1000);
-	}*/
-	/*QTRSensorsRC* sensor = lineFollowerControl.getLeftSensor();
+void ReadSensorData() {
+	QTRSensorsRC* sensor = lineFollowerControl.getLeftSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {
@@ -121,7 +137,7 @@ void loop() {
 	// Position
 	Serial.println(position);
 
-	delay(1000);*/
+	delay(1000);
 }
 void Arm_Front_Home_Right()
 {
