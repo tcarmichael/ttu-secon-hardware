@@ -11,14 +11,16 @@ ArmControl control;
 void setup()
 {
 	Serial.begin(115200);
-
 	Mecanum mecanum;
 	//mecanum.begin();
 	mecanum.mecRun(0, 0, 0);
-	//control.RearHomeRight();
-	//control.frontHomeRight();
+	control.RearHomeRight();
+	control.frontHomeRight();
+	Serial.print("Hello \n");
 	//control.FrontFlipToLeft();
-	control.Etch.Pull();
+	//control.Etch.Pull();
+	//control.Etch.Grasp();
+	
 	//control.Etch.Etch_Play();
 }
 
@@ -32,6 +34,6 @@ void loop()
 	Arm_Front_Flip_To_Right();
 	Arm_Front_Home_Right();*/
 	//control.rearArm(3,1,0,90,90,-90);
-
+	
 	
 }

@@ -1,6 +1,7 @@
 #include "ArmControl.h"
 #include "Arduino.h"
 
+
 void EtchControl::Etch_Play()
 {
 	// assumes the knobs have already been grasped with the
@@ -20,7 +21,7 @@ void EtchControl::makeSpace()
 	delay(3000);
 
 	// Release knob
-	parent->setPosition(parent->Rear_Arm[5], 60);
+	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
 	delay(500);
 
 	// Rotate wrist
@@ -28,7 +29,7 @@ void EtchControl::makeSpace()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], 80);
+	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
 	delay(500);
 
 	// Scroll over
@@ -36,7 +37,7 @@ void EtchControl::makeSpace()
 	delay(500);
 
 	// Release knob
-	parent->setPosition(parent->Rear_Arm[5], 60);
+	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
 	delay(500);
 
 	// Rotate wrist
@@ -44,7 +45,7 @@ void EtchControl::makeSpace()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], 80);
+	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
 	delay(500);
 }
 
@@ -90,7 +91,7 @@ void EtchControl::down()
 	delay(1000);
 
 	// Release knob
-	parent->setPosition(parent->Front_Arm[5], 50);
+	parent->setPosition(parent->Front_Arm[5], openFrontGripper);
 	delay(500);
 
 	// Rotate wrist
@@ -98,7 +99,7 @@ void EtchControl::down()
 	delay(500);
 
 	// Grab knob
-	parent->setPosition(parent->Front_Arm[5], 65);
+	parent->setPosition(parent->Front_Arm[5], closeFrontGripper);
 	delay(500);
 
 	// Scroll over
@@ -106,44 +107,44 @@ void EtchControl::down()
 	delay(500);
 
 	// Release knob
-	parent->setPosition(parent->Front_Arm[5], 50);
+	parent->setPosition(parent->Front_Arm[5], openFrontGripper);
 	delay(500);
 
 	// Rotate wrist
 	parent->setPosition(parent->Front_Arm[4], 14);
+	delay(500);
+
+	// Grab knob
+	parent->setPosition(parent->Front_Arm[5], closeFrontGripper);
 	delay(500);
 }
 
 void EtchControl::Pull()
 {
 	parent->RearHomeRight();
-
-	for (double i = -1; i > -8.5; i -= .1)
-	{
-		parent->rearArm(i, 2, 0, 90, 90, -90);
-		delay(10);
-	}
+	parent->Rear_Smooth_Move(-1, 0, 2, 90, 90, -30, -8.5, 2, 0, 90, 90, -90, 1); 
 	parent->rearArm(-8, 2, 0, 90, 90, -90);
 	delay(1500);
-	for (double i = 0; i > -3.2; i -= .05)
-	{
-		parent->rearArm(-8.5, 1.8, i, 90, 90, -90);
-		delay(10);
-	}
+	parent->Rear_Smooth_Move(-8.5, 1.8, 0, 90, 90, -90,-8.5, 1.8, -3.2, 90, 90, -90, 1); 
 	parent->rearArm(-8.5, 1.8, -3.2, 90, 90, -90);
 	delay(1500);
-
-	for (double i = -8.5; i < -5; i += .05)
-	{
-		parent->rearArm(i, 1.8, -3.5, 90, 85, -90);
-		delay(10);
-	}
-	delay(1500);
+	parent->Rear_Smooth_Move(-8.5, 1.8, -3.5, 90, 80, -90, -5, 1.8, -3.5, 90, 70, -90, 1);
 }
 
 
 void EtchControl::Grasp()
 {
+	parent->rearArm(-5, .4, 0, 90, 90, -90);
+	delay(1500);
+	parent->Rear_Smooth_Move(-5.5, 0.26, 0, 30, 100, -100,-5.5, 0, -2.6, 30, 100, -100, 1.5); 
+	delay(1500);
+
+	parent->frontArm(5, 1.8, 0, 90, 90, -90);
+	delay(1500);
+	parent->Front_Smooth_Move(5, 1.6, 0, 30, 85, -85, 4.8, 1.6, -3, 30, 85, -85, 1.5); 
+
+	delay(1500);
 	//make sure front arm is rotated so that the servo box
 	// is out of the way from the rear arm.
+
 }
