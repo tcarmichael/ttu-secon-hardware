@@ -8,6 +8,7 @@
 Mecanum mecanum;
 
 LineFollowControl lineFollowerControl(&mecanum);
+Adafruit_PWMServoDriver pwm;
 
 void setup() {
 	Serial.begin(9600);
@@ -20,30 +21,35 @@ void setup() {
 	Serial.println("Calibrating");
 	delay(500);
 	lineFollowerControl.defaultCalibration();
+
+	// Remove this
+	pwm.begin();
+	pwm.setPWMFreq(60);
+	Arm_Front_Home_Right();
+	Arm_Rear_Home_Right();
 	
 	// Begin line following
 	Serial.println("Starting line following");
-	followLine();
+	//followLine();
 }
 
 void followLine() {
 	// Follow the front line sensor until the left line sensor finds a line
 	Serial.println("Following the front line sensor");
 	delay(1000);
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followInfinitely();
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(1000);
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
+	delay(2000);
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(1000);
+	delay(2000);
 
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
@@ -64,6 +70,17 @@ void followLine() {
 }
 
 void loop() {
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	lineFollowerControl.followInfinitely();
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+	/*for (double speed = 0; speed < 1.5; speed += 0.1) {
+		mecanum.mecRun(speed, 3*PI/2, 0.00);
+		delay(50);
+	}
+
+	mecanum.mecRun(2.0, 3*PI / 2, 0.00);
+	delay(2000);*/
 	/*for (int i = 0; i < 4; i++) {
 		mecanum.mecRun(3.0, 1.57*i, 0);
 		delay(1000);
@@ -106,3 +123,143 @@ void loop() {
 
 	delay(1000);*/
 }
+void Arm_Front_Home_Right()
+{
+	Front_Arm_IK(1, 0, 2, 90, 90, -30);
+	delay(1500);
+}
+void Arm_Rear_Home_Right()
+{
+	Rear_Arm_IK(-1, 0, 2, 90, 90, -30);
+	delay(1500);
+}
+
+
+const double A = 4.75;
+const double B = 5.00;
+
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  650 // this is the 'maximum' pulse length count (out of 4096)
+
+const int NUM_SERVOS = 6;
+const int Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 12 intentionally
+const int Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
+
+int Rear_Arm_IK(double x, double y, double z, int g, double wr, int wa) // Note xy are coordinates in the ground plane and z is the vertical plane
+{
+
+	double r = sqrt(x*x + y*y);
+	z = z + r*(.5);
+	wa = wa + 3 * r;
+	double Base_Rotation = degrees(atan2(y, x));
+	double M = sqrt((z*z) + (r*r));
+
+	if (M <= 0)
+	{
+		Serial.print("M");
+		return 1;
+
+	}
+	double A1 = atan(z / r);
+	if (r <= 0)
+	{
+		Serial.print("r");
+		return 1;
+
+	}
+	double A2 = acos((A*A - B*B + M*M) / ((A * 2)*M));
+	double Elbow = acos((A*A + B*B - M*M) / ((A * 2)*B));
+	double Shoulder = A1 + A2;
+	Elbow = degrees(Elbow);
+	Shoulder = degrees(Shoulder);
+	if ((int)Elbow <= 0 || (int)Shoulder <= 0)
+	{
+		Serial.print("S");
+		return 1;
+
+	}
+	double Wris = abs(wa - Elbow - Shoulder) - 90;
+
+	double pulselen;
+
+	pulselen = map(Shoulder, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[1], 0, pulselen);
+
+
+	pulselen = map(180 - Elbow, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[2], 0, pulselen);
+
+
+
+	pulselen = map(180 - Wris, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[3], 0, pulselen);
+
+
+	pulselen = map(Base_Rotation, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[0], 0, pulselen);
+
+
+	pulselen = map(wr, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[4], 0, pulselen);
+
+	pulselen = map(g, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Rear_Arm[5], 0, pulselen);
+
+
+	return 0;
+}
+
+
+
+int Front_Arm_IK(double x, double y, double z, int g, double wr, int wa)
+{
+	double r = sqrt(x*x + y*y);
+	z = z + r*(.5);
+	wa = wa + 1.5*r;
+	double Base_Rotation = degrees(atan2(y, x));
+	double M = sqrt((z*z) + (r*r));
+	if (M <= 0)
+		return 1;
+	double A1 = atan(z / r);
+	if (r <= 0)
+		return 1;
+	double A2 = acos((A*A - B*B + M*M) / ((A * 2)*M));
+	double Elbow = acos((A*A + B*B - M*M) / ((A * 2)*B));
+	double Shoulder = A1 + A2;
+	Elbow = degrees(Elbow);
+	Shoulder = degrees(Shoulder);
+	if ((int)Elbow <= 0 || (int)Shoulder <= 0)
+		return 1;
+	double Wris = abs(wa - Elbow - Shoulder) - 90;
+
+
+	double pulselen;
+
+	pulselen = map(Shoulder, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[1], 0, pulselen);
+
+
+	pulselen = map(180 - Elbow, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[2], 0, pulselen);
+
+
+
+	pulselen = map(180 - Wris, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[3], 0, pulselen);
+
+
+	pulselen = map(Base_Rotation, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[0], 0, pulselen);
+
+
+	pulselen = map(wr, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[4], 0, pulselen);
+
+	pulselen = map(g, 0, 180, SERVOMIN, SERVOMAX);
+	pwm.setPWM(Front_Arm[5], 0, pulselen);
+
+
+	return 0;
+
+}
+

@@ -4,7 +4,8 @@
 
 #include "LineFollowControl.h"
 
-LineFollowControl::LineFollowControl(Mecanum* mecanum) {
+LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0)
+{
 
 	mecanumControl = mecanum;
 
@@ -67,6 +68,7 @@ void LineFollowControl::setSide(int side) {
 
 		Kp = 1.0 / FOLLOWER_OFFSET;
 		Kd = 0;
+		fudge_factor = 0.0;
 		//Kd = 0.0005;
 		break;
 
@@ -75,17 +77,20 @@ void LineFollowControl::setSide(int side) {
 
 		Kp = 0.9 / FOLLOWER_OFFSET;
 		//Kp = 0;
-		//Kd = 0.0;
-		Kd = 0.005;
+		Kd = 0.0;
+		fudge_factor = 0.05;
+		//Kd = 0.001;
 		//Kd = 0.006;
 		break;
 
 	case LEFT:
 		currentAngle = PI_4 * 6;
 
-		//Kp = 1.0 / FOLLOWER_OFFSET;
-		Kp = 0.0;
-		Kd = 3.0;
+		Kp = 0.9 / FOLLOWER_OFFSET;
+		//Kp = 0.0;
+		Kd = 0.0;
+		fudge_factor = 0.0;
+		//Kd = 0.001;
 		//Kd = 0.006;
 		break;
 
@@ -116,6 +121,7 @@ void LineFollowControl::followUntilLine(int side) {
 		do {
 			lastError = update(lastError);
 		} while (whiteCount(getCurrentSensor()) < 5);
+		Serial.println("Crossed line");
 
 		// Stay at the same velocity until the other line sensors detect a line
 		do {
@@ -168,12 +174,6 @@ int LineFollowControl::whiteCount(QTRSensorsRC* sensor) {
 
 	sensor->readCalibrated(sensorValues);
 
-	/*for (int i = 0; i < NUM_SENSORS; i++) {
-		Serial.print(sensorValues[i]);
-		Serial.print(' ');
-	}
-	Serial.println();*/
-
 	for (int i = 0; i < NUM_SENSORS; i++) {
 
 		if (sensorValues[i] < THRESHOLD) {
@@ -181,12 +181,18 @@ int LineFollowControl::whiteCount(QTRSensorsRC* sensor) {
 		}
 	}
 
+	if (whiteCount == 8) {
+		for (int i = 0; i < NUM_SENSORS; i++) {
+			Serial.print(sensorValues[i]);
+			Serial.print(' ');
+		}
+		Serial.println();
+	}
+
 	return whiteCount;
 }
 
 int LineFollowControl::update(int lastError) {
-	Serial.println(Kp);
-	Serial.println(Kd);
 	const int NUM_SENSORS = 8;
 
 	unsigned int sensors[NUM_SENSORS];
@@ -212,7 +218,7 @@ int LineFollowControl::update(int lastError) {
 	speed = (speed < 0) ? 0 : speed;
 
 	// Send the speed
-	mecanumControl->mecRun(speed, currentAngle, rotation);
+	mecanumControl->mecRun(speed, currentAngle, rotation + fudge_factor);
 
 	/*if (error == FOLLOWER_OFFSET || error == -FOLLOWER_OFFSET) {
 		mecanumControl->mecRun(0, currentAngle, rotation);
@@ -226,13 +232,13 @@ int LineFollowControl::update(int lastError) {
 	}*/
 
 	// Output the values
-	/*Serial.print("Error: ");
+	Serial.print("Error: ");
 	Serial.print(error);
 	//Serial.print("\tSpeed: ");
 	//Serial.print(speed);
 	Serial.print("\tRotation: ");
 	Serial.print(rotation);
-	Serial.println();*/
+	Serial.println();
 
 	return error;
 }
@@ -241,10 +247,27 @@ int LineFollowControl::update(int lastError) {
 void LineFollowControl::followInfinitely()
 {
 	int lastError = 0;
+	int pos = 0;
 
 	// Infinite loop
 	while(true) {
 		update(lastError);
+
+
+		const int NUM_SENSORS = 8;
+
+		unsigned int sensors[NUM_SENSORS];
+		const int FOLLOWER_OFFSET = 3500;
+
+		pos = arrays[currentSide]->readLine(sensors, QTR_EMITTERS_ON, 1) - FOLLOWER_OFFSET;
+		if (pos < -1000 || pos > 1000) {
+			for (int i = 0; i < NUM_SENSORS; i++) {
+				Serial.print(sensors[i]);
+				Serial.print(' ');
+			}
+			Serial.println();
+			break;
+		}
 	}
 }
 

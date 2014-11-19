@@ -52,6 +52,8 @@ private:
 	double Ki;
 	QTRSensorsRC* arrays[NUM_ARRAYS];
 	Mecanum* mecanumControl;
+	// Makes the robot drive exactly straight
+	double fudge_factor;
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
