@@ -30,13 +30,196 @@ void setup() {
 	
 	// Begin line following
 	Serial.println("Starting line following");
-	//followLine();
+	followLine();
+}
+
+void loop() {
+	//ReadSensorData();
+	//FollowSide();
+	//SpeedRamping();
+	//MoveInSquare();
 }
 
 void followLine() {
 	// Follow the front line sensor until the left line sensor finds a line
 	Serial.println("Following the front line sensor");
 	delay(1000);
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	/*lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
+	delay(100);
+
+	Serial.println("Turn left 90");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(800);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Following the left line sensor");
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn left 180");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(1600);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn left 90");
+	lineFollowerControl.RotateUntilLine(-1.0);
+	delay(100);
+
+	Serial.println("Wait on right line sensor");
+	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
+	delay(100);
+
+	Serial.println("Turn right 90");
+	mecanum.mecRun(0, 0, 1.0);
+	delay(800);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn left 180");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(1600);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn right 90");
+	lineFollowerControl.RotateUntilLine(1.0);
+	delay(100);
+
+	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
+	delay(100);
+
+	Serial.println("Turn left 90");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(800);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Following the left line sensor");
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn left 180");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(1600);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);*/
+
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn left 90");
+	lineFollowerControl.RotateUntilLine(-1.0);
+	delay(100);
+
+	Serial.println("Wait on right line sensor");
+	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
+	delay(100);
+
+	Serial.println("Turn right 90");
+	mecanum.mecRun(0, 0, 1.0);
+	delay(800);
+	mecanum.mecRun(0, 0, 0);
+	delay(1000);
+
+	lineFollowerControl.followUntilWhite();
+	delay(2000);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(900);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	Serial.println("Turn left almost 180");
+	mecanum.mecRun(0, 0, -1.0);
+	delay(1400);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	lineFollowerControl.followUntilWhite();
+	delay(2000);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(400);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	Serial.println("Turn right 90");
+	lineFollowerControl.RotateUntilLine(1.0);
+	delay(100);
+
+	lineFollowerControl.followUntilWhite();
+
+	/*Serial.println("Following the right line sensor");
+	lineFollowerControl.setSide(LineFollowControl::RIGHT);
+	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
+	delay(2000);
+
+	Serial.println("Following the front line sensor");
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
+	delay(1000);
+
+	Serial.println("Following the right line sensor");
+	lineFollowerControl.setSide(LineFollowControl::RIGHT);
+	lineFollowerControl.followUntilWhite();
+	delay(1000);
+
+	Serial.println("Following the left line sensor");
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
+	delay(1000);
+
+	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(1000);
@@ -64,16 +247,9 @@ void followLine() {
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(1000);
+	delay(1000);*/
 
 	Serial.println("Done");
-}
-
-void loop() {
-	//ReadSensorData();
-	//FollowSide();
-	//SpeedRamping();
-	//MoveInSquare();
 }
 
 void MoveInSquare() {
@@ -101,7 +277,7 @@ void FollowSide() {
 }
 
 void ReadSensorData() {
-	QTRSensorsRC* sensor = lineFollowerControl.getLeftSensor();
+	QTRSensorsRC* sensor = lineFollowerControl.getFrontSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {

@@ -67,7 +67,7 @@ void LineFollowControl::setSide(int side) {
 		currentAngle = 0;
 
 		Kp = 1.0 / FOLLOWER_OFFSET;
-		Kd = 0;
+		Kd = 0.0001;
 		fudge_factor = 0.0;
 		//Kd = 0.0005;
 		break;
@@ -75,10 +75,10 @@ void LineFollowControl::setSide(int side) {
 	case RIGHT:
 		currentAngle = PI_4 * 2;
 
-		Kp = 0.9 / FOLLOWER_OFFSET;
+		Kp = 1.0 / FOLLOWER_OFFSET;
 		//Kp = 0;
-		Kd = 0.0;
-		fudge_factor = 0.05;
+		Kd = 0.001;
+		fudge_factor = 0.00;
 		//Kd = 0.001;
 		//Kd = 0.006;
 		break;
@@ -86,9 +86,9 @@ void LineFollowControl::setSide(int side) {
 	case LEFT:
 		currentAngle = PI_4 * 6;
 
-		Kp = 0.9 / FOLLOWER_OFFSET;
+		Kp = 1.0 / FOLLOWER_OFFSET;
 		//Kp = 0.0;
-		Kd = 0.0;
+		Kd = 0.001;
 		fudge_factor = 0.0;
 		//Kd = 0.001;
 		//Kd = 0.006;
@@ -105,7 +105,7 @@ void LineFollowControl::followUntilWhite() {
 
 	do {
 		lastError = update(lastError);
-	} while (whiteCount(getCurrentSensor()) != 8);
+	} while (whiteCount(getCurrentSensor()) <= 7);
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
@@ -240,6 +240,16 @@ int LineFollowControl::update(int lastError) {
 	Serial.print(rotation);
 	Serial.println();
 
+	/*if (currentSide == RIGHT || currentSide == LEFT)
+	{
+		if (error <= -2000 || error >= 2000)
+		{
+			do {
+				arrays[currentSide]->read(sensors);
+			} while (sensors[3] > 800 || sensors[4] > 800);
+		}
+	}*/
+
 	return error;
 }
 
@@ -247,27 +257,10 @@ int LineFollowControl::update(int lastError) {
 void LineFollowControl::followInfinitely()
 {
 	int lastError = 0;
-	int pos = 0;
 
 	// Infinite loop
 	while(true) {
-		update(lastError);
-
-
-		const int NUM_SENSORS = 8;
-
-		unsigned int sensors[NUM_SENSORS];
-		const int FOLLOWER_OFFSET = 3500;
-
-		pos = arrays[currentSide]->readLine(sensors, QTR_EMITTERS_ON, 1) - FOLLOWER_OFFSET;
-		if (pos < -1000 || pos > 1000) {
-			for (int i = 0; i < NUM_SENSORS; i++) {
-				Serial.print(sensors[i]);
-				Serial.print(' ');
-			}
-			Serial.println();
-			break;
-		}
+		lastError = update(lastError);
 	}
 }
 
@@ -281,7 +274,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int frontCalibratedMin[] = {
-		360, 256, 255, 218, 154, 180, 244, 269
+		160, 110, 110, 125, 90, 110, 170, 170
 	};
 
 	// Initialize left
@@ -301,7 +294,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		231, 218, 192, 192, 218, 192, 205, 346
+		200, 200, 192, 192, 218, 192, 205, 346
 	};
 
 	// Write to the new arrays
@@ -315,4 +308,19 @@ void LineFollowControl::defaultCalibration(void)
 		arrays[RIGHT]->calibratedMaximumOn[i] = rightCalibratedMax[i];
 		arrays[RIGHT]->calibratedMinimumOn[i] = rightCalibratedMin[i];
 	}
+}
+
+
+void LineFollowControl::RotateUntilLine(double rotation)
+{
+	mecanumControl->mecRun(0, 0, rotation);
+
+	const int NUM_SENSORS = 8;
+	unsigned int sensors[NUM_SENSORS];
+
+	do {
+		arrays[currentSide]->read(sensors);
+	} while (sensors[3] > 800 || sensors[4] > 800);
+
+	mecanumControl->mecRun(0, 0, 0);
 }

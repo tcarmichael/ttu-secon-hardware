@@ -50,8 +50,8 @@ extern "C" void __cxa_pure_virtual() {;}
 
 
 //
-void followLine();
 //
+void followLine();
 void MoveInSquare();
 void SpeedRamping();
 void FollowSide();
