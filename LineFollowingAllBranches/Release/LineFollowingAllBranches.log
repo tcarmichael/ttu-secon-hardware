@@ -1,0 +1,29 @@
+﻿Build started 11/16/2014 9:52:53 PM.
+     1>Project "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowingAllBranches.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\Arduino\hardware\arduino\sam\cores\arduino" /I"C:\Program Files\Arduino\hardware\arduino\sam\variants\arduino_due_x" /I"C:\Program Files\Arduino\hardware\arduino\sam\libraries\Wire" /I"C:\Program Files\Arduino\hardware\arduino\sam\libraries\Wire\utility" /IC:\Users\radar1\Documents\Arduino\libraries\QTRSensors /IC:\Users\radar1\Documents\Arduino\libraries\QTRSensors\utility /IC:\Users\radar1\Documents\Arduino\libraries\MecanumDriver /IC:\Users\radar1\Documents\Arduino\libraries\MecanumDriver\utility /IC:\Users\radar1\Documents\Arduino\libraries\Adafruit_Motor_Driver /IC:\Users\radar1\Documents\Arduino\libraries\Adafruit_Motor_Driver\utility /I"C:\Program Files\Arduino\libraries" /I"C:\Program Files\Arduino\hardware\arduino\sam\libraries" /I"C:\Program Files\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers" /IC:\Users\radar1\Documents\Arduino\libraries /I"C:\Program Files\Arduino\hardware\arduino\sam\system\CMSIS\Device\ATMEL\\" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\libsam" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\libsam\include" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\CMSIS\CMSIS\Include\\" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\CMSIS\CMSIS\Include\\" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\CMSIS\Device\ATMEL\\" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\libsam" /I"C:\Program Files\Arduino\hardware\arduino\sam\system\libsam\include" /I"C:\Program Files\Arduino/hardware/tools/g++_arm_none_eabi\arm-none-eabi\include" /I"C:\Program Files\Arduino/hardware/tools/g++_arm_none_eabi\arm_none_eabi\include\\" /I"C:\Program Files\Arduino/hardware/tools/g++_arm_none_eabi\lib\gcc\arm-none-eabi\4.4.1\include" /I"C:\Program Files\Arduino/hardware/tools/g++_arm_none_eabi\lib\gcc\arm-none-eabi\4.4.1\include\\" /Zi /nologo /W3 /WX- /sdl /Od /Oi /Oy- /D __SAM3X8E__ /D USB_VID=0x2341 /D USB_PID=0x003e /D USBCON /D "USB_MANUFACTURER=\"Unknown\"" /D "USB_PRODUCT=\"Arduino Due\"" /D ARDUINO=158 /D ARDUINO_MAIN /D printf=iprintf /D __SAM__ /D __sam__ /D F_CPU=84000000L /D __cplusplus /D _MBCS /X /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /FI"C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h" /analyze- /errorReport:prompt LineFollowControl.cpp
+         LineFollowControl.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(13): warning C4005: '__SAM3X8E__' : macro redefinition
+                 command-line arguments :  see previous definition of '__SAM3X8E__'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(16): warning C4005: 'USBCON' : macro redefinition
+                 command-line arguments :  see previous definition of 'USBCON'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(17): warning C4005: 'USB_MANUFACTURER' : macro redefinition
+                 command-line arguments :  see previous definition of 'USB_MANUFACTURER'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(18): warning C4005: 'USB_PRODUCT' : macro redefinition
+                 command-line arguments :  see previous definition of 'USB_PRODUCT'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(20): warning C4005: 'ARDUINO_MAIN' : macro redefinition
+                 command-line arguments :  see previous definition of 'ARDUINO_MAIN'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(22): warning C4005: '__SAM__' : macro redefinition
+                 command-line arguments :  see previous definition of '__SAM__'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(23): warning C4005: '__sam__' : macro redefinition
+                 command-line arguments :  see previous definition of '__sam__'
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(25): warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(32): warning C4005: '__asm__' : macro redefinition
+                 C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Visual Micro\.LineFollowingAllBranches.vsarduino.h(27) : see previous definition of '__asm__'
+     1>C:\Program Files\Arduino\hardware\arduino\sam\cores\arduino\arduino.h(23): fatal error C1083: Cannot open include file: 'stdint.h': No such file or directory
+     1>Done Building Project "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowingAllBranches.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.41
