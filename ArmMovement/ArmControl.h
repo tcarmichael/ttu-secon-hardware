@@ -9,7 +9,8 @@
 	#include "WProgram.h"
 #endif
 
-#include "Adafruit_PWMServoDriver.h"
+//#include "Adafruit_PWMServoDriver.h"
+#include <Adafruit_MotorShield.h>
 #include "EtchControl.h"
 #include "SimonControl.h"
 #include "RubiksControl.h"

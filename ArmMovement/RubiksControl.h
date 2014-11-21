@@ -11,4 +11,5 @@ public:
 	RubiksControl(ArmControl* parent) : parent(parent) {}
 	void Grab();
 	void Rotate();
+	void Release();
 };
