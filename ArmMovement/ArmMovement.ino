@@ -15,12 +15,10 @@ void setup()
 	mecanum.begin();
 	mecanum.mecRun(0, 0, 0);
 	control.begin();
+	
+	control.Rubiks.Rubiks_Play();
 
-	//control.RearHomeLeft();
-	//control.frontHomeLeft();
-	//control.Rubiks.Grab();
-	//control.Rubiks.Rotate();
-	control.Card.Card_Play();
+	
 
 
 }

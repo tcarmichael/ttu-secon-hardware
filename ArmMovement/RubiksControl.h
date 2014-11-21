@@ -12,4 +12,5 @@ public:
 	void Grab();
 	void Rotate();
 	void Release();
+	void Rubiks_Play();
 };
