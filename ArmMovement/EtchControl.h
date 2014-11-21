@@ -6,6 +6,10 @@ class EtchControl
 	// Wrapper for the Etch-A-Sketch functions
 private:
 	ArmControl* parent;
+	const int closeRearGripper = 95;
+	const int openRearGripper = 60;
+	const int closeFrontGripper = 1;
+	const int openFrontGripper  = 60;
 
 public:
 	EtchControl(ArmControl* parent) : parent(parent) {}
@@ -17,4 +21,6 @@ public:
 	void down();
 	void Pull();
 	void Grasp();
+	void Release();
+	void draw();
 };

@@ -9,5 +9,5 @@ private:
 
 public:
 	CardControl(ArmControl* parent) : parent(parent) {}
-	void Grab();
+	void Card_Play();
 };
