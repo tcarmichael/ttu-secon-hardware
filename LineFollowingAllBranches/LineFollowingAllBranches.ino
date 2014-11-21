@@ -3,12 +3,16 @@
 #include "Wire.h"
 #include "QTRSensors.h"
 #include "Adafruit_MotorShield.h"
+#include "ArmControl.h"
+#include "Adafruit_Light_Sensor\Adafruit_TSL2561_U.h"
+#include "Adafruit_Sensor\Adafruit_Sensor.h"
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
-
 LineFollowControl lineFollowerControl(&mecanum);
-Adafruit_PWMServoDriver pwm;
+
+// Controls the arm movements
+ArmControl arm;
 
 void setup() {
 	Serial.begin(9600);
@@ -22,11 +26,14 @@ void setup() {
 	delay(500);
 	lineFollowerControl.defaultCalibration();
 
-	// Remove this
-	pwm.begin();
-	pwm.setPWMFreq(60);
-	Arm_Front_Home_Right();
-	Arm_Rear_Home_Right();
+	// Set the arms in position
+	arm.begin();
+	arm.frontHomeRight();
+	arm.RearHomeRight();
+
+	// Wait for start signal
+	Serial.println("Waiting for LED");
+	//WaitForLed();
 	
 	// Begin line following
 	Serial.println("Starting line following");
@@ -40,17 +47,46 @@ void loop() {
 	//MoveInSquare();
 }
 
-void followLine() {
+void WaitForLed()
+{
+	// Initialize the sensor
+	Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
+	if (!tsl.begin())
+	{
+		/* There was a problem detecting the ADXL345 ... check your connections */
+		Serial.print("Ooops, no TSL2561 detected ... Check your wiring or I2C ADDR!");
+	}
+
+	// Configure the sensor
+	tsl.enableAutoRange(true);
+	tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);
+	
+	// Wait for the sensor to return a value
+	sensors_event_t event;
+	do {
+		tsl.getEvent(&event);
+	} while (!event.light);
+}
+
+
+void followLine()
+{
+	delay(1000);
+
+	// Get out of the box
+	mecanum.mecRun(1.5, 0, 0);
+	delay(500);
+	mecanum.mecRun(0, 0, 0);
+
 	// Follow the front line sensor until the left line sensor finds a line
 	Serial.println("Following the front line sensor");
-	delay(1000);
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	/*lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
+	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(100);
 
 	Serial.println("Turn left 90");
 	lineFollowerControl.RotateUntilLine(-1.0);
-	delay(100);*/
+	delay(100);
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.followUntilWhite();
@@ -71,6 +107,9 @@ void followLine() {
 	delay(1000);
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
+
+	// Play Simon here
+	//arm.Simon.Play();
 
 	mecanum.mecRun(1.3, PI / 2, 0);
 	delay(800);
@@ -119,7 +158,10 @@ void followLine() {
 	mecanum.mecRun(1.3, PI / 2, 0);
 	delay(1000);
 	mecanum.mecRun(0, 0, 0);
-	delay(2000);
+	delay(5000);
+
+	// Play game here
+	arm.Etch.Etch_Play();
 
 	mecanum.mecRun(1.3, 3 * PI / 2, 0);
 	delay(600);
@@ -163,6 +205,8 @@ void followLine() {
 	delay(1000);
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
+
+	// Play Rubiks here
 
 	mecanum.mecRun(1.3, PI / 2, 0);
 	delay(600);
@@ -208,7 +252,10 @@ void followLine() {
 	mecanum.mecRun(1.0, 0, 0);
 	delay(600);
 	mecanum.mecRun(0, 0, 0);
-	delay(2000);
+	delay(5000);
+
+	// Play game here
+	arm.Card.Card_Play();
 
 	Serial.println("Turn left almost 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
@@ -345,143 +392,3 @@ void ReadSensorData() {
 
 	delay(1000);
 }
-void Arm_Front_Home_Right()
-{
-	Front_Arm_IK(1, 0, 2, 90, 90, -30);
-	delay(1500);
-}
-void Arm_Rear_Home_Right()
-{
-	Rear_Arm_IK(-1, 0, 2, 90, 90, -30);
-	delay(1500);
-}
-
-
-const double A = 4.75;
-const double B = 5.00;
-
-#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  650 // this is the 'maximum' pulse length count (out of 4096)
-
-const int NUM_SERVOS = 6;
-const int Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 12 intentionally
-const int Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
-
-int Rear_Arm_IK(double x, double y, double z, int g, double wr, int wa) // Note xy are coordinates in the ground plane and z is the vertical plane
-{
-
-	double r = sqrt(x*x + y*y);
-	z = z + r*(.5);
-	wa = wa + 3 * r;
-	double Base_Rotation = degrees(atan2(y, x));
-	double M = sqrt((z*z) + (r*r));
-
-	if (M <= 0)
-	{
-		Serial.print("M");
-		return 1;
-
-	}
-	double A1 = atan(z / r);
-	if (r <= 0)
-	{
-		Serial.print("r");
-		return 1;
-
-	}
-	double A2 = acos((A*A - B*B + M*M) / ((A * 2)*M));
-	double Elbow = acos((A*A + B*B - M*M) / ((A * 2)*B));
-	double Shoulder = A1 + A2;
-	Elbow = degrees(Elbow);
-	Shoulder = degrees(Shoulder);
-	if ((int)Elbow <= 0 || (int)Shoulder <= 0)
-	{
-		Serial.print("S");
-		return 1;
-
-	}
-	double Wris = abs(wa - Elbow - Shoulder) - 90;
-
-	double pulselen;
-
-	pulselen = map(Shoulder, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[1], 0, pulselen);
-
-
-	pulselen = map(180 - Elbow, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[2], 0, pulselen);
-
-
-
-	pulselen = map(180 - Wris, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[3], 0, pulselen);
-
-
-	pulselen = map(Base_Rotation, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[0], 0, pulselen);
-
-
-	pulselen = map(wr, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[4], 0, pulselen);
-
-	pulselen = map(g, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Rear_Arm[5], 0, pulselen);
-
-
-	return 0;
-}
-
-
-
-int Front_Arm_IK(double x, double y, double z, int g, double wr, int wa)
-{
-	double r = sqrt(x*x + y*y);
-	z = z + r*(.5);
-	wa = wa + 1.5*r;
-	double Base_Rotation = degrees(atan2(y, x));
-	double M = sqrt((z*z) + (r*r));
-	if (M <= 0)
-		return 1;
-	double A1 = atan(z / r);
-	if (r <= 0)
-		return 1;
-	double A2 = acos((A*A - B*B + M*M) / ((A * 2)*M));
-	double Elbow = acos((A*A + B*B - M*M) / ((A * 2)*B));
-	double Shoulder = A1 + A2;
-	Elbow = degrees(Elbow);
-	Shoulder = degrees(Shoulder);
-	if ((int)Elbow <= 0 || (int)Shoulder <= 0)
-		return 1;
-	double Wris = abs(wa - Elbow - Shoulder) - 90;
-
-
-	double pulselen;
-
-	pulselen = map(Shoulder, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[1], 0, pulselen);
-
-
-	pulselen = map(180 - Elbow, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[2], 0, pulselen);
-
-
-
-	pulselen = map(180 - Wris, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[3], 0, pulselen);
-
-
-	pulselen = map(Base_Rotation, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[0], 0, pulselen);
-
-
-	pulselen = map(wr, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[4], 0, pulselen);
-
-	pulselen = map(g, 0, 180, SERVOMIN, SERVOMAX);
-	pwm.setPWM(Front_Arm[5], 0, pulselen);
-
-
-	return 0;
-
-}
-

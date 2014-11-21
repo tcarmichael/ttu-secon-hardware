@@ -73,17 +73,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="LineFollowingAllBranches.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArmControl.h" />
+    <ClInclude Include="CardControl.h" />
+    <ClInclude Include="EtchControl.h" />
     <ClInclude Include="LineFollowControl.h" />
+    <ClInclude Include="RubiksControl.h" />
+    <ClInclude Include="SimonControl.h" />
     <ClInclude Include="Visual Micro\.LineFollowingAllBranches.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArmControl.cpp" />
+    <ClCompile Include="CardControl.cpp" />
+    <ClCompile Include="EtchControl.cpp" />
     <ClCompile Include="LineFollowControl.cpp" />
+    <ClCompile Include="RubiksControl.cpp" />
+    <ClCompile Include="SimonControl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

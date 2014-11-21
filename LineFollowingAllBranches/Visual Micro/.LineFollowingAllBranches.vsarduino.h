@@ -51,20 +51,27 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
+void WaitForLed();
 void followLine();
 void MoveInSquare();
 void SpeedRamping();
 void FollowSide();
 void ReadSensorData();
-void Arm_Front_Home_Right();
-void Arm_Rear_Home_Right();
-int Rear_Arm_IK(double x, double y, double z, int g, double wr, int wa);
-int Front_Arm_IK(double x, double y, double z, int g, double wr, int wa);
 
 #include "C:\Program Files\Arduino\hardware\arduino\sam\cores\arduino\arduino.h"
 #include "C:\Program Files\Arduino\hardware\arduino\sam\variants\arduino_due_x\pins_arduino.h" 
 #include "C:\Program Files\Arduino\hardware\arduino\sam\variants\arduino_due_x\variant.h" 
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowingAllBranches.ino"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\ArmControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\ArmControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\CardControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\CardControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.h"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.cpp"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\RubiksControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\RubiksControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\SimonControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\SimonControl.h"
 #endif

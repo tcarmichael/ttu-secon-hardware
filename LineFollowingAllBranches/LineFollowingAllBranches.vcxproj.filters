@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LineFollowingAllBranches.ino" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.LineFollowingAllBranches.vsarduino.h">
@@ -25,9 +24,39 @@
     <ClInclude Include="LineFollowControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArmControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CardControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EtchControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RubiksControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LineFollowControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CardControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EtchControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RubiksControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
