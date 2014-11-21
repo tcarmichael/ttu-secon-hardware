@@ -66,36 +66,29 @@ void LineFollowControl::setSide(int side) {
 	case FRONT:
 		currentAngle = 0;
 
-		Kp = 1.0 / FOLLOWER_OFFSET;
-		Kd = 0.0001;
+		Kp = 3.0 / FOLLOWER_OFFSET;
+		Kd = 0.0005;
 		fudge_factor = 0.0;
-		//Kd = 0.0005;
 		break;
 
 	case RIGHT:
-		currentAngle = PI_4 * 2;
+		currentAngle = PI / 2;
 
 		Kp = 1.0 / FOLLOWER_OFFSET;
-		//Kp = 0;
 		Kd = 0.001;
 		fudge_factor = 0.00;
-		//Kd = 0.001;
-		//Kd = 0.006;
 		break;
 
 	case LEFT:
-		currentAngle = PI_4 * 6;
+		currentAngle = 3 * PI / 2;
 
 		Kp = 1.0 / FOLLOWER_OFFSET;
-		//Kp = 0.0;
 		Kd = 0.001;
 		fudge_factor = 0.0;
-		//Kd = 0.001;
-		//Kd = 0.006;
 		break;
 
 	case BACK:
-		currentAngle = PI_4 * 4;
+		currentAngle = PI;
 		break;
 	}
 }
@@ -209,8 +202,8 @@ int LineFollowControl::update(int lastError) {
 	double rotation = Kp * error + Kd * (error - lastError);
 
 	// Bounds-checking
-	rotation = (rotation > 1) ? 1 : rotation;
-	rotation = (rotation < -1) ? -1 : rotation;
+	//rotation = (rotation > 1) ? 1 : rotation;
+	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
 	double speed = 1.5 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
@@ -219,17 +212,6 @@ int LineFollowControl::update(int lastError) {
 
 	// Send the speed
 	mecanumControl->mecRun(speed, currentAngle, rotation + fudge_factor);
-
-	/*if (error == FOLLOWER_OFFSET || error == -FOLLOWER_OFFSET) {
-		mecanumControl->mecRun(0, currentAngle, rotation);
-	}
-	else {
-		mecanumControl->mecRun(0.6, currentAngle, rotation);
-	}*/
-	/*for (int i = 0; i < 8; i++) {
-		Serial.print(sensors[i]);
-		Serial.print(' ');
-	}*/
 
 	// Output the values
 	Serial.print("Error: ");
@@ -240,15 +222,12 @@ int LineFollowControl::update(int lastError) {
 	Serial.print(rotation);
 	Serial.println();
 
-	/*if (currentSide == RIGHT || currentSide == LEFT)
+	if (error <= -3500 || error >= 3500)
 	{
-		if (error <= -2000 || error >= 2000)
-		{
-			do {
-				arrays[currentSide]->read(sensors);
-			} while (sensors[3] > 800 || sensors[4] > 800);
-		}
-	}*/
+		do {
+			arrays[currentSide]->read(sensors);
+		} while (sensors[3] > 800 || sensors[4] > 800);
+	}
 
 	return error;
 }
@@ -310,16 +289,26 @@ void LineFollowControl::defaultCalibration(void)
 	}
 }
 
-
 void LineFollowControl::RotateUntilLine(double rotation)
+{
+	RotateUntilLine(rotation, currentSide);
+}
+
+void LineFollowControl::RotateUntilLine(double rotation, int side)
 {
 	mecanumControl->mecRun(0, 0, rotation);
 
 	const int NUM_SENSORS = 8;
 	unsigned int sensors[NUM_SENSORS];
 
+	// Wait for black
 	do {
-		arrays[currentSide]->read(sensors);
+		arrays[side]->read(sensors);
+	} while (sensors[3] < 800 || sensors[4] < 800);
+
+	// Wait for white
+	do {
+		arrays[side]->read(sensors);
 	} while (sensors[3] > 800 || sensors[4] > 800);
 
 	mecanumControl->mecRun(0, 0, 0);

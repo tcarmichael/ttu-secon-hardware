@@ -62,6 +62,7 @@ public:
 	void followInfinitely();
 	void defaultCalibration(void);
 	void RotateUntilLine(double rotation);
+	void RotateUntilLine(double rotation, int side);
 };
 
 #endif

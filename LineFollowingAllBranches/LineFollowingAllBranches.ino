@@ -49,25 +49,36 @@ void followLine() {
 	delay(100);
 
 	Serial.println("Turn left 90");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(800);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
+	lineFollowerControl.RotateUntilLine(-1.0);
+	delay(100);*/
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
-	Serial.println("Go straight");
+	Serial.println("Play Simon");
+
+	/*Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
 	delay(400);
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
+	delay(100);*/
+	
+	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
+	delay(1000);
 
-	Serial.println("Turn left 180");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(1600);
+	mecanum.mecRun(1.3, 3 * PI / 2, 0);
+	delay(1000);
 	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	mecanum.mecRun(1.3, PI / 2, 0);
+	delay(800);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	Serial.println("Turn right 180");
+	lineFollowerControl.RotateUntilLine(1.0);
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
@@ -88,24 +99,35 @@ void followLine() {
 	delay(100);
 
 	Serial.println("Turn right 90");
-	mecanum.mecRun(0, 0, 1.0);
-	delay(800);
-	mecanum.mecRun(0, 0, 0);
+	lineFollowerControl.RotateUntilLine(1.0);
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
-	Serial.println("Go straight");
+	Serial.println("Play Etch-A-Sketch");
+
+	/*Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
 	delay(400);
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
+	delay(100);*/
+
+	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
+	delay(1000);
+
+	mecanum.mecRun(1.3, PI / 2, 0);
+	delay(1000);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	mecanum.mecRun(1.3, 3 * PI / 2, 0);
+	delay(600);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
 
 	Serial.println("Turn left 180");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(1600);
-	mecanum.mecRun(0, 0, 0);
+	lineFollowerControl.RotateUntilLine(-1.0);
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
@@ -125,26 +147,38 @@ void followLine() {
 	delay(100);
 
 	Serial.println("Turn left 90");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(800);
-	mecanum.mecRun(0, 0, 0);
+	lineFollowerControl.RotateUntilLine(-1.0);
 	delay(100);
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
-	Serial.println("Go straight");
+	Serial.println("Play Rubik's Cube");
+
+	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
+	delay(1000);
+
+	mecanum.mecRun(1.3, 3 * PI / 2, 0);
+	delay(1000);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+	mecanum.mecRun(1.3, PI / 2, 0);
+	delay(600);
+	mecanum.mecRun(0, 0, 0);
+	delay(2000);
+
+
+	/*Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
 	delay(400);
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	Serial.println("Turn left 180");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(1600);
-	mecanum.mecRun(0, 0, 0);
 	delay(100);*/
+
+	Serial.println("Turn right 180");
+	lineFollowerControl.RotateUntilLine(1.0);
+	delay(100);
 
 	lineFollowerControl.followUntilWhite();
 	delay(100);
@@ -164,9 +198,7 @@ void followLine() {
 	delay(100);
 
 	Serial.println("Turn right 90");
-	mecanum.mecRun(0, 0, 1.0);
-	delay(800);
-	mecanum.mecRun(0, 0, 0);
+	lineFollowerControl.RotateUntilLine(1.0);
 	delay(1000);
 
 	lineFollowerControl.followUntilWhite();
@@ -174,14 +206,12 @@ void followLine() {
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(900);
+	delay(600);
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
 
 	Serial.println("Turn left almost 180");
-	mecanum.mecRun(0, 0, -1.0);
-	delay(1400);
-	mecanum.mecRun(0, 0, 0);
+	lineFollowerControl.RotateUntilLine(-1.0);
 	delay(2000);
 
 	lineFollowerControl.followUntilWhite();
