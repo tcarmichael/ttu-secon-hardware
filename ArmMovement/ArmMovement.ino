@@ -5,7 +5,7 @@
 //#include <Adafruit_PWMServoDriver.h>
 
 #define DEBUG
-
+int incomingByte = 0;
 ArmControl control;
 
 void setup()
@@ -16,7 +16,7 @@ void setup()
 	mecanum.mecRun(0, 0, 0);
 	control.begin();
 	
-	control.Rubiks.Rubiks_Play();
+	control.Etch.Etch_Play();
 
 	
 
@@ -32,6 +32,7 @@ void loop()
 	Arm_Front_Flip_To_Right();
 	Arm_Front_Home_Right();*/
 	//control.rearArm(3,1,0,90,90,-90);
+    
 
-	
+
 }

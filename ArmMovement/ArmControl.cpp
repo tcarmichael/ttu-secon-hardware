@@ -376,7 +376,6 @@ void ArmControl::Front_Smooth_Move(double x1, double y1, double z1, int g1, doub
 	for (int temp = 1; temp <= I + 1; temp += 1)
 	{
 			y_array[temp] = y_array[temp - 1] + y_inc;
-			Serial.println(y_array[temp],4);
 	}
 
 
