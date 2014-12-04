@@ -53,6 +53,7 @@ extern "C" void __cxa_pure_virtual() {;}
 //
 void WaitForLed();
 void followLine();
+void FollowLineMecanum();
 void MoveInSquare();
 void SpeedRamping();
 void FollowSide();

@@ -20,24 +20,34 @@ void setup() {
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
 	mecanum.begin();
+	mecanum.mecRun(0, 0, 0);
 	
 	// Calibrate the line followers
 	Serial.println("Calibrating");
-	delay(500);
 	lineFollowerControl.defaultCalibration();
 
 	// Set the arms in position
 	arm.begin();
-	arm.frontHomeRight();
-	arm.RearHomeRight();
+	//arm.frontHomeRight();
+	//arm.RearHomeRight();
+	arm.frontHomeLeft();
+	arm.RearHomeLeft();
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
 	//WaitForLed();
+	delay(5000);
+
+	// Get out of the box
+	delay(1000);
+	mecanum.mecRun(1.5, 0, 0);
+	delay(1000);
+	mecanum.mecRun(0, 0, 0);
 	
 	// Begin line following
 	Serial.println("Starting line following");
 	followLine();
+	//FollowLineMecanum();
 }
 
 void loop() {
@@ -71,13 +81,6 @@ void WaitForLed()
 
 void followLine()
 {
-	delay(1000);
-
-	// Get out of the box
-	mecanum.mecRun(1.5, 0, 0);
-	delay(500);
-	mecanum.mecRun(0, 0, 0);
-
 	// Follow the front line sensor until the left line sensor finds a line
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
@@ -92,35 +95,19 @@ void followLine()
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
-	Serial.println("Play Simon");
-
-	/*Serial.println("Go straight");
-	mecanum.mecRun(1.0, 0, 0);
-	delay(400);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-	
 	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
 	delay(1000);
 
-	mecanum.mecRun(1.3, 3 * PI / 2, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
-
 	// Play Simon here
-	//arm.Simon.Play();
-
-	mecanum.mecRun(1.3, PI / 2, 0);
-	delay(800);
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
+	Serial.println("Play Simon");
+	arm.Simon.Simon_Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(1.0);
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
+
 	delay(100);
 
 	Serial.println("Go straight");
@@ -142,31 +129,14 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	Serial.println("Play Etch-A-Sketch");
-
-	/*Serial.println("Go straight");
-	mecanum.mecRun(1.0, 0, 0);
-	delay(400);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
+	delay(1000);
 
 	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
 	delay(1000);
 
-	mecanum.mecRun(1.3, PI / 2, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);
-	delay(5000);
-
 	// Play game here
+	Serial.println("Play Etch-A-Sketch");
 	arm.Etch.Etch_Play();
-
-	mecanum.mecRun(1.3, 3 * PI / 2, 0);
-	delay(600);
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
 
 	Serial.println("Turn left 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
@@ -196,29 +166,12 @@ void followLine()
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
-	Serial.println("Play Rubik's Cube");
-
 	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
 	delay(1000);
 
-	mecanum.mecRun(1.3, 3 * PI / 2, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
-
 	// Play Rubiks here
-
-	mecanum.mecRun(1.3, PI / 2, 0);
-	delay(600);
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
-
-
-	/*Serial.println("Go straight");
-	mecanum.mecRun(1.0, 0, 0);
-	delay(400);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
+	Serial.println("Play Rubik's Cube");
+	arm.Rubiks.Rubiks_Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(1.0);
@@ -243,26 +196,23 @@ void followLine()
 
 	Serial.println("Turn right 90");
 	lineFollowerControl.RotateUntilLine(1.0);
-	delay(1000);
+	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(2000);
+	delay(100);
 
-	Serial.println("Go straight");
-	mecanum.mecRun(1.0, 0, 0);
-	delay(600);
-	mecanum.mecRun(0, 0, 0);
-	delay(5000);
+	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
+	delay(100);
 
 	// Play game here
 	arm.Card.Card_Play();
 
 	Serial.println("Turn left almost 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
-	delay(2000);
+	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(2000);
+	delay(100);
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
@@ -275,8 +225,22 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
+}
 
-	/*Serial.println("Following the right line sensor");
+void FollowLineMecanum() {
+	Serial.println("Following the front line sensor");
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
+	delay(1000);
+
+	Serial.println("Following the left line sensor");
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	lineFollowerControl.followUntilWhite();
+	delay(1000);
+
+	// Play Simon
+
+	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
 	delay(2000);
@@ -290,6 +254,8 @@ void followLine()
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilWhite();
 	delay(1000);
+
+	// Play Etch-A-Sketch
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
@@ -306,6 +272,8 @@ void followLine()
 	lineFollowerControl.followUntilWhite();
 	delay(2000);
 
+	// Play the Rubik's cube
+
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
@@ -321,10 +289,16 @@ void followLine()
 	lineFollowerControl.followUntilWhite();
 	delay(1000);
 
+	// Pick up the card
+
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(1000);*/
+	delay(1000);
+
+	Serial.println("Following the front line sensor");
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	lineFollowerControl.followUntilWhite();
 
 	Serial.println("Done");
 }
@@ -354,7 +328,7 @@ void FollowSide() {
 }
 
 void ReadSensorData() {
-	QTRSensorsRC* sensor = lineFollowerControl.getFrontSensor();
+	QTRSensorsRC* sensor = lineFollowerControl.getLeftSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {

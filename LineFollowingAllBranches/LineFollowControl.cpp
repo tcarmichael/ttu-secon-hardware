@@ -98,7 +98,7 @@ void LineFollowControl::followUntilWhite() {
 
 	do {
 		lastError = update(lastError);
-	} while (whiteCount(getCurrentSensor()) <= 7);
+	} while (whiteCount(getCurrentSensor()) < 8);
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
@@ -206,7 +206,7 @@ int LineFollowControl::update(int lastError) {
 	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 1.5 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	double speed = 1.0 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
 	//speed = (speed > 1) ? 1 : speed;
 	speed = (speed < 0) ? 0 : speed;
 
