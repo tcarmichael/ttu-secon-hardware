@@ -43,6 +43,7 @@ public:
 private:
 	// Constant data members
 	static const int NUM_ARRAYS = 4;
+	static const int NUM_SENSORS = 8;
 
 	// Variable data members
 	int currentSide;
@@ -54,6 +55,7 @@ private:
 	Mecanum* mecanumControl;
 	// Makes the robot drive exactly straight
 	double fudge_factor;
+	unsigned int sensorValues[NUM_SENSORS];
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
@@ -63,6 +65,7 @@ public:
 	void defaultCalibration(void);
 	void RotateUntilLine(double rotation);
 	void RotateUntilLine(double rotation, int side);
+	void CenterOnLine(int sensor1, int sensor2);
 };
 
 #endif
