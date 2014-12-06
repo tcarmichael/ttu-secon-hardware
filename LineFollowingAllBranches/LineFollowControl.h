@@ -56,16 +56,19 @@ private:
 	// Makes the robot drive exactly straight
 	double fudge_factor;
 	unsigned int sensorValues[NUM_SENSORS];
+	bool corner_rotations;
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
 	int update(int lastError);
+	bool CenterSensor(int sensor);
 public:
 	void followInfinitely();
 	void defaultCalibration(void);
 	void RotateUntilLine(double rotation);
 	void RotateUntilLine(double rotation, int side);
 	void CenterOnLine(int sensor1, int sensor2);
+	void set_corner_rotations(bool corner_rotations);
 };
 
 #endif

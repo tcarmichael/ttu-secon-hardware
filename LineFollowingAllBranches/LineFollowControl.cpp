@@ -5,13 +5,14 @@
 #include "LineFollowControl.h"
 
 LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensorValues()
+, corner_rotations()
 {
 
 	mecanumControl = mecanum;
 
 	const int TIMEOUT = 2000;
 
-	unsigned char frontSensors[] = { 48,47,46,45,44,43,42,41 };
+	unsigned char frontSensors[] = { 41,42,43,44,45,46,47,48 };
 	const int frontEmitter = 40;
 	arrays[FRONT] = new QTRSensorsRC(
 		frontSensors,
@@ -94,9 +95,39 @@ void LineFollowControl::setSide(int side) {
 
 void LineFollowControl::followUntilWhite() {
 	int lastError = 0;
+	int position = 0;
 
 	do {
 		lastError = update(lastError);
+
+		// Go a bit past the corners if in corner rotation mode
+		if (corner_rotations)
+		{
+			position = arrays[currentSide]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+
+			// Keep going its current speed until it reaches the middle of the line
+			if (position == -3500 || position == 3500)
+			{
+				bool left_center, right_center;
+				do
+				{
+					arrays[LEFT]->read(sensorValues, QTR_EMITTERS_ON);
+					left_center = sensorValues[3] > 800 || sensorValues[4] > 800;
+
+					arrays[RIGHT]->read(sensorValues, QTR_EMITTERS_ON);
+					right_center = sensorValues[3] > 800 || sensorValues[4] > 800;
+				} while (!left_center || !right_center);
+
+				if (left_center)
+				{
+					RotateUntilLine(1.0);
+				}
+				else if (right_center)
+				{
+					RotateUntilLine(-1.0);
+				}
+			}
+		}
 	} while (whiteCount(getCurrentSensor()) < 8);
 
 	// Turn off the motors
@@ -105,7 +136,6 @@ void LineFollowControl::followUntilWhite() {
 
 void LineFollowControl::followUntilLine(int side) {
 	int lastError = 0;
-	unsigned int sensors[NUM_SENSORS];
 
 	if (currentSide == RIGHT || currentSide == LEFT) {
 		// Follow line until the sensor crosses the line
@@ -117,8 +147,8 @@ void LineFollowControl::followUntilLine(int side) {
 		// Stay at the same velocity until the other line sensors detect a line
 		do {
 			// Beware of magic number
-			arrays[side]->read(sensors, QTR_EMITTERS_ON);
-		} while (sensors[3] > 800 || sensors[4] > 800);
+			arrays[side]->read(sensorValues, QTR_EMITTERS_ON);
+		} while (sensorValues[3] > 800 || sensorValues[4] > 800);
 	}
 	else {
 
@@ -126,8 +156,8 @@ void LineFollowControl::followUntilLine(int side) {
 			lastError = update(lastError);
 
 			// Beware of magic number
-			arrays[side]->read(sensors, QTR_EMITTERS_ON);
-		} while (sensors[3] > 800 || sensors[4] > 800);
+			arrays[side]->read(sensorValues, QTR_EMITTERS_ON);
+		} while (sensorValues[3] > 800 || sensorValues[4] > 800);
 	}
 
 	// Turn off the motors
@@ -203,8 +233,7 @@ int LineFollowControl::update(int lastError) {
 
 	// Calculate the speed
 	double speed = 1.0 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
-	//speed = (speed > 1) ? 1 : speed;
-	speed = (speed < 0) ? 0 : speed;
+	if (speed < 0) speed = 0;
 
 	// Send the speed
 	mecanumControl->mecRun(speed, currentAngle, rotation + fudge_factor);
@@ -217,13 +246,6 @@ int LineFollowControl::update(int lastError) {
 	Serial.print("\tRotation: ");
 	Serial.print(rotation);
 	Serial.println();
-
-	if (error <= -3500 || error >= 3500)
-	{
-		do {
-			arrays[currentSide]->read(sensors);
-		} while (sensors[3] > 800 || sensors[4] > 800);
-	}
 
 	return error;
 }
@@ -249,7 +271,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int frontCalibratedMin[] = {
-		160, 110, 110, 125, 90, 110, 170, 170
+		160, 110, 110, 100, 90, 110, 170, 170
 	};
 
 	// Initialize left
@@ -269,7 +291,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		200, 200, 192, 192, 218, 192, 205, 346
+		160, 190, 190, 170, 160, 140, 190, 300
 	};
 
 	// Write to the new arrays
@@ -312,66 +334,68 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 
 void LineFollowControl::CenterOnLine(int sensor1, int sensor2)
 {
-	int position = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+	bool centerSensor1, centerSensor2;
+	int position1, position2;
+	do {
+		centerSensor1 = CenterSensor(sensor1);
+		centerSensor2 = CenterSensor(sensor2);
+
+		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+		Serial.print(position1);
+		Serial.print(' ');
+		Serial.println(position2);
+		Serial.println();
+	} while (position1 > 3550 || position1 < 3450 || position2 > 3550 || position2 < 3450);
+}
+
+
+bool LineFollowControl::CenterSensor(int sensor)
+{
+	const int TOLERANCE = 50;
+	const int CENTER = 3500;
+	const int LEFT = CENTER - TOLERANCE;
+	const int RIGHT = CENTER + TOLERANCE;
+
+	int position = arrays[sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
 	int direction = 0;
 
 	// Left of line
-	if (position < 3400) {
-		direction = -150;
+	if (position < LEFT) {
+		direction = -100;
 	}
 	// Right of line
-	else if (position > 3600) {
-		direction = 150;
+	else if (position > RIGHT) {
+		direction = 100;
+	}
+	else {
+		return false;
 	}
 
 	// Move the side
-	switch (sensor1) {
+	switch (sensor) {
 	case LineFollowControl::LEFT:
 		mecanumControl->WriteDirect(direction, 0, direction, 0);
 		break;
 
 	case LineFollowControl::RIGHT:
-		mecanumControl->WriteDirect(0, direction, 0, direction);
+		mecanumControl->WriteDirect(0, -direction, 0, -direction);
 		break;
 	}
 
 	// Wait until it is centered on the line
-	while (position < 3400 || position > 3600) {
-		position = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+	while (position < LEFT || position > RIGHT) {
+		position = arrays[sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 	}
 
 	// Stop robot
 	mecanumControl->mecRun(0, 0, 0);
+	return true;
+}
 
-	// Second line follower
-	position = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
-	// Left of line
-	if (position < 3400) {
-		direction = 150;
-	}
-	// Right of line
-	else if (position > 3600) {
-		direction = -150;
-	}
-
-	// Move the side
-	switch (sensor2) {
-	case LineFollowControl::LEFT:
-		mecanumControl->WriteDirect(direction, 0, direction, 0);
-		break;
-
-	case LineFollowControl::RIGHT:
-		mecanumControl->WriteDirect(0, direction, 0, direction);
-		break;
-	}
-
-	// Wait until it is centered on the line
-	while (position < 3400 || position > 3600) {
-		position = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
-	}
-
-	// Stop robot
-	mecanumControl->mecRun(0, 0, 0);
+void LineFollowControl::set_corner_rotations(bool new_corner_rotations)
+{
+	corner_rotations = new_corner_rotations;
 }
