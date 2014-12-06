@@ -148,8 +148,8 @@ void LineFollowControl::followUntilLine(int side) {
 	}
 	else {
 
-		while (!IsCenteredOneLine(side)) {
-			lastError = update(lastError)
+		while (!IsCenteredOnLine(side)) {
+			lastError = update(lastError);
 		}
 	}
 
