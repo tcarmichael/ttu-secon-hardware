@@ -48,6 +48,12 @@ void setup() {
 	lineFollowerControl.set_corner_rotations(true);
 	//followLine();
 	//FollowLineMecanum();
+
+
+
+
+	// Justin Testing Games
+	arm.Rubiks.Rubiks_Play();
 }
 
 void loop() {
@@ -56,8 +62,8 @@ void loop() {
 	//SpeedRamping();
 	//MoveInSquare();
 	//Strafe();
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(2000);
+	//lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+	//delay(2000);
 }
 
 void WaitForLed()

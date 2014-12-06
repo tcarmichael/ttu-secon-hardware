@@ -8,6 +8,7 @@
 const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 10 intentionally
 const int ArmControl::Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
 
+
 const double ArmControl::A = 4.75;
 const double ArmControl::B = 5.00;
 
