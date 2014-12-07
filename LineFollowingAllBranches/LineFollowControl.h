@@ -70,6 +70,7 @@ public:
 	void RotateUntilLine(double rotation, int side);
 	void CenterOnLine(int sensor1, int sensor2);
 	void set_corner_rotations(bool corner_rotations);
+	bool IsExactlyCenteredOnLine(int sensor);
 };
 
 #endif

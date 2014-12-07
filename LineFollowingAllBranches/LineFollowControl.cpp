@@ -105,7 +105,7 @@ void LineFollowControl::followUntilWhite() {
 			int position = arrays[currentSide]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
 			// Keep going its current speed until it reaches the middle of the line
-			if (position == -3500 || position == 3500)
+			if (position == 0 || position == 7000)
 			{
 				bool left_center, right_center;
 				do
@@ -116,10 +116,12 @@ void LineFollowControl::followUntilWhite() {
 
 				if (left_center)
 				{
+					Serial.println("Rotating Left");
 					RotateUntilLine(1.0);
 				}
 				else if (right_center)
 				{
+					Serial.println("Rotating Right");
 					RotateUntilLine(-1.0);
 				}
 			}
@@ -264,7 +266,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int frontCalibratedMin[] = {
-		160, 110, 110, 100, 90, 110, 170, 170
+		130, 110, 100, 90, 90, 110, 170, 170
 	};
 
 	// Initialize left
@@ -284,7 +286,7 @@ void LineFollowControl::defaultCalibration(void)
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		160, 190, 190, 170, 160, 140, 190, 300
+		130, 150, 150, 140, 150, 130, 150, 240
 	};
 
 	// Write to the new arrays
@@ -312,14 +314,16 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 	unsigned int sensors[NUM_SENSORS];
 
 	// Wait for black
-	do {
-		arrays[side]->read(sensors);
-	} while (sensors[3] < 800 || sensors[4] < 800);
+	while (IsCenteredOnLine(side))
+	{
+		// Wait
+	}
 
 	// Wait for white
-	do {
-		arrays[side]->read(sensors);
-	} while (sensors[3] > 800 || sensors[4] > 800);
+	while (!IsExactlyCenteredOnLine(side))
+	{
+		// Wait
+	}
 
 	mecanumControl->mecRun(0, 0, 0);
 }
@@ -333,22 +337,32 @@ void LineFollowControl::CenterOnLine(int sensor1, int sensor2)
 	{
 		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
-		if ( (position1 < 3550 && position1 > 3450) || (position2 < 3550 && position2 > 3450) ) return;
+		if ( (position1 < 3600 && position1 > 3400) && (position2 < 3600 && position2 > 3400) ) return;
+		Serial.print(position1);
+		Serial.print(' ');
+		Serial.print(position2);
+		Serial.println();
 
 		CenterSensor(sensor1);
+		delay(100);
 		
 		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
-		if ( (position1 < 3550 && position1 > 3450) || (position2 < 3550 && position2 > 3450) ) return;
+		if ((position1 < 3600 && position1 > 3400) && (position2 < 3600 && position2 > 3400)) return;
+		Serial.print(position1);
+		Serial.print(' ');
+		Serial.print(position2);
+		Serial.println();
 
 		CenterSensor(sensor2);
+		delay(100);
 	}
 }
 
 
 bool LineFollowControl::CenterSensor(int sensor)
 {
-	const int TOLERANCE = 50;
+	const int TOLERANCE = 100;
 	const int CENTER = 3500;
 	const int LEFT = CENTER - TOLERANCE;
 	const int RIGHT = CENTER + TOLERANCE;
@@ -359,11 +373,11 @@ bool LineFollowControl::CenterSensor(int sensor)
 
 	// Left of line
 	if (position < LEFT) {
-		direction = -100;
+		direction = -75;
 	}
 	// Right of line
 	else if (position > RIGHT) {
-		direction = 100;
+		direction = 75;
 	}
 	else {
 		return false;
@@ -406,4 +420,16 @@ bool LineFollowControl::IsCenteredOnLine(int sensor)
 
 	// If the middle two sensors detect a line
 	return sensorValues[3] < THRESHOLD && sensorValues[4] < THRESHOLD;
+}
+
+
+bool LineFollowControl::IsExactlyCenteredOnLine(int sensor)
+{
+	const int CENTER = 3500;
+	const int THRESHOLD = 50;
+	const int LEFT = CENTER - THRESHOLD;
+	const int RIGHT = CENTER + THRESHOLD;
+	int position = arrays[sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+
+	return position < RIGHT && position > LEFT && sensorValues[3] < 400 && sensorValues [4] < 400;
 }

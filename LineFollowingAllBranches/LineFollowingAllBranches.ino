@@ -45,19 +45,21 @@ void setup() {
 	
 	// Begin line following
 	Serial.println("Starting line following");
-	lineFollowerControl.set_corner_rotations(true);
-	//followLine();
+	lineFollowerControl.set_corner_rotations(false);
+	followLine();
 	//FollowLineMecanum();
-
-
-
-
-	// Justin Testing Games
-	arm.Rubiks.Rubiks_Play();
 }
 
 void loop() {
-	//ReadSensorData();
+	Serial.println("Right");
+	lineFollowerControl.setSide(LineFollowControl::RIGHT);
+	ReadSensorData();
+	Serial.println("Left");
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	ReadSensorData();
+	Serial.println("Front");
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	ReadSensorData();
 	//FollowSide();
 	//SpeedRamping();
 	//MoveInSquare();
@@ -110,11 +112,11 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
-	delay(2000);
+	delay(100);
 
 	// And boom goes the dynamite
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(1000);
+	delay(100);
 
 	// Play Simon here
 	Serial.println("Play Simon");
@@ -130,7 +132,7 @@ void followLine()
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(100);
+	delay(200);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
@@ -147,13 +149,19 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
+	delay(100);
+
+	mecanum.mecRun(-1.0, 0, 0);
+	delay(200);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
 
 	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
-	delay(1000);
+	delay(100);
 
 	// And boom goes the dynamite
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+	delay(100);
 
 	// Play game here
 	Serial.println("Play Etch-A-Sketch");
@@ -168,7 +176,7 @@ void followLine()
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(100);
+	delay(200);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
@@ -187,8 +195,13 @@ void followLine()
 	lineFollowerControl.followUntilWhite();
 	delay(100);
 
+	mecanum.mecRun(-1.0, 0, 0);
+	delay(200);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
 	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
-	delay(1000);
+	delay(100);
 
 	// And boom goes the dynamite
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
@@ -206,12 +219,17 @@ void followLine()
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(100);
+	delay(200);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
 	Serial.println("Turn left 90");
 	lineFollowerControl.RotateUntilLine(-1.0);
+	delay(100);
+
+	mecanum.mecRun(-1.0, 0, 0);
+	delay(200);
+	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
 	Serial.println("Wait on right line sensor");
@@ -223,7 +241,7 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(100);
+	delay(1000);
 
 	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
 	delay(100);
@@ -240,7 +258,7 @@ void followLine()
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(100);
+	delay(200);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
@@ -360,7 +378,7 @@ void FollowSide() {
 }
 
 void ReadSensorData() {
-	QTRSensorsRC* sensor = lineFollowerControl.getFrontSensor();
+	QTRSensorsRC* sensor = lineFollowerControl.getCurrentSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {
