@@ -62,6 +62,7 @@ private:
 	int whiteCount(QTRSensorsRC* array);
 	int update(int lastError);
 	bool CenterSensor(int sensor);
+	bool IsCenteredOnLine(int sensor);
 public:
 	void followInfinitely();
 	void defaultCalibration(void);
