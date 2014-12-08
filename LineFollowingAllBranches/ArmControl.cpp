@@ -416,3 +416,204 @@ void ArmControl::Front_Smooth_Move(double x1, double y1, double z1, int g1, doub
 	}
 
 }
+
+
+
+
+void ArmControl::Both_Smooth_Move(double RearCurrent[6],double RearNext[6], double FrontCurrent[6],double FrontNext[6],  double time)
+{
+	//double distance = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1));
+	//time = distance/time;
+	double x_inc_Front;
+	double y_inc_Front;
+	double z_inc_Front;
+	double g_inc_Front;
+	double wr_inc_Front;
+	double wa_inc_Front;
+	double I = time / .01;
+	x_inc_Front = ( FrontNext[0]-FrontCurrent[0])/I;
+	y_inc_Front = ( FrontNext[1]-FrontCurrent[1])/I;
+	z_inc_Front = ( FrontNext[2]-FrontCurrent[2])/I;
+	g_inc_Front = ( FrontNext[3]-FrontCurrent[3])/I;
+	wr_inc_Front = ( FrontNext[4]-FrontCurrent[4])/I;
+	wa_inc_Front = ( FrontNext[5]-FrontCurrent[5])/I;
+	
+	/*Serial.print(wr2);
+	Serial.print("     ");
+	Serial.print(wr1);
+	Serial.print("     ");
+	Serial.print(abs((abs(wr2) - abs(wr1))));
+	Serial.print("     ");
+	Serial.print(I);
+	Serial.print("     ");
+	Serial.print(abs((abs(wr2) - abs(wr1))) / I);*/
+	
+	Serial.print("\n \n");
+
+	double x_array_Front[(int)I + 1];
+	double y_array_Front[(int)I + 1];
+	double z_array_Front[(int)I + 1];
+	double g_array_Front[(int)I + 1];
+	double wr_array_Front[(int)I + 1];
+	double wa_array_Front[(int)I + 1];
+
+	x_array_Front[0] = FrontCurrent[0];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			x_array_Front[temp] = x_array_Front[temp - 1] + x_inc_Front;
+
+	}
+
+
+	y_array_Front[0] = FrontCurrent[1];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			y_array_Front[temp] = y_array_Front[temp - 1] + y_inc_Front;
+	}
+
+
+	z_array_Front[0] = FrontCurrent[2];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			z_array_Front[temp] = z_array_Front[temp - 1] + z_inc_Front;
+	}
+
+
+	g_array_Front[0] = FrontCurrent[3];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			g_array_Front[temp] = g_array_Front[temp - 1] + g_inc_Front;
+	}
+
+
+	wa_array_Front[0] = FrontCurrent[5];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			wa_array_Front[temp] = wa_array_Front[temp - 1] + wa_inc_Front;
+	}
+
+
+	wr_array_Front[0] = FrontCurrent[4];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			wr_array_Front[temp] = wr_array_Front[temp - 1] + wr_inc_Front;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//double distance = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1));
+	//time = distance/time;
+	double x_inc_Rear;
+	double y_inc_Rear;
+	double z_inc_Rear;
+	double g_inc_Rear;
+	double wr_inc_Rear;
+	double wa_inc_Rear;
+
+	x_inc_Rear = ( RearNext[0]-RearCurrent[0])/I;
+	y_inc_Rear = ( RearNext[1]-RearCurrent[1])/I;
+	z_inc_Rear = ( RearNext[2]-RearCurrent[2])/I;
+	g_inc_Rear = ( RearNext[3]-RearCurrent[3])/I;
+	wr_inc_Rear = ( RearNext[4]-RearCurrent[4])/I;
+	wa_inc_Rear = ( RearNext[5]-RearCurrent[5])/I;
+	
+	/*Serial.print(wr2);
+	Serial.print("     ");
+	Serial.print(wr1);
+	Serial.print("     ");
+	Serial.print(abs((abs(wr2) - abs(wr1))));
+	Serial.print("     ");
+	Serial.print(I);
+	Serial.print("     ");
+	Serial.print(abs((abs(wr2) - abs(wr1))) / I);*/
+	
+	Serial.print("\n \n");
+
+	double x_array_Rear[(int)I + 1];
+	double y_array_Rear[(int)I + 1];
+	double z_array_Rear[(int)I + 1];
+	double g_array_Rear[(int)I + 1];
+	double wr_array_Rear[(int)I + 1];
+	double wa_array_Rear[(int)I + 1];
+
+	x_array_Rear[0] = RearCurrent[0];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			x_array_Rear[temp] = x_array_Rear[temp - 1] + x_inc_Rear;
+
+	}
+
+
+	y_array_Rear[0] = RearCurrent[1];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			y_array_Rear[temp] = y_array_Rear[temp - 1] + y_inc_Rear;
+	}
+
+
+	z_array_Rear[0] = RearCurrent[2];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			z_array_Rear[temp] = z_array_Rear[temp - 1] + z_inc_Rear;
+	}
+
+
+	g_array_Rear[0] = RearCurrent[3];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			g_array_Rear[temp] = g_array_Rear[temp - 1] + g_inc_Rear;
+	}
+
+
+	wa_array_Rear[0] = RearCurrent[5];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			wa_array_Rear[temp] = wa_array_Rear[temp - 1] + wa_inc_Rear;
+	}
+
+
+	wr_array_Rear[0] = RearCurrent[4];
+	for (int temp = 1; temp <= I + 1; temp += 1)
+	{
+			wr_array_Rear[temp] = wr_array_Rear[temp - 1] + wr_inc_Rear;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	for (int tempWrite = 0; tempWrite <= I + 1; tempWrite += 1)
+	{
+		frontArm(x_array_Front[tempWrite], y_array_Front[tempWrite], z_array_Front[tempWrite], g_array_Front[tempWrite], wr_array_Front[tempWrite], wa_array_Front[tempWrite]);
+		rearArm(x_array_Rear[tempWrite], y_array_Rear[tempWrite], z_array_Rear[tempWrite], g_array_Rear[tempWrite], wr_array_Rear[tempWrite], wa_array_Rear[tempWrite]);
+		delay(10);
+	}
+
+}
