@@ -59,7 +59,7 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A011,C011,M011,N011,TimeConstant);
-
+	
 
 	//parent->Rear_Smooth_Move(4.1, 2.5, 0, 110, 120, -105,         8, 0, 0, 110, 90, -105, TimeConstant); //move rear arm up out 
 	delay(100);
@@ -73,8 +73,8 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A01,C01,M01,N01,TimeConstant);
-
-
+	delay(100);
+	
 // Squeeze together
 	double A[6]={8.5, 0, -4, 110, 92, -105};
 	double B[6]={8.5, 1.6, -4.3, 110, 92, -105};
@@ -83,7 +83,7 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A,B,M,N,TimeConstant);
-
+	delay(100);
 	
 	// Pull out
 	double A2[6]={8.5, 1.7, -4.3, 110, 92, -105};
@@ -93,7 +93,7 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A2,B2,M2,N2,TimeConstant);
-
+	delay(100);
 	// Pull in setup
 	double A3[6]={8.5, 0, -4.3, 110, 92, -105};
 	double B3[6]={6, 0, 2, 110, 92, -105};
@@ -102,7 +102,7 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A3,B3,M3,N3,TimeConstant);
-
+	delay(100);
 	// Pull in setup step 2
 	parent->Front_Smooth_Move(-9, 0, -3, 0, 163, 0,           -9, 2, -5, 0, 80, 0, TimeConstant);
 	delay(100);
@@ -205,6 +205,8 @@ void RubiksControl::Release()
 
 	parent->RearHomeLeft();
 	parent->frontHomeLeft();
+	parent->FrontFlipToRight();
+	parent->frontHomeRight();
 	
 }
 

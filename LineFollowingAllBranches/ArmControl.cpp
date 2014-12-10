@@ -132,67 +132,67 @@ int ArmControl::rearArm(double x, double y, double z, int g, double wr, int wa)
 void ArmControl::frontHomeRight()
 {
 	frontArm(1, 0, 2, 90, 90, -30);
-	delay(1500);
+	delay(500);
 }
 
 void ArmControl::frontHomeLeft()
 {
 	frontArm(-1, 0, 2, 90, 90, -30);
-	delay(1500);
+	delay(500);
 }
 
 
 void ArmControl::FrontFlipToLeft()
 {
 	frontArm(3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 
 	frontArm(-3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 }
 
 
 void ArmControl::FrontFlipToRight()
 {
 	frontArm(-3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 
 	frontArm(3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 }
 
 
 void ArmControl::RearHomeLeft()
 {
 	rearArm(1, 0, 2, 90, 90, -30);
-	delay(1500);
+	delay(500);
 }
 
 
 void ArmControl::RearHomeRight()
 {
 	rearArm(-1, 0, 2, 90, 90, -30);
-	delay(1500);
+	delay(500);
 }
 
 
 void ArmControl::RearFlipToRight()
 {
 	rearArm(3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 
 	rearArm(-3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 }
 
 
 void ArmControl::RearFlipToLeft()
 {
 	rearArm(-3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 
 	rearArm(3, 0, 5, 90, 90, 0);
-	delay(1000);
+	delay(500);
 }
 
 

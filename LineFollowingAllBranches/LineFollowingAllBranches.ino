@@ -28,25 +28,29 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	arm.frontHomeLeft();
-	arm.RearHomeLeft();
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
+	//arm.frontHomeLeft();
+	//arm.RearHomeLeft();
+	arm.frontHomeRight();
+	arm.RearHomeRight();
+	arm.Etch.Pull();
+
+
+	
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
 	//WaitForLed();
 
 	// Get out of the box
-	/*delay(1000);
-	mecanum.mecRun(1.5, 0, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);*/
+	//delay(1000);
+	//mecanum.mecRun(1.5, 0, 0);
+	//delay(1000);
+	//mecanum.mecRun(0, 0, 0);
 	
 	// Begin line following
 	Serial.println("Starting line following");
 	lineFollowerControl.set_corner_rotations(false);
-	followLine();
+	//followLine();
 	//FollowLineMecanum();
 }
 
@@ -120,7 +124,7 @@ void followLine()
 
 	// Play Simon here
 	Serial.println("Play Simon");
-	//arm.Simon.Simon_Play();
+	arm.Simon.Simon_Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(1.0);
@@ -165,7 +169,7 @@ void followLine()
 
 	// Play game here
 	Serial.println("Play Etch-A-Sketch");
-	//arm.Etch.Etch_Play();
+	arm.Etch.Etch_Play();
 
 	Serial.println("Turn left 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
@@ -208,7 +212,7 @@ void followLine()
 
 	// Play Rubiks here
 	Serial.println("Play Rubik's Cube");
-	//arm.Rubiks.Rubiks_Play();
+	arm.Rubiks.Rubiks_Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(1.0);
@@ -247,7 +251,7 @@ void followLine()
 	delay(100);
 
 	// Play game here
-	//arm.Card.Card_Play();
+	arm.Card.Card_Play();
 
 	Serial.println("Turn left almost 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
