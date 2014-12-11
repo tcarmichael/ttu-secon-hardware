@@ -150,6 +150,13 @@ void LineFollowControl::followUntilLine(int side) {
 	}
 	else {
 
+		/*do
+		{
+			lastError = update(lastError);
+
+			arrays[side]->read(sensorValues, QTR_EMITTERS_ON);
+		} while (sensorValues[5] > 800);*/
+
 		while (!IsCenteredOnLine(side)) {
 			lastError = update(lastError);
 		}
@@ -221,6 +228,13 @@ int LineFollowControl::update(int lastError) {
 
 	// Convert the error into a motor speed
 	double rotation = Kp * error + Kd * (error - lastError);
+	
+	/*if (error == 3500) {
+		rotation = 0.9;
+	}
+	else if (error == -3500) {
+		rotation = -0.9;
+	}*/
 
 	// Bounds-checking
 	//rotation = (rotation > 1) ? 1 : rotation;
@@ -432,4 +446,50 @@ bool LineFollowControl::IsExactlyCenteredOnLine(int sensor)
 	int position = arrays[sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
 	return position < RIGHT && position > LEFT && sensorValues[3] < 400 && sensorValues [4] < 400;
+}
+
+
+void LineFollowControl::DefaultCalibrationOtherSide()
+{
+	// Initialize front
+	arrays[FRONT]->calibratedMaximumOn = new unsigned int[8];
+	arrays[FRONT]->calibratedMinimumOn = new unsigned int[8];
+	unsigned int frontCalibratedMax[] = {
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
+	};
+	unsigned int frontCalibratedMin[] = {
+		90, 100, 60, 60, 100, 110, 150, 170
+	};
+
+	// Initialize left
+	arrays[LEFT]->calibratedMinimumOn = new unsigned int[8];
+	arrays[LEFT]->calibratedMaximumOn = new unsigned int[8];
+	unsigned int leftCalibratedMin[] = {
+		80, 80, 40, 40, 40, 80, 80, 100
+	};
+	unsigned int leftCalibratedMax[] = {
+		2000, 1300, 1200, 1100, 1000, 1300, 1400, 1500
+	};
+
+	// Initialize right
+	arrays[RIGHT]->calibratedMaximumOn = new unsigned int[8];
+	arrays[RIGHT]->calibratedMinimumOn = new unsigned int[8];
+	unsigned int rightCalibratedMax[] = {
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
+	};
+	unsigned int rightCalibratedMin[] = {
+		120, 120, 100, 90, 100, 80, 90, 150
+	};
+
+	// Write to the new arrays
+	for (int i = 0; i < 8; i++) {
+		arrays[FRONT]->calibratedMaximumOn[i] = frontCalibratedMax[i];
+		arrays[FRONT]->calibratedMinimumOn[i] = frontCalibratedMin[i];
+
+		arrays[LEFT]->calibratedMaximumOn[i] = leftCalibratedMax[i];
+		arrays[LEFT]->calibratedMinimumOn[i] = leftCalibratedMin[i];
+
+		arrays[RIGHT]->calibratedMaximumOn[i] = rightCalibratedMax[i];
+		arrays[RIGHT]->calibratedMinimumOn[i] = rightCalibratedMin[i];
+	}
 }

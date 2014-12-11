@@ -71,6 +71,7 @@ public:
 	void CenterOnLine(int sensor1, int sensor2);
 	void set_corner_rotations(bool corner_rotations);
 	bool IsExactlyCenteredOnLine(int sensor);
+	void DefaultCalibrationOtherSide();
 };
 
 #endif

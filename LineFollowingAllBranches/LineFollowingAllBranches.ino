@@ -24,15 +24,18 @@ void setup() {
 	
 	// Calibrate the line followers
 	Serial.println("Calibrating");
-	lineFollowerControl.defaultCalibration();
+	//lineFollowerControl.defaultCalibration();
+	lineFollowerControl.DefaultCalibrationOtherSide();
 
 	// Set the arms in position
 	arm.begin();
-	//arm.frontHomeLeft();
-	//arm.RearHomeLeft();
-	arm.frontHomeRight();
-	arm.RearHomeRight();
-	arm.Etch.Pull();
+	arm.frontHomeLeft();
+	arm.RearHomeLeft();
+	//arm.frontHomeRight();
+	//arm.RearHomeRight();
+	//arm.Simon.Simon_Play();
+	//delay(3000);
+	//arm.Rubiks.Rubiks_Play();
 
 
 	
@@ -50,7 +53,7 @@ void setup() {
 	// Begin line following
 	Serial.println("Starting line following");
 	lineFollowerControl.set_corner_rotations(false);
-	//followLine();
+	followLine();
 	//FollowLineMecanum();
 }
 
@@ -70,6 +73,13 @@ void loop() {
 	//Strafe();
 	//lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	//delay(2000);
+
+	//arm.frontHomeRight();
+	//arm.RearHomeRight();
+	//arm.Etch.Pull();
+	//arm.frontHomeRight();
+	//arm.RearHomeRight();
+	//delay(3000);
 }
 
 void WaitForLed()
@@ -114,7 +124,7 @@ void followLine()
 	delay(200);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
-
+	
 	lineFollowerControl.RotateUntilLine(1.0, LineFollowControl::RIGHT);
 	delay(100);
 
@@ -142,6 +152,11 @@ void followLine()
 
 	Serial.println("Turn left 90");
 	lineFollowerControl.RotateUntilLine(-1.0);
+	delay(100);
+
+	mecanum.mecRun(-1.0, 0, 0);
+	delay(50);
+	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
 	Serial.println("Wait on right line sensor");
@@ -188,6 +203,11 @@ void followLine()
 	lineFollowerControl.RotateUntilLine(1.0);
 	delay(100);
 
+	mecanum.mecRun(-1.0, 0, 0);
+	delay(50);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(100);
 
@@ -223,7 +243,7 @@ void followLine()
 
 	Serial.println("Go straight");
 	mecanum.mecRun(1.0, 0, 0);
-	delay(200);
+	delay(150);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
@@ -232,7 +252,7 @@ void followLine()
 	delay(100);
 
 	mecanum.mecRun(-1.0, 0, 0);
-	delay(200);
+	delay(50);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
@@ -245,14 +265,38 @@ void followLine()
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
-
-	lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
 	delay(100);
+
+	bool oldBoard = false;
+	if (oldBoard)
+	{
+		Serial.println("Go straight");
+		mecanum.mecRun(1.0, 0, 0);
+		delay(150);
+		mecanum.mecRun(0, 0, 0);
+		delay(100);
+
+		lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
+		delay(100);
+	}
+	else
+	{
+		mecanum.mecRun(-1.0, 0, 0);
+		delay(200);
+		mecanum.mecRun(0, 0, 0);
+		delay(100);
+
+		lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
+		delay(100);
+
+		// And boom goes the dynamite
+		lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+		delay(100);
+	}
 
 	// Play game here
 	arm.Card.Card_Play();
-
+	
 	Serial.println("Turn left almost 180");
 	lineFollowerControl.RotateUntilLine(-1.0);
 	delay(100);
@@ -267,10 +311,17 @@ void followLine()
 	delay(100);
 
 	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(1.0);
+	lineFollowerControl.RotateUntilLine(0.8);
+	delay(100);
+
+	Serial.println("Go straight");
+	mecanum.mecRun(1.0, 0, 0);
+	delay(150);
+	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
 	lineFollowerControl.followUntilWhite();
+	
 }
 
 void FollowLineMecanum() {

@@ -85,15 +85,15 @@ void SimonControl::Grab()
 	double A01[6] = { 8, 0, 0, 110, 90, -105 };
 	double C01[6] = { 8, 0, -4.3, 110, 90, -105 };
 	double M01[6] = { -9, 0, 0, 0, 163, -105 };
-	double N01[6] = { -9, 0, -5, 0, 163, -105 };
+	double N01[6] = { -9, 0, -5.6, 0, 163, -105 };
 	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
 	delay(100);
 
 	// Squeeze together
 	double A[6] = { 8.5, 0, -4.3, 110, 92, -105 };
 	double B[6] = { 8.5, 1.6, -4.3, 110, 92, -105 };
-	double M[6] = { -8.5, 0, -5, 0, 163, -105 };
-	double N[6] = { -8.5, .7, -5, 0, 163, -105 };
+	double M[6] = { -8.5, 0, -5.6, 0, 163, -105 };
+	double N[6] = { -8.5, .7, -5.6, 0, 163, -105 };
 
 
 	parent->Both_Smooth_Move(A, B, M, N, TimeConstant);
@@ -102,7 +102,7 @@ void SimonControl::Grab()
 	// Pull out
 	double A2[6] = { 8.5, 1.7, -4.3, 110, 92, -105 };
 	double B2[6] = { 8.5, 0, -4.3, 110, 92, -105 };
-	double M2[6] = { -8.5, .6, -5, 0, 163, -105 };
+	double M2[6] = { -8.5, .6, -5.6, 0, 163, -105 };
 	double N2[6] = { -9, 0, -5, 0, 163, -105 };
 
 
@@ -112,13 +112,13 @@ void SimonControl::Grab()
 	double A3[6] = { 8.5, 0, -4.3, 110, 92, -105 };
 	double B3[6] = { 7.5, 0, -5, 110, 92, -105 };
 	double M3[6] = { -9, 0, -4.3, 0, 163, -105 };
-	double N3[6] = { -9, 0, -4, 0, 163, -50 };
+	double N3[6] = { -9, 0, -4.5, 0, 163, -50 };
 
 
 	parent->Both_Smooth_Move(A3, B3, M3, N3, TimeConstant);
 	delay(100);
 	// Pull in setup step 2
-	parent->Front_Smooth_Move(-9, 0, -4, 0, 163, -50, -9, 2, -5, 0, 80, -50, TimeConstant);
+	parent->Front_Smooth_Move(-9, 0, -4.5, 0, 163, -50, -9, 2, -5, 0, 80, -50, TimeConstant);
 	delay(100);
 
 	// pull in wrist swing down

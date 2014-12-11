@@ -131,41 +131,47 @@ void EtchControl::down()
 void EtchControl::Pull()
 {
 	double TimeConstant = .7;
-	// move both arms out
-	double A011[6] = { -1, 0, 2, 50, 90, -30 };
-	double C011[6] = { -8.5, 0.5, -4.5, 50, 0, -90 };
-	double M011[6] = { 1, 0, 2, 90, 90, -30 };
-	double N011[6] = { 8.5, 1.5, -4.5, 90, 0, -90 };
+	parent->Rear_Smooth_Move(-1, 0, 2, 90, 90, -30, -1, 0, 2, 90, 90, 90, TimeConstant);
 
 
-	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
+	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 8.3, 3,    -4.5, 30, 90, -30, TimeConstant);// setup
+	parent->Front_Smooth_Move(8.3, 3, -4.5, 30, 90, -30,     8.3, 3, -7, 30, 90, -30, TimeConstant);// further down
+	parent->Front_Smooth_Move(8.3, 3, -7, 30, 90, -30,        8.3, 4, -7, 30, 95, -100, TimeConstant);// wrist rotate
+	parent->Front_Smooth_Move( 8.3, 4, -7, 30, 96, -100,      5.8, 3, -5, 30, 115, -100, 2);
 
-	delay(1000);
-	// move both arms back to robot
-	double A01[6] = { -8.5, 0.5, -4.5, 50, 0, -90 };
-	double C01[6] = { -4.2, 0.5, -5, 50, 0, -100 };
-	double M01[6] = { 8.5, 1.5, -4.5, 90, 0, -90 };
-	double N01[6] = { 4, 1.5, -5, 90, 0, -100 };
-	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
-	delay(100);
-
-	//fudging
-	double A0111[6] = { -4.2, 0.5, -5, 50, 90, -100 };
-	double C0111[6] = { -4.2, 0.5, -5, 50, 130, -100 };
-	double M0111[6] = { 4, 1.5, -5, 90, 90, -100 };
-	double N0111[6] = { 4, 1.5, -5, 90, 40, -100 };
-	//parent->Both_Smooth_Move(A0111, C0111, M0111, N0111, TimeConstant);
-	//delay(100);
+	//fudge factoring
+	/*
+	parent->Front_Smooth_Move(6, 3, -5, 30, 95, -100, 6, 3, -5, 30, 95, -100, TimeConstant);
+	
+	parent->Front_Smooth_Move(6, 2, -5, 30, 95, -100, 5, 5, -5, 30, 95, -100, TimeConstant);
+	
+	parent->Front_Smooth_Move(5, 5, -5, 30, 95, -100, 6, 3, -5, 30, 95, -100, TimeConstant);
+	*/
 
 
-	// move away to prepare to grab knobs
-	double A[6] = { -4.5, 0.5, -5, 50, 0, -90 };
-	double B[6] = { -6, 0.5, -3, 50, 90, -90 };
-	double M[6] = { 4.2, 1.5, -5, 90, 0, -90 };
-	double N[6] = { 6, 1.5, -3, 90, 90, -90 };
+	double savA[6] = { -1, 0, 2, 90, 90, 90 };
+	double savB[6] = { -6, 0.5, -3, 50, 0, -90 };
+	double savM[6] = { 6, 3, -5, 30, 95, -100 };
+	double savN[6] = { 6, 1.5, -3, 90, 0, -90 };
 
 
-	parent->Both_Smooth_Move(A, B, M, N, TimeConstant);
+	parent->Both_Smooth_Move(savA, savB, savM, savN, TimeConstant);
+	
+
+
+
+
+
+
+
+	// rotate wrists
+	double A4[6] = { -6, 0.5, -3, 50, 0, -90 };
+	double B4[6] = { -6, 0.2, -3, 50, 90, -90 };
+	double M4[6] = { 6, 1.5, -3, 90, 0, -90 };
+	double N4[6] = { 6, 1.5, -3, 90, 90, -90 };
+
+
+	parent->Both_Smooth_Move(A4, B4, M4, N4, TimeConstant);
 }
 
 
@@ -173,10 +179,10 @@ void EtchControl::Grasp()
 {
 	double TimeConstant = .8;
 	// move both arms to knobs
-	double A011[6] = { -6, 0.5, -3, 50, 90, -90 };
-	double C011[6] = { -5.5, 0, -4, 50, 90, -100 };
-	double M011[6] = { 6, 1.5, -3, 90, 90, -90 };
-	double N011[6] = { 5.55, 1.3, -4, 90, 90, -102 };
+	double A011[6] = { -6, 0.2, -3, 10, 90, -90 };
+	double C011[6] = { -5.5, 0, -4.05, 10, 90, -103 };
+	double M011[6] = { 6, 1.5, -3, 40, 90, -90 };
+	double N011[6] = { 5.55, 1.25, -4, 40, 90, -102 };
 
 
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
@@ -190,6 +196,7 @@ void EtchControl::Grasp()
 	parent->setPosition(parent->Front_Arm[4], 14);
 	delay(100);
 	parent->setPosition(14,closeFrontGripper);
+	delay(500);
 
 }
 

@@ -55,7 +55,7 @@ void RubiksControl::Grab()
 	double A011[6]={4.1, 2.5, 0, 110, 120, -105};
 	double C011[6]={  8, 0, 0, 110, 90, -105};
 	double M011[6]={-1, 0, 2, 90, 90, 90};
-	double N011[6]={ -9, 0, 0, 0, 163, -105};
+	double N011[6]={ -9, 0, 0, 0, 180, -105};
 
 
 	parent->Both_Smooth_Move(A011,C011,M011,N011,TimeConstant);
@@ -68,8 +68,8 @@ void RubiksControl::Grab()
 // move both arms down
 	double A01[6]={8, 0, 0, 110, 90, -105};
 	double C01[6]={ 8, 0, -4, 110, 90, -105};
-	double M01[6]={-9, 0, 0, 0, 163, -105};
-	double N01[6]={ -9, 0, -4.3, 0, 163, -105};
+	double M01[6]={-9, 0, 0, 0, 180, -105};
+	double N01[6]={ -9, 0, -4.3, 0, 185, -105};
 
 
 	parent->Both_Smooth_Move(A01,C01,M01,N01,TimeConstant);
@@ -77,19 +77,19 @@ void RubiksControl::Grab()
 	
 // Squeeze together
 	double A[6]={8.5, 0, -4, 110, 92, -105};
-	double B[6]={8.5, 1.6, -4.3, 110, 92, -105};
-	double M[6]={-8.5, 0, -4.3, 0, 163, -105};
-	double N[6]={-8.5, .7, -4.3, 0, 163, -105};
+	double B[6]={8.5, 1.4, -4.3, 110, 92, -105};
+	double M[6]={-9, 0, -4.3, 0, 185, -105};
+	double N[6]={-9, 1, -4.3, 0, 185, -105};
 
 
 	parent->Both_Smooth_Move(A,B,M,N,TimeConstant);
 	delay(100);
 	
 	// Pull out
-	double A2[6]={8.5, 1.7, -4.3, 110, 92, -105};
+	double A2[6] = { 8.5, 1.4, -4.3, 110, 92, -105 };
 	double B2[6]={8.5, 0, -4.3, 110, 92, -105};
-	double M2[6]={-8.5,.6, -4.3, 0, 163, -105};
-	double N2[6]={-9, 0, -4.3, 0, 163, -105};
+	double M2[6] = { -8.5, 1, -4.3, 0, 185, -105 };
+	double N2[6]={-9, 0, -4.3, 0, 185, -105};
 
 
 	parent->Both_Smooth_Move(A2,B2,M2,N2,TimeConstant);
@@ -97,32 +97,34 @@ void RubiksControl::Grab()
 	// Pull in setup
 	double A3[6]={8.5, 0, -4.3, 110, 92, -105};
 	double B3[6]={6, 0, 2, 110, 92, -105};
-	double M3[6]={-9, 0, -4.3, 0, 163, -105};
-	double N3[6]={-9, 0, -3, 0, 163, 0};
+	double M3[6]={-9, 0, -4.3, 0, 185, -105};
+	double N3[6]={-9, 0, -3, 0, 185, 0};
 
 
 	parent->Both_Smooth_Move(A3,B3,M3,N3,TimeConstant);
 	delay(100);
+	
 	// Pull in setup step 2
-	parent->Front_Smooth_Move(-9, 0, -3, 0, 163, 0,           -9, 2, -5, 0, 80, 0, TimeConstant);
+	parent->Front_Smooth_Move(-9, 0, -3, 0, 163, 0,           -9, 2, -5, 0, 90, 0, TimeConstant);
 	delay(100);
-
+	
 	// pull in wrist swing down
-	parent->Front_Smooth_Move(-9, 2, -5, 0, 80, 0,           -9, 2, -5, 0, 65, -90, TimeConstant);
+	parent->Front_Smooth_Move(-9, 2, -5, 0, 90, 0, -9, 1.5, -5, 0, 78, -90, TimeConstant);
 	delay(100);
 
+	
 	// pull in x direction 
-	parent->Front_Smooth_Move(-9, 2, -5, 0, 65, -90,           -5, 2, -5, 0, 65, -90, TimeConstant);
+	parent->Front_Smooth_Move(-9, 2, -5, 0, 78, -90, -5, 2, -5, 0, 78, -90, TimeConstant);
 	delay(100);
-
+	
 	// move out the way
-	parent->Front_Smooth_Move(-7, 2, -5, 0, 65, -90,           -8, 0, -5, 0, 65, 90, TimeConstant);
+	parent->Front_Smooth_Move(-7, 2, -5, 0, 83, -90,           -8, 0, -5, 0, 83, 90, TimeConstant);
 	delay(100);
-
+	
 	// Place hat position
 	double A4[6]={6, 0, 2, 110, 92, -105};
 	double B4[6]={4.7, 2.9, -2, 110, 33, -105};
-	double M4[6]={ -8, 0, -5, 0, 65, 90};
+	double M4[6]={ -8, 0, -5, 0, 83, 90};
 	double N4[6]={-1, 0, 2, 90, 90, 90};
 
 
@@ -172,7 +174,7 @@ void RubiksControl::Rotate()
 
 
 	// rotate again
-	parent->Rear_Smooth_Move(  4.6, 2.9, -3, 110, 0, -105,               4.6, 2.9, -3, 105, 70, -105,           TimeConstant); //rotate
+	parent->Rear_Smooth_Move(  4.6, 2.9, -3, 110, 0, -105,               4.6, 2.9, -3, 105, 40, -105,           TimeConstant); //rotate
 	delay(100);
 
 
