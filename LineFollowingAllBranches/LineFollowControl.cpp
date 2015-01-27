@@ -12,8 +12,8 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 
 	const int TIMEOUT = 2000;
 
-	unsigned char frontSensors[] = { 41,42,43,44,45,46,47,48 };
-	const int frontEmitter = 40;
+	unsigned char frontSensors[] = { 29,28,27,26,25,24,23,22 };
+	const int frontEmitter = 14;
 	arrays[FRONT] = new QTRSensorsRC(
 		frontSensors,
 		NUM_SENSORS,
@@ -21,8 +21,8 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		frontEmitter
 		);
 
-	unsigned char rightSensors[] = { 30, 29, 28, 27, 26, 25, 24, 23 };
-	const int rightEmitter = 22;
+	unsigned char rightSensors[] = { 45, 44, 43, 42, 41, 40, 39, 38 };
+	const int rightEmitter = 16;
 	arrays[RIGHT] = new QTRSensorsRC(
 		rightSensors,
 		NUM_SENSORS,
@@ -30,8 +30,8 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		rightEmitter
 		);
 
-	unsigned char leftSensors[] = { 39, 38, 37, 36, 35, 34, 33, 32 };
-	const int leftEmitter = 31;
+	unsigned char leftSensors[] = { 53, 52, 51, 50, 49, 48, 47, 46 };
+	const int leftEmitter = 17;
 	arrays[LEFT] = new QTRSensorsRC(
 		leftSensors,
 		NUM_SENSORS,
@@ -39,12 +39,16 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		leftEmitter
 		);
 
-	/*arrays[BACK] = QTRSensorsRC(
-	(unsigned char[]) {41,42,43,44,45,46,47,48},
-	NUM_SENSORS,
-	TIMEOUT,
-	40
-	);*/
+
+	unsigned char BackSensors[] = { 37, 36, 35, 34, 33, 32, 31, 30 };
+	const int BackEmitter = 15;
+	arrays[BACK] = new QTRSensorsRC(
+		BackSensors,
+		NUM_SENSORS,
+		TIMEOUT,
+		BackEmitter
+		);
+	
 
 }
 
@@ -303,6 +307,16 @@ void LineFollowControl::defaultCalibration(void)
 		130, 150, 150, 140, 150, 130, 150, 240
 	};
 
+	// Initialize back
+	arrays[BACK]->calibratedMaximumOn = new unsigned int[8];
+	arrays[BACK]->calibratedMinimumOn = new unsigned int[8];
+	unsigned int backCalibratedMax[] = {
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
+	};
+	unsigned int backCalibratedMin[] = {
+		50, 50, 50, 50, 50, 50, 50, 50
+	};
+
 	// Write to the new arrays
 	for (int i = 0; i < 8; i++) {
 		arrays[FRONT]->calibratedMaximumOn[i] = frontCalibratedMax[i];
@@ -313,6 +327,9 @@ void LineFollowControl::defaultCalibration(void)
 
 		arrays[RIGHT]->calibratedMaximumOn[i] = rightCalibratedMax[i];
 		arrays[RIGHT]->calibratedMinimumOn[i] = rightCalibratedMin[i];
+
+		arrays[BACK]->calibratedMaximumOn[i] = backCalibratedMax[i];
+		arrays[BACK]->calibratedMinimumOn[i] = backCalibratedMin[i];
 	}
 }
 
@@ -458,7 +475,7 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int frontCalibratedMin[] = {
-		90, 100, 60, 60, 100, 110, 150, 170
+		90, 100, 60, 60, 100, 110, 150, 160
 	};
 
 	// Initialize left
@@ -478,8 +495,20 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		120, 120, 100, 90, 100, 80, 90, 150
+		115, 120, 100, 90, 100, 80, 90, 150
 	};
+
+	// Initialize back
+	arrays[BACK]->calibratedMaximumOn = new unsigned int[8];
+	arrays[BACK]->calibratedMinimumOn = new unsigned int[8];
+	unsigned int backCalibratedMax[] = {
+		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
+	};
+	unsigned int backCalibratedMin[] = {
+		50, 50, 50, 50, 50, 50, 50, 50
+	};
+
+
 
 	// Write to the new arrays
 	for (int i = 0; i < 8; i++) {
@@ -491,5 +520,8 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 
 		arrays[RIGHT]->calibratedMaximumOn[i] = rightCalibratedMax[i];
 		arrays[RIGHT]->calibratedMinimumOn[i] = rightCalibratedMin[i];
+
+		arrays[BACK]->calibratedMaximumOn[i] = backCalibratedMax[i];
+		arrays[BACK]->calibratedMinimumOn[i] = backCalibratedMin[i];
 	}
 }
