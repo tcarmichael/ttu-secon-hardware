@@ -51,14 +51,14 @@ void setup() {
 	//mecanum.mecRun(0, 0, 0);
 	
 	// Begin line following
-	Serial.println("Starting line following");
-	lineFollowerControl.set_corner_rotations(false);
-	followLine();
+	/*Serial.println("Starting line following");
+	lineFollowerControl.set_corner_rotations(false);*/
+	//followLine();
 	//FollowLineMecanum();
 }
 
 void loop() {
-	Serial.println("Right");
+	/*Serial.println("Right");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	ReadSensorData();
 	Serial.println("Left");
@@ -66,10 +66,12 @@ void loop() {
 	ReadSensorData();
 	Serial.println("Front");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	ReadSensorData();
+	ReadSensorData();*/
+	/*lineFollowerControl.setSide(LineFollowControl::BACK);
+	ReadSensorData();*/
 	//FollowSide();
 	//SpeedRamping();
-	//MoveInSquare();
+	//MoveInSquare(true);
 	//Strafe();
 	//lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	//delay(2000);
@@ -80,6 +82,8 @@ void loop() {
 	//arm.frontHomeRight();
 	//arm.RearHomeRight();
 	//delay(3000);
+	
+	//ReadSensorData();
 }
 
 void WaitForLed()
@@ -102,7 +106,6 @@ void WaitForLed()
 		tsl.getEvent(&event);
 	} while (!event.light);
 }
-
 
 void followLine()
 {
@@ -408,10 +411,37 @@ void Strafe()
 	delay(3000);
 }
 
-void MoveInSquare() {
+void MoveInSquare(bool acceleration)
+{
+	double max_speed = 1.5;
+
 	for (int i = 0; i < 4; i++) {
-		mecanum.mecRun(1.0, 2 * PI / i, 0);
-		delay(1000);
+		// Accelerate
+		if (acceleration)
+		{
+			for (double speed = 0; speed < max_speed; speed += 0.05)
+			{
+				mecanum.mecRun(speed, i * PI / 2, 0);
+				delay(50);
+			}
+		}
+
+		// Constant speed
+		mecanum.mecRun(max_speed, i * PI / 2, 0);
+		delay(500);
+
+		// Decelerate
+		if (acceleration)
+		{
+			for (double speed = max_speed; speed > 0; speed -= 0.05)
+			{
+				mecanum.mecRun(speed, i * PI / 2, 0);
+				delay(50);
+			}
+		}
+
+		// Pause between sides
+		delay(100);
 	}
 }
 
@@ -426,14 +456,14 @@ void SpeedRamping() {
 }
 
 void FollowSide() {
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followInfinitely();
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
 }
 
 void ReadSensorData() {
-	QTRSensorsRC* sensor = lineFollowerControl.getCurrentSensor();
+	QTRSensorsRC* sensor = lineFollowerControl.getBackSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {

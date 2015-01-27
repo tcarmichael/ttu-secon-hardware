@@ -55,7 +55,7 @@ void WaitForLed();
 void followLine();
 void FollowLineMecanum();
 void Strafe();
-void MoveInSquare();
+void MoveInSquare(bool acceleration);
 void SpeedRamping();
 void FollowSide();
 void ReadSensorData();
