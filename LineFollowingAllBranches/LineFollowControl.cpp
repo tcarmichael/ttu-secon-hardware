@@ -12,7 +12,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 
 	const int TIMEOUT = 2000;
 
-	unsigned char frontSensors[] = { 29,28,27,26,25,24,23,22 };
+	unsigned char frontSensors[] = { 22,23,24,25,26,27,28,29 };
 	const int frontEmitter = 14;
 	arrays[FRONT] = new QTRSensorsRC(
 		frontSensors,
@@ -218,7 +218,7 @@ int LineFollowControl::whiteCount(QTRSensorsRC* sensor) {
 	return whiteCount;
 }
 
-int LineFollowControl::update(int lastError) {
+int LineFollowControl::update(int lastError, int oppositeSensor) {
 
 	unsigned int sensors[NUM_SENSORS];
 	const int FOLLOWER_OFFSET = 3500;
@@ -232,13 +232,6 @@ int LineFollowControl::update(int lastError) {
 
 	// Convert the error into a motor speed
 	double rotation = Kp * error + Kd * (error - lastError);
-	
-	/*if (error == 3500) {
-		rotation = 0.9;
-	}
-	else if (error == -3500) {
-		rotation = -0.9;
-	}*/
 
 	// Bounds-checking
 	//rotation = (rotation > 1) ? 1 : rotation;
@@ -248,17 +241,23 @@ int LineFollowControl::update(int lastError) {
 	double speed = 1.0 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
 	if (speed < 0) speed = 0;
 
+	// Calculate the opposite angle
+	if (oppositeSensor == -1)
+	{
+
+	}
+
 	// Send the speed
 	mecanumControl->mecRun(speed, currentAngle, rotation + fudge_factor);
 
 	// Output the values
-	Serial.print("Error: ");
-	Serial.print(error);
+	//Serial.print("Error: ");
+	//Serial.print(error);
 	//Serial.print("\tSpeed: ");
 	//Serial.print(speed);
-	Serial.print("\tRotation: ");
-	Serial.print(rotation);
-	Serial.println();
+	//Serial.print("\tRotation: ");
+	//Serial.print(rotation);
+	//Serial.println();
 
 	return error;
 }
