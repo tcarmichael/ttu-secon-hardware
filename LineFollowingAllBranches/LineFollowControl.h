@@ -60,7 +60,7 @@ private:
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
-	int update(int lastError);
+	int update(int lastError, int oppositeSensor = -1);
 	bool CenterSensor(int sensor);
 	bool IsCenteredOnLine(int sensor);
 public:
