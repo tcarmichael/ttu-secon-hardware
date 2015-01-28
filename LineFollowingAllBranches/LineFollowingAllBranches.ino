@@ -48,7 +48,7 @@ void setup() {
 	//delay(1000);
 	//mecanum.mecRun(1.5, 0, 0);
 	//delay(1000);
-	//mecanum.mecRun(0, 0, 0);
+	mecanum.mecRun(0, 0, 0);
 	
 	// Begin line following
 	/*Serial.println("Starting line following");
@@ -63,13 +63,13 @@ void loop() {
 	ReadSensorData();
 	Serial.println("Left");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	ReadSensorData();
-	Serial.println("Front");
+	ReadSensorData();*/
+	/*Serial.println("Front");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	ReadSensorData();*/
 	/*lineFollowerControl.setSide(LineFollowControl::BACK);
 	ReadSensorData();*/
-	//FollowSide();
+	FollowSide(LineFollowControl::LEFT);
 	//SpeedRamping();
 	//MoveInSquare(true);
 	//Strafe();
@@ -332,7 +332,7 @@ void FollowLineMecanum() {
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(1000);
-
+	
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilWhite();
@@ -455,15 +455,15 @@ void SpeedRamping() {
 	delay(2000);
 }
 
-void FollowSide() {
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
+void FollowSide(int side) {
+	lineFollowerControl.setSide(side);
 	lineFollowerControl.followInfinitely();
 	mecanum.mecRun(0, 0, 0);
 	delay(2000);
 }
 
 void ReadSensorData() {
-	QTRSensorsRC* sensor = lineFollowerControl.getBackSensor();
+	QTRSensorsRC* sensor = lineFollowerControl.getCurrentSensor();
 
 	// Minimum
 	for (int i = 0; i < 8; i++) {

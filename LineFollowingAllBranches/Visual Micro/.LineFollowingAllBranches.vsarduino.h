@@ -57,7 +57,7 @@ void FollowLineMecanum();
 void Strafe();
 void MoveInSquare(bool acceleration);
 void SpeedRamping();
-void FollowSide();
+void FollowSide(int side);
 void ReadSensorData();
 
 #include "C:\Program Files\Arduino\hardware\arduino\sam\cores\arduino\arduino.h"
