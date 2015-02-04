@@ -72,6 +72,8 @@ public:
 	void set_corner_rotations(bool corner_rotations);
 	bool IsExactlyCenteredOnLine(int sensor);
 	void DefaultCalibrationOtherSide();
+	void UpdateAngle(int front_sensor, int back_sensor);
+	double CalculateAngle(int front_distance, int back_distance);
 };
 
 #endif

@@ -78,8 +78,8 @@ void LineFollowControl::setSide(int side) {
 	case RIGHT:
 		currentAngle = PI / 2;
 
-		Kp = 1.0 / FOLLOWER_OFFSET;
-		Kd = 0.001;
+		Kp =  0.5 / FOLLOWER_OFFSET;
+		Kd = 0.005;
 		fudge_factor = 0.00;
 		break;
 
@@ -218,13 +218,12 @@ int LineFollowControl::whiteCount(QTRSensorsRC* sensor) {
 	return whiteCount;
 }
 
-int LineFollowControl::update(int lastError, int oppositeSensor) {
+int LineFollowControl::update(int lastError, int opposite_sensor) {
 
-	unsigned int sensors[NUM_SENSORS];
 	const int FOLLOWER_OFFSET = 3500;
 
 	// Read the line follower
-	int position = getCurrentSensor()->readLine(sensors, QTR_EMITTERS_ON, 1);
+	int position = getCurrentSensor()->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 
 	// Calculate the error
 	// Positive error is to the left; negative error is to the right
@@ -238,26 +237,39 @@ int LineFollowControl::update(int lastError, int oppositeSensor) {
 	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 1.0 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
-	if (speed < 0) speed = 0;
+	double speed = 1.3 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	//double speed = 0.6;
+	//if (speed < 0) speed = 0;
 
 	// Calculate the opposite angle
-	if (oppositeSensor == -1)
-	{
+	double angle_offset = 0;
+	//if (opposite_sensor != -1)
+	//{
+	//	// Constant Kp
+	//	const double opposite_Kp = 0.0 * (PI / 2) / FOLLOWER_OFFSET;
+	//	
+	//	unsigned int other_sensors[NUM_SENSORS];
 
-	}
+	//	position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
+	//	error = position - FOLLOWER_OFFSET;
+
+	//	// Put the position into the PID
+	//	angle_offset = 0; // opposite_Kp * error;
+	//}
 
 	// Send the speed
-	mecanumControl->mecRun(speed, currentAngle, rotation + fudge_factor);
+	/*Serial.print("\tSpeed: ");
+	Serial.print(speed);*/
+	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation + fudge_factor);
 
 	// Output the values
-	//Serial.print("Error: ");
-	//Serial.print(error);
-	//Serial.print("\tSpeed: ");
-	//Serial.print(speed);
-	//Serial.print("\tRotation: ");
-	//Serial.print(rotation);
-	//Serial.println();
+	/*Serial.print("Error: ");
+	Serial.print(error);*/
+	/*Serial.print("\tSpeed: ");
+	Serial.print(speed);
+	Serial.print("\tRotation: ");
+	Serial.print(rotation);
+	Serial.println();*/
 
 	return error;
 }
@@ -269,7 +281,8 @@ void LineFollowControl::followInfinitely()
 
 	// Infinite loop
 	while(true) {
-		lastError = update(lastError);
+		lastError = update(lastError, LineFollowControl::LEFT);
+		// UpdateAngle(LineFollowControl::RIGHT, LineFollowControl::LEFT);
 	}
 }
 
@@ -523,4 +536,43 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		arrays[BACK]->calibratedMaximumOn[i] = backCalibratedMax[i];
 		arrays[BACK]->calibratedMinimumOn[i] = backCalibratedMin[i];
 	}
+}
+
+
+void LineFollowControl::UpdateAngle(int front_sensor, int back_sensor)
+{
+	const double Kp = 1.0;
+
+	int front_distance = arrays[front_sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+	int back_distance = arrays[front_sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
+
+	double angle = CalculateAngle(front_distance, back_distance);
+
+	double error = Kp * angle;
+
+	double speed = 1.0 * (1.0 - abs(angle) / (PI / 2));
+
+	// Write to the motors
+	mecanumControl->mecRun(speed, currentAngle, error);
+}
+
+
+double LineFollowControl::CalculateAngle(int front_distance, int back_distance)
+{
+	// 0.0010714 cm/unit
+	front_distance *= 0.0010714;
+	back_distance *= 0.0010714;
+
+	double Theta = 0;
+
+	if (front_distance / front_distance == back_distance / back_distance)
+	{
+		Theta = (PI / 2) - atan2(7.5, (front_distance + back_distance));
+	}
+	else
+	{
+		Theta = (PI / 2) - atan2(7.5, (front_distance - back_distance));
+	}
+
+	return Theta;
 }
