@@ -33,9 +33,7 @@ void setup() {
 	arm.RearHomeLeft();
 	//arm.frontHomeRight();
 	//arm.RearHomeRight();
-	//arm.Simon.Simon_Play();
-	//delay(3000);
-	//arm.Rubiks.Rubiks_Play();
+	//arm.Simon.Grab();
 
 
 	
@@ -49,7 +47,6 @@ void setup() {
 	//mecanum.mecRun(1.5, 0, 0);
 	//delay(1000);
 	mecanum.mecRun(0, 0, 0);
-	
 	// Begin line following
 	/*Serial.println("Starting line following");
 	lineFollowerControl.set_corner_rotations(false);*/
@@ -61,15 +58,15 @@ void loop() {
 	/*Serial.println("Right");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	ReadSensorData();
-	Serial.println("Left");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	Serial.println("Left");*/
+	/*lineFollowerControl.setSide(LineFollowControl::LEFT);
 	ReadSensorData();*/
 	/*Serial.println("Front");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	ReadSensorData();*/
 	/*lineFollowerControl.setSide(LineFollowControl::BACK);
 	ReadSensorData();*/
-	FollowSide(LineFollowControl::LEFT);
+	FollowSide(LineFollowControl::RIGHT);
 	//SpeedRamping();
 	//MoveInSquare(true);
 	//Strafe();
@@ -458,8 +455,6 @@ void SpeedRamping() {
 void FollowSide(int side) {
 	lineFollowerControl.setSide(side);
 	lineFollowerControl.followInfinitely();
-	mecanum.mecRun(0, 0, 0);
-	delay(2000);
 }
 
 void ReadSensorData() {

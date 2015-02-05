@@ -69,7 +69,7 @@ void SimonControl::Grab()
 	delay(100);
 	parent->Rear_Smooth_Move(4.0, 2.5, -3.1, 0, 120, -105, 4.0, 2.5, -3.1, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
 	delay(100);
-	parent->Rear_Smooth_Move(4.1, 2.5, -3.1, 110, 120, -105, 4.1, 2.5, 0, 110, 120, -105, TimeConstant); //squeeze
+	parent->Rear_Smooth_Move(4.1, 2.5, -3.1, 110, 120, -105, 4.1, 2.5, 0, 110, 120, -105, TimeConstant); //lift hat up
 	delay(100);
 
 	// Forcing simon to center position
@@ -84,16 +84,16 @@ void SimonControl::Grab()
 	// move both arms down
 	double A01[6] = { 8, 0, 0, 110, 90, -105 };
 	double C01[6] = { 8, 0, -4.3, 110, 90, -105 };
-	double M01[6] = { -9, 0, 0, 0, 163, -105 };
-	double N01[6] = { -9, 0, -5.6, 0, 163, -105 };
+	double M01[6] = { -9, 0, 0, 0, 180, -105 };
+	double N01[6] = { -9, 0, -5.6, 0, 180, -105 };
 	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
 	delay(100);
 
 	// Squeeze together
 	double A[6] = { 8.5, 0, -4.3, 110, 92, -105 };
 	double B[6] = { 8.5, 1.6, -4.3, 110, 92, -105 };
-	double M[6] = { -8.5, 0, -5.6, 0, 163, -105 };
-	double N[6] = { -8.5, .7, -5.6, 0, 163, -105 };
+	double M[6] = { -8.5, 0, -5.6, 0, 180, -105 };
+	double N[6] = { -8.5, .7, -5.6, 0, 180, -105 };
 
 
 	parent->Both_Smooth_Move(A, B, M, N, TimeConstant);
@@ -102,8 +102,8 @@ void SimonControl::Grab()
 	// Pull out
 	double A2[6] = { 8.5, 1.7, -4.3, 110, 92, -105 };
 	double B2[6] = { 8.5, 0, -4.3, 110, 92, -105 };
-	double M2[6] = { -8.5, .6, -5.6, 0, 163, -105 };
-	double N2[6] = { -9, 0, -5, 0, 163, -105 };
+	double M2[6] = { -8.5, .6, -5.6, 0, 180, -105 };
+	double N2[6] = { -9, 0, -5, 0, 180, -105 };
 
 
 	parent->Both_Smooth_Move(A2, B2, M2, N2, TimeConstant);
@@ -122,22 +122,22 @@ void SimonControl::Grab()
 	delay(100);
 
 	// pull in wrist swing down
-	parent->Front_Smooth_Move(-9, 2, -5, 0, 80, -50, -9, 2, -5, 50, 65, -90, TimeConstant);
+	parent->Front_Smooth_Move(-9, 2, -5, 0, 80, -50, -9, 2, -5, 50, 80, -90, TimeConstant);
 	delay(100);
 
 	// pull in x direction 
-	parent->Front_Smooth_Move(-9, 2, -5, 0, 65, -90, -5, 2, -5, 50, 65, -90, TimeConstant);
+	parent->Front_Smooth_Move(-9, 2, -5, 0, 80, -90, -6, 2, -5.5, 50, 80, -110, TimeConstant);
 	delay(100);
 
 	//move front arm out of the way
-	parent->Front_Smooth_Move(-5, 2, -5, 50, 65, -90, -7, 2, -5, 50, 65, -90, TimeConstant);
+	parent->Front_Smooth_Move(-6, 2, -5.5, 50, 80, -110, -7, 2, -5, 50, 80, -90, TimeConstant); //move back
 	delay(100);
-	parent->Front_Smooth_Move(-7, 2, -5, 50, 65, -90, -4, 1.5, -3.7, 180, 70, -70, TimeConstant);
+	parent->Front_Smooth_Move(-7, 2, -5, 50, 80, -90, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // move above start button
 
 	//move rear arm to hold simon
-	parent->Rear_Smooth_Move(7.5, 0, -5, 110, 92, -105, 8.5, 2, -5, 110, 130, -105, TimeConstant);
+	parent->Rear_Smooth_Move(7.5, 0, -5, 110, 92, -105, 8.5, 2, -5, 110, 130, -105, TimeConstant); // move to position
 	delay(100);
-	parent->Rear_Smooth_Move(8.5, 2, -5, 110, 130, -105, 7, 2, -5, 110, 130, -105, TimeConstant);
+	parent->Rear_Smooth_Move(8.5, 2, -5, 110, 130, -105, 7, 2, -5, 110, 130, -105, TimeConstant); //hold simon
 	delay(100);
 
 }
