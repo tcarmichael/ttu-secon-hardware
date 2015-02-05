@@ -79,7 +79,8 @@ void LineFollowControl::setSide(int side) {
 		currentAngle = PI / 2;
 
 		Kp =  0.5 / FOLLOWER_OFFSET;
-		Kd = 0.005;
+		Kd = 0.0;
+		//Kd = 0.005;
 		fudge_factor = 0.00;
 		break;
 
@@ -237,25 +238,25 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 1.3 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	double speed = 0.8 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
 	//double speed = 0.6;
 	//if (speed < 0) speed = 0;
 
 	// Calculate the opposite angle
 	double angle_offset = 0;
-	//if (opposite_sensor != -1)
-	//{
-	//	// Constant Kp
-	//	const double opposite_Kp = 0.0 * (PI / 2) / FOLLOWER_OFFSET;
-	//	
-	//	unsigned int other_sensors[NUM_SENSORS];
+	if (opposite_sensor != -1)
+	{
+		// Constant Kp
+		const double opposite_Kp = 0.0 *(PI / 2) / FOLLOWER_OFFSET;
 
-	//	position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
-	//	error = position - FOLLOWER_OFFSET;
+		unsigned int other_sensors[NUM_SENSORS];
 
-	//	// Put the position into the PID
-	//	angle_offset = 0; // opposite_Kp * error;
-	//}
+		position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
+		error = position - FOLLOWER_OFFSET;
+
+		// Put the position into the PID
+		angle_offset = opposite_Kp * error;
+	}
 
 	// Send the speed
 	/*Serial.print("\tSpeed: ");
@@ -267,9 +268,9 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	Serial.print(error);*/
 	/*Serial.print("\tSpeed: ");
 	Serial.print(speed);
-	Serial.print("\tRotation: ");
-	Serial.print(rotation);
-	Serial.println();*/
+	Serial.print("\tRotation: ");*/
+	Serial.println(rotation);
+	/*Serial.println();*/
 
 	return error;
 }
