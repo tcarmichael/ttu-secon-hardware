@@ -16,7 +16,9 @@ ArmControl arm;
 
 void setup() {
 	Serial.begin(9600);
-
+	arm.begin();
+	Serial.println("play simon");
+	arm.Simon.Play();
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
 	mecanum.begin();
@@ -29,11 +31,13 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	arm.frontHomeLeft();
-	arm.RearHomeLeft();
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
-	//arm.Simon.Grab();
+	//arm.frontHomeLeft();
+	//arm.RearHomeLeft();
+	arm.frontHomeRight();
+	arm.RearHomeRight();
+	
+
+	/*****Robot is initialized and ready to run at this point*****/
 
 
 	
@@ -47,40 +51,23 @@ void setup() {
 	//mecanum.mecRun(1.5, 0, 0);
 	//delay(1000);
 	mecanum.mecRun(0, 0, 0);
+
 	// Begin line following
 	/*Serial.println("Starting line following");
 	lineFollowerControl.set_corner_rotations(false);*/
 	//followLine();
-	//FollowLineMecanum();
+	FollowLineMecanum(); 
 }
 
 void loop() {
-	/*Serial.println("Right");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	ReadSensorData();
-	Serial.println("Left");*/
-	/*lineFollowerControl.setSide(LineFollowControl::LEFT);
+	/*lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	ReadSensorData();*/
-	/*Serial.println("Front");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	ReadSensorData();*/
-	/*lineFollowerControl.setSide(LineFollowControl::BACK);
-	ReadSensorData();*/
-	FollowSide(LineFollowControl::RIGHT);
+	//FollowSide(LineFollowControl::RIGHT);
 	//SpeedRamping();
 	//MoveInSquare(true);
 	//Strafe();
-	//lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	//delay(2000);
-
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
-	//arm.Etch.Pull();
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
-	//delay(3000);
 	
-	//ReadSensorData();
+
 }
 
 void WaitForLed()
@@ -335,7 +322,11 @@ void FollowLineMecanum() {
 	lineFollowerControl.followUntilWhite();
 	delay(1000);
 
+	mecanum.mecRun(0.6, PI / 2, 0);
+	delay(200);
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Simon
+	//arm.Simon.Simon_Play();
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
@@ -352,7 +343,11 @@ void FollowLineMecanum() {
 	lineFollowerControl.followUntilWhite();
 	delay(1000);
 
+	mecanum.mecRun(0.6, 3 * PI / 2, 0);
+	delay(200);
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Etch-A-Sketch
+	arm.Etch.Etch_Play();
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
@@ -369,6 +364,9 @@ void FollowLineMecanum() {
 	lineFollowerControl.followUntilWhite();
 	delay(2000);
 
+	mecanum.mecRun(0.6, PI / 2, 0);
+	delay(200);
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play the Rubik's cube
 
 	Serial.println("Following the right line sensor");
@@ -386,6 +384,10 @@ void FollowLineMecanum() {
 	lineFollowerControl.followUntilWhite();
 	delay(1000);
 
+
+	mecanum.mecRun(0.6, 3 * PI / 2, 0);
+	delay(200);
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Pick up the card
 
 	Serial.println("Following the left line sensor");

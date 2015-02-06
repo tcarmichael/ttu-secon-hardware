@@ -70,16 +70,27 @@ void LineFollowControl::setSide(int side) {
 	case FRONT:
 		currentAngle = 0;
 
-		Kp = 3.0 / FOLLOWER_OFFSET;
-		Kd = 0.0005;
+		Kp = 0.5 / FOLLOWER_OFFSET;
+		Kd = 0.00000001;
 		fudge_factor = 0.0;
 		break;
 
 	case RIGHT:
+		//Savannah's experiments
+		/*currentAngle = PI / 2;
+
+		Kp =  0.0 / FOLLOWER_OFFSET;
+		Kd = 0.1;
+		//Kd = 0.005;
+		fudge_factor = 0.00;
+		break;*/
+
+		//Tandy's work
+		
 		currentAngle = PI / 2;
 
-		Kp =  0.5 / FOLLOWER_OFFSET;
-		Kd = 0.0;
+		Kp = 0.5 / FOLLOWER_OFFSET;
+		Kd = 0.00000001;
 		//Kd = 0.005;
 		fudge_factor = 0.00;
 		break;
@@ -87,8 +98,8 @@ void LineFollowControl::setSide(int side) {
 	case LEFT:
 		currentAngle = 3 * PI / 2;
 
-		Kp = 1.0 / FOLLOWER_OFFSET;
-		Kd = 0.001;
+		Kp = 0.3 / FOLLOWER_OFFSET;
+		Kd = 0.000001;
 		fudge_factor = 0.0;
 		break;
 
@@ -229,6 +240,7 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	// Calculate the error
 	// Positive error is to the left; negative error is to the right
 	int error = position - FOLLOWER_OFFSET;
+	Serial.println(error);
 
 	// Convert the error into a motor speed
 	double rotation = Kp * error + Kd * (error - lastError);
@@ -247,7 +259,7 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	if (opposite_sensor != -1)
 	{
 		// Constant Kp
-		const double opposite_Kp = 0.0 *(PI / 2) / FOLLOWER_OFFSET;
+		const double opposite_Kp = 0.01 *(PI / 2) / FOLLOWER_OFFSET;
 
 		unsigned int other_sensors[NUM_SENSORS];
 
@@ -269,7 +281,7 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	/*Serial.print("\tSpeed: ");
 	Serial.print(speed);
 	Serial.print("\tRotation: ");*/
-	Serial.println(rotation);
+	//Serial.println(rotation);
 	/*Serial.println();*/
 
 	return error;
