@@ -3,9 +3,6 @@ int pinRed = 9;
 int pinBlue = 10;
 int pinGreen = 11;
 const int MAX_SEQUENCE = 32;
-int sequence[MAX_SEQUENCE];
-
-int current = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -14,35 +11,78 @@ void setup() {
   pinMode(pinRed, INPUT);
   pinMode(pinBlue, INPUT);
   pinMode(pinGreen, INPUT);
-  return;
-  for (current = 0; current < MAX_SEQUENCE; current++) {
+  // return;
+  Play();
+}
+
+void Play()
+{
+  // Hit start
+  
+  double start_time = millis();
+  double end_time = start_time + 15000.0;
+  int sequence[MAX_SEQUENCE];
+  int current = 0;
+  Serial.println("timing");
+  
+  while (millis() <= end_time)
+  {
     // Wait for Simon sequence
     //Serial.println("Waiting for Simon");
-    for (int i = 0; i < current; i++) {
+    int curr_color;
+    
+    Serial.println("Waiting for color");
+    
+    do
+    {
+       // Wait until a tone is detected
+      curr_color = get_color();
+    } while(curr_color == 0);
+    
+    
+    
+    for (int i = 0; i < current; i++)
+    {
       // Ignore color
       get_color();
     }
     
-    Serial.println("Waiting for color");
-    sequence[current] = get_color();
+    sequence[current] = curr_color;
     
-    play_sequence(current);
+    
+    
+    for (int k = 0; k <= current; k++)
+    {
+      Serial.print(sequence[k]);
+      Serial.print(" ");
+    }
     Serial.println();
+    
+    
+
+  
+//    play_sequence(current);
+//    Serial.println();
     
     // Wait for user sequence
     Serial.println("Wait for user");
-    for (int i = 0; i < current + 1; i++) {
-      get_color();
-    }
+//    for (int i = 0; i < current + 1; i++)
+//    {
+      play_sequence(current, sequence);
+      //get_color();
+//    }
     //Serial.println(current);
+    Serial.println();
+    current++;
   }
+  Serial.println(start_time);
+  Serial.println(millis());
 }
-
 void loop() {
   // put your main code here, to run repeatedly:
-  int col = 0;
-  col = get_color();
-  Serial.println(col);
+  //int col = 0;
+  //col = get_color();
+  //Serial.println(col);
 }
 
   int get_color() {
@@ -77,7 +117,7 @@ void loop() {
   }
   
   
-  int color = -1;
+  int color = 0;
 /*    Serial.print("yellow: ");
     Serial.print(yellowValue);
     Serial.print(" red: ");
@@ -101,7 +141,7 @@ void loop() {
 //      //Serial.print("YELLOW");
 //      color = 3;
 //    }
-    else if (yellowValue > 750) {
+    else if (yellowValue > 550) {
       //Serial.print("YELLOW");
       color = 3;
     }
@@ -116,8 +156,9 @@ void loop() {
     return color;
 }
 
-void play_sequence(int curr) {
+void play_sequence(int curr, int sequence[]) {
   for (int i = 0; i <= curr; i++) {
+    delay(5000);
     switch (sequence[i]) {
       case 1:
         press_red();
