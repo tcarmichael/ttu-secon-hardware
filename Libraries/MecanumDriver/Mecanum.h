@@ -15,12 +15,13 @@ class Mecanum
 		Mecanum() {};
 		void mecRun(double magnitude, double angle, double rotation);
 		void begin();
+		void WriteDirect(int, int, int, int);
 
 	private:
 		Adafruit_MotorShield Moto_Shield;
 		Adafruit_DCMotor *motors[4];
 
-		// Scales the motor shield signal from [-2, 2] to [-255, 255]
-		static const int SCALE = 128;
+		// Scales the motor shield signal from [-1, 1] to [-255, 255]
+		static const int SCALE = 255;
 };
 #endif
