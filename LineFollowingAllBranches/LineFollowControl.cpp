@@ -70,28 +70,18 @@ void LineFollowControl::setSide(int side) {
 	case FRONT:
 		currentAngle = 0;
 
-		Kp = 0.5 / FOLLOWER_OFFSET;
+		Kp = 0.35 / FOLLOWER_OFFSET;
 		Kd = 0.00000001;
 		fudge_factor = 0.0;
 		break;
 
 	case RIGHT:
-		//Savannah's experiments
-		/*currentAngle = PI / 2;
-
-		Kp =  0.0 / FOLLOWER_OFFSET;
-		Kd = 0.1;
-		//Kd = 0.005;
-		fudge_factor = 0.00;
-		break;*/
-
-		//Tandy's work
 		
 		currentAngle = PI / 2;
 
-		Kp = 0.5 / FOLLOWER_OFFSET;
-		Kd = 0.00000001;
-		//Kd = 0.005;
+		Kp = 0.4 / FOLLOWER_OFFSET;
+		//Kd = 0.00001;
+		Kd = 0;
 		fudge_factor = 0.00;
 		break;
 
@@ -155,7 +145,7 @@ void LineFollowControl::followUntilLine(int side) {
 		// Follow line until the sensor crosses the line
 		do {
 			lastError = update(lastError);
-		} while (whiteCount(getCurrentSensor()) < 5);
+		} while (whiteCount(getCurrentSensor()) < 8);
 		Serial.println("Crossed line");
 
 		// Stay at the same velocity until the other line sensors detect a line
@@ -250,25 +240,25 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 0.8 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
-	//double speed = 0.6;
-	//if (speed < 0) speed = 0;
+	double speed = 0.9 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	//double speed = 0.7;
+	if (speed < 0) speed = 0;
 
 	// Calculate the opposite angle
 	double angle_offset = 0;
-	if (opposite_sensor != -1)
-	{
-		// Constant Kp
-		const double opposite_Kp = 0.01 *(PI / 2) / FOLLOWER_OFFSET;
+	//if (opposite_sensor != -1)
+	//{
+	//	// Constant Kp
+	//	const double opposite_Kp = 0.01 *(PI / 2) / FOLLOWER_OFFSET;
 
-		unsigned int other_sensors[NUM_SENSORS];
+	//	unsigned int other_sensors[NUM_SENSORS];
 
-		position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
-		error = position - FOLLOWER_OFFSET;
+	//	position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
+	//	error = position - FOLLOWER_OFFSET;
 
-		// Put the position into the PID
-		angle_offset = opposite_Kp * error;
-	}
+	//	// Put the position into the PID
+	//	angle_offset = opposite_Kp * error;
+	//}
 
 	// Send the speed
 	/*Serial.print("\tSpeed: ");
@@ -429,11 +419,11 @@ bool LineFollowControl::CenterSensor(int sensor)
 
 	// Left of line
 	if (position < LEFT) {
-		direction = -75;
+		direction = -65;
 	}
 	// Right of line
 	else if (position > RIGHT) {
-		direction = 75;
+		direction = 65;
 	}
 	else {
 		return false;
@@ -510,7 +500,7 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		80, 80, 40, 40, 40, 80, 80, 100
 	};
 	unsigned int leftCalibratedMax[] = {
-		2000, 1300, 1200, 1100, 1000, 1300, 1400, 1500
+		1800, 1300, 1200, 1100, 1000, 1300, 1400, 1500
 	};
 
 	// Initialize right
@@ -520,7 +510,7 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 	};
 	unsigned int rightCalibratedMin[] = {
-		115, 120, 100, 90, 100, 80, 90, 150
+		90, 100, 100, 90, 100, 80, 90, 140
 	};
 
 	// Initialize back

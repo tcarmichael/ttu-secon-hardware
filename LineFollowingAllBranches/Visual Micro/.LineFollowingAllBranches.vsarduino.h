@@ -51,6 +51,22 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
+void LED_Setup();
+void Orange_On_For(int timer);
+void Red_On_For(int timer);
+void White_On_For(int timer);
+void Blue_On_For(int timer);
+void Green_On_For(int timer);
+void Orange_On();
+void Red_On();
+void White_On();
+void Blue_On();
+void Green_On();
+void Orange_Off();
+void Red_Off();
+void White_Off();
+void Blue_Off();
+void Green_Off();
 void WaitForLed();
 void followLine();
 void FollowLineMecanum();
@@ -70,6 +86,8 @@ void ReadSensorData();
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\CardControl.h"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.cpp"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LEDControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LEDControl.h"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.cpp"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.h"
 #include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\RubiksControl.cpp"

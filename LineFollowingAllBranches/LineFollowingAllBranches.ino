@@ -6,6 +6,8 @@
 #include "ArmControl.h"
 #include "Adafruit_Light_Sensor\Adafruit_TSL2561_U.h"
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
+#include "LEDControl.h"
+
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
@@ -14,11 +16,23 @@ LineFollowControl lineFollowerControl(&mecanum);
 // Controls the arm movements
 ArmControl arm;
 
+
 void setup() {
 	Serial.begin(9600);
+	// Used to initialize the LEDs :)
+	LED_Setup();
+
+	//Example code Line for LEDs, just change the color word
+
+	Orange_On();
+	Green_On_For(2000);
+	Orange_Off();
+	
+	// uncomment for David's code testing
 	arm.begin();
-	Serial.println("play simon");
-	arm.Simon.Play();
+	arm.Simon.Simon_Play();
+	delay(15000);
+	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
 	mecanum.begin();
@@ -31,42 +45,155 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	//arm.frontHomeLeft();
-	//arm.RearHomeLeft();
-	arm.frontHomeRight();
-	arm.RearHomeRight();
+	arm.frontHomeLeft();
+	arm.RearHomeLeft();
+	//arm.frontHomeRight();
+	//arm.RearHomeRight();
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
 
 
-	
+	//arm.Etch.Etch_Play();
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
-	//WaitForLed();
+	WaitForLed();
 
 	// Get out of the box
-	//delay(1000);
-	//mecanum.mecRun(1.5, 0, 0);
-	//delay(1000);
+	mecanum.mecRun(0.9, 0, 0);
+	delay(1000);
 	mecanum.mecRun(0, 0, 0);
 
 	// Begin line following
-	/*Serial.println("Starting line following");
-	lineFollowerControl.set_corner_rotations(false);*/
-	//followLine();
+	Serial.println("Starting line following");
+	
 	FollowLineMecanum(); 
+	//followLine();
 }
 
 void loop() {
 	/*lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	ReadSensorData();*/
-	//FollowSide(LineFollowControl::RIGHT);
+	//FollowSide(LineFollowControl::FRONT);
 	//SpeedRamping();
 	//MoveInSquare(true);
 	//Strafe();
 	
+
+}
+void LED_Setup(){
+	pinMode(14, OUTPUT);
+	pinMode(15, OUTPUT);
+	pinMode(16, OUTPUT);
+	pinMode(17, OUTPUT);
+	pinMode(18, OUTPUT);
+	digitalWrite(18, LOW);
+	digitalWrite(17, LOW);
+	digitalWrite(16, LOW);
+	digitalWrite(15, LOW);
+	digitalWrite(14, LOW);
+
+
+}
+void Orange_On_For(int timer){
+	digitalWrite(14, HIGH);
+	delay(timer);
+	digitalWrite(14, LOW);
+
+}
+
+void Red_On_For(int timer){
+	digitalWrite(15, HIGH);
+	delay(timer);
+	digitalWrite(15, LOW);
+
+}
+
+void White_On_For(int timer){
+	digitalWrite(16, HIGH);
+	delay(timer);
+	digitalWrite(16, LOW);
+
+}
+
+void Blue_On_For(int timer){
+	digitalWrite(17, HIGH);
+	delay(timer);
+	digitalWrite(17, LOW);
+
+}
+
+void Green_On_For(int timer){
+	digitalWrite(18, HIGH);
+	delay(timer);
+	digitalWrite(18, LOW);
+
+}
+
+
+
+
+
+
+void Orange_On(){
+	digitalWrite(14, HIGH);
+	
+}
+
+void Red_On(){
+	digitalWrite(15, HIGH);
+	
+}
+
+void White_On(){
+	digitalWrite(16, HIGH);
+
+}
+
+void Blue_On(){
+	digitalWrite(17, HIGH);
+
+}
+
+void Green_On(){
+	digitalWrite(18, HIGH);
+
+}
+
+
+
+
+
+
+
+void Orange_Off(){
+	
+	digitalWrite(14, LOW);
+	
+}
+
+void Red_Off(){
+
+	digitalWrite(15, LOW);
+
+}
+
+void White_Off(){
+
+	digitalWrite(16, LOW);
+
+}
+
+void Blue_Off(){
+
+	digitalWrite(17, LOW);
+
+}
+
+void Green_Off(){
+
+	digitalWrite(18, LOW);
 
 }
 
@@ -89,6 +216,10 @@ void WaitForLed()
 	do {
 		tsl.getEvent(&event);
 	} while (!event.light);
+
+	do {
+		tsl.getEvent(&event);
+	} while (event.light);
 }
 
 void followLine()
@@ -315,85 +446,79 @@ void FollowLineMecanum() {
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(1000);
 	
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
 
 	mecanum.mecRun(0.6, PI / 2, 0);
 	delay(200);
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Simon
-	//arm.Simon.Simon_Play();
+	//delay(5000);
+	arm.Simon.Simon_Play();
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(2000);
 
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(1000);
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
 
 	mecanum.mecRun(0.6, 3 * PI / 2, 0);
 	delay(200);
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Etch-A-Sketch
+	//delay(5000);
 	arm.Etch.Etch_Play();
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(1000);
 
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(1000);
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilWhite();
-	delay(2000);
 
 	mecanum.mecRun(0.6, PI / 2, 0);
 	delay(200);
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play the Rubik's cube
+	//delay(5000);
+	arm.Rubiks.Rubiks_Play();
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(2000);
 
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(1000);
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	lineFollowerControl.followUntilWhite();
-	delay(1000);
 
 
 	mecanum.mecRun(0.6, 3 * PI / 2, 0);
 	delay(200);
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Pick up the card
+	//delay(5000);
+	arm.Card.Card_Play();
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
 	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	delay(1000);
 
 	Serial.println("Following the front line sensor");
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
