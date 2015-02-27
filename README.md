@@ -5,8 +5,9 @@ The code repository for the first-place SECON Hardware team
 
 Required Libraries
 ------------------
-Pololu Line-Following Sensor
-https://github.com/pololu/qtr-sensors-arduino
+Copy the libraries in the `libraries/` to your local `Arduino/libraries` directory.
+
+Next, download the following libraries and copy them into your local `Arduino/libraries` directory.
 
 Adafruit Motor Shield
 https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
