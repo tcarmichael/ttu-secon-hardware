@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LineFollowingAllBranches.ino" />
+    <None Include="LEDController.cpp.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.LineFollowingAllBranches.vsarduino.h">
@@ -39,6 +40,15 @@
     <ClInclude Include="SimonControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LEDControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LEDControler.h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LEDController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LineFollowControl.cpp">
@@ -57,6 +67,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimonControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDControler.h.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LEDController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

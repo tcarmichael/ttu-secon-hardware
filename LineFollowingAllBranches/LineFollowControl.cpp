@@ -101,7 +101,7 @@ void LineFollowControl::setSide(int side) {
 
 void LineFollowControl::followUntilWhite() {
 	int lastError = 0;
-
+	bool test = true;
 	do {
 		lastError = update(lastError);
 
@@ -132,7 +132,8 @@ void LineFollowControl::followUntilWhite() {
 				}
 			}
 		}
-	} while (whiteCount(getCurrentSensor()) < 8);
+		
+	} while (whiteCount(getCurrentSensor()) < 8); 
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
@@ -240,7 +241,7 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	//rotation = (rotation < -1) ? -1 : rotation;
 
 	// Calculate the speed
-	double speed = 0.9 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
+	double speed = 0.5 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));  // Savannah changed this 0.9
 	//double speed = 0.7;
 	if (speed < 0) speed = 0;
 
@@ -266,6 +267,12 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation + fudge_factor);
 
 	// Output the values
+	for (int i = 0; i < 8; i++)
+	{
+		Serial.print(sensorValues[i]);
+		Serial.print(' ');
+	}
+	Serial.println();
 	/*Serial.print("Error: ");
 	Serial.print(error);*/
 	/*Serial.print("\tSpeed: ");
@@ -366,7 +373,7 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 	}
 
 	// Wait for white
-	while (!IsExactlyCenteredOnLine(side))
+	while (!IsCenteredOnLine(side)) 
 	{
 		// Wait
 	}
@@ -378,8 +385,9 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 void LineFollowControl::CenterOnLine(int sensor1, int sensor2)
 {
 	int position1, position2;
-
-	while (true)
+	const unsigned long TIMEOUT = 5e3; // 5 seconds
+	unsigned long start = millis();
+	while (millis() - start < TIMEOUT)
 	{
 		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
@@ -402,6 +410,9 @@ void LineFollowControl::CenterOnLine(int sensor1, int sensor2)
 
 		CenterSensor(sensor2);
 		delay(100);
+		
+		
+
 	}
 }
 
@@ -471,7 +482,7 @@ bool LineFollowControl::IsCenteredOnLine(int sensor)
 
 bool LineFollowControl::IsExactlyCenteredOnLine(int sensor)
 {
-	const int CENTER = 3500;
+	const int CENTER = 3500; 
 	const int THRESHOLD = 50;
 	const int LEFT = CENTER - THRESHOLD;
 	const int RIGHT = CENTER + THRESHOLD;

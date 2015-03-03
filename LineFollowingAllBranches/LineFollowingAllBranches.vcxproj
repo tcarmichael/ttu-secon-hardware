@@ -73,6 +73,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="LEDController.cpp.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="LineFollowingAllBranches.ino">
       <FileType>CppCode</FileType>
     </None>
@@ -81,6 +84,15 @@
     <ClInclude Include="ArmControl.h" />
     <ClInclude Include="CardControl.h" />
     <ClInclude Include="EtchControl.h" />
+    <ClInclude Include="LEDControl.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="LEDControler.h.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="LEDController.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="LineFollowControl.h" />
     <ClInclude Include="RubiksControl.h" />
     <ClInclude Include="SimonControl.h" />
@@ -90,6 +102,9 @@
     <ClCompile Include="ArmControl.cpp" />
     <ClCompile Include="CardControl.cpp" />
     <ClCompile Include="EtchControl.cpp" />
+    <ClCompile Include="LEDControl.cpp" />
+    <ClCompile Include="LEDControler.h.c" />
+    <ClCompile Include="LEDController.cpp" />
     <ClCompile Include="LineFollowControl.cpp" />
     <ClCompile Include="RubiksControl.cpp" />
     <ClCompile Include="SimonControl.cpp" />

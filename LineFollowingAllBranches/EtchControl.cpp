@@ -131,44 +131,61 @@ void EtchControl::down()
 void EtchControl::Pull()
 {
 	double TimeConstant = .7;
-	parent->Rear_Smooth_Move(-1, 0, 2, 90, 90, -30, -1, 0, 2, 90, 90, 90, TimeConstant);
+	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 1, 0, 2, 90, 90, 90, TimeConstant);
 
 
-	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 8.3, 3,    -4.5, 30, 90, -30, TimeConstant);// setup
-	parent->Front_Smooth_Move(8.3, 3, -4.5, 30, 90, -30,     8.3, 3, -7, 30, 90, -30, TimeConstant);// further down
-	parent->Front_Smooth_Move(8.3, 3, -7, 30, 90, -30,        8.3, 4, -7, 30, 95, -100, TimeConstant);// wrist rotate
-	parent->Front_Smooth_Move( 8.3, 4, -7, 30, 96, -100,      5.8, 3, -5, 30, 115, -100, 2);
+	parent->Rear_Smooth_Move(-1, 0, 2, 110, 90, -30,   -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant);// setup and grip hat
+	parent->Rear_Smooth_Move(-8.3, 1.5, -2.5, 110, 90, -30, -9, 1.5, -5, 110, 90, -70, TimeConstant);// further down
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 90, -70, -9, 1.5, -5, 110, 84, -100, TimeConstant);// wrist rotate and theta
 
-	//fudge factoring
-	/*
-	parent->Front_Smooth_Move(6, 3, -5, 30, 95, -100, 6, 3, -5, 30, 95, -100, TimeConstant);
-	
-	parent->Front_Smooth_Move(6, 2, -5, 30, 95, -100, 5, 5, -5, 30, 95, -100, TimeConstant);
-	
-	parent->Front_Smooth_Move(5, 5, -5, 30, 95, -100, 6, 3, -5, 30, 95, -100, TimeConstant);
-	*/
-
-
-	double savA[6] = { -1, 0, 2, 90, 90, 90 };
-	double savB[6] = { -6, 0.5, -3, 50, 0, -90 };
-	double savM[6] = { 6, 3, -5, 30, 95, -100 };
-	double savN[6] = { 6, 1.5, -3, 90, 0, -90 };
-
-
-	parent->Both_Smooth_Move(savA, savB, savM, savN, TimeConstant);
+	//fudgefactoring!
+	//parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -3, 110, 83, -85, TimeConstant); //move away from etch
+	//parent->Rear_Smooth_Move(-9, 1.5, -3, 110, 83, -85, -8.5, 1.5, -3.2, 110, 130, -110, TimeConstant);//move above etch, and orient hat to grab rear knob
+	//parent->Rear_Smooth_Move(-8.5, 1.5, -3.2, 110, 130, -110, -7.5, 1.5, -3.8, 110, 170, -110, TimeConstant); //move down to etch
 	
 
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -5, 110, 83, -130, 2); // continute rotate and theta to chassis
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 82, -130, -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant); // move away from etch
+	parent->Rear_Smooth_Move(-8.3, 1.5, -2.5, 110, 90, -30, -1, 0, 2, 110, 90, -30, TimeConstant); // return to home position
+	parent->frontHomeRight(); //move front arm back down
+
+	//return hat and come back
+	parent->RearHomeRight();
+	delay(100);
+	parent->RearFlipToLeft();
+	delay(100);
+	parent->RearHomeLeft();
+	delay(100);
+	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 4, 0, 3, 90, 90, -30, TimeConstant); // move front arm out of the way
+	delay(100);
+	parent->Rear_Smooth_Move(1, 0, 2, 110, 90, -30, 3.8, 2.5, -3.1, 110, 120, -105, TimeConstant); //drop hat down
+	delay(100);
+	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 120, -105, 3.8, 2.5, -3.1, 0, 120, -105, TimeConstant); // hat leggo
+	delay(100);
+	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 120, -105, 3.8, 2.5, 2, 0, 120, -105, TimeConstant); //move up
+	delay(100);
+	parent->RearHomeLeft();
+	delay(100);
+	parent->frontHomeRight(); // bring arm back to home
+	parent->RearFlipToRight();
+	delay(100);
+	parent->RearHomeRight();
 
 
+	double savA[6] = { -1, 0, 2, 90, 90, -30 };
+	double savB[6] = { -6, 0, -3, 50, 0, -90 };
+	double savM[6] = { 1, 0, 2, 90, 90, -30 };
+	double savN[6] = { 6, 1.25, -3, 90, 0, -90 };
 
 
+	parent->Both_Smooth_Move(savA, savB, savM, savN, TimeConstant); //prepare arms to grab knobs
 
 
 	// rotate wrists
-	double A4[6] = { -6, 0.5, -3, 50, 0, -90 };
-	double B4[6] = { -6, 0.2, -3, 50, 90, -90 };
-	double M4[6] = { 6, 1.5, -3, 90, 0, -90 };
-	double N4[6] = { 6, 1.5, -3, 90, 90, -90 };
+	double A4[6] = { -6, 0, -3, 50, 0, -90 };
+	double B4[6] = { -6, 0, -3, 50, 90, -90 };
+	double M4[6] = { 6, 1.25, -3, 90, 0, -90 };
+	double N4[6] = { 6, 1.25, -3, 90, 90, -90 };
 
 
 	parent->Both_Smooth_Move(A4, B4, M4, N4, TimeConstant);
@@ -179,9 +196,9 @@ void EtchControl::Grasp()
 {
 	double TimeConstant = .8;
 	// move both arms to knobs
-	double A011[6] = { -6, 0.2, -3, 10, 90, -90 };
+	double A011[6] = { -6, 0, -3, 10, 90, -90 };
 	double C011[6] = { -5.5, 0, -4.05, 10, 90, -103 };
-	double M011[6] = { 6, 1.5, -3, 40, 90, -90 };
+	double M011[6] = { 6, 1.25, -3, 40, 90, -90 };
 	double N011[6] = { 5.55, 1.25, -4, 40, 90, -102 };
 
 
@@ -226,5 +243,22 @@ void EtchControl::Release()
 	delay(100);
 	parent->RearHomeLeft();
 	delay(100);
+
+	//grab hat from skid
+	double A001[6] = { 1, 0, 2, 90, 90, -30 };
+	double C001[6] = { 3.9, 2.2, -0.1, 20, 120, -105 };
+	double M001[6] = { -1, 0, 2, 90, 90, -30 };
+	double N001[6] = { -1, 0, 2, 90, 90, 90 };
+	parent->Both_Smooth_Move(A001, C001, M001, N001, TimeConstant);
+
+	parent->Rear_Smooth_Move(3.9, 2.2, -0.1, 20, 120, -105, 4.0, 2.5, -3.1, 0, 120, -105, TimeConstant); //move rear arm to grab rubik hat -bend to it
+	delay(100);
+	parent->Rear_Smooth_Move(4.0, 2.5, -3.1, 0, 120, -105, 4.0, 2.5, -3.1, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
+	delay(100);
+	parent->Rear_Smooth_Move(4.1, 2.5, -3.1, 110, 120, -105, 4.1, 2.5, 0, 110, 120, -105, TimeConstant); //lift hat up
+	delay(100);
+	parent->RearHomeLeft();
+	parent->frontHomeLeft();
+
 
 }
