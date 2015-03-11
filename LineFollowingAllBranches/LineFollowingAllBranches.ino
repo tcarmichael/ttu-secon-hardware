@@ -1,5 +1,4 @@
-#include "LEDController.h"
-#include "LEDControler.h.h"
+
 #include "LineFollowControl.h"
 #include "Mecanum.h"
 #include "Wire.h"
@@ -24,14 +23,15 @@ void setup() {
 
 
 	//Example code Line for LEDs, just change the color word
-	//LEDControl.LED_Setup();
-	//LEDControl.Blue_On();
+	LEDControl.LED_Setup();
+	LEDControl.Blue_On();
+	LEDControl.Green_On();
 	
 	
 	// uncomment for David's code testing
-	/*arm.begin();
-	arm.Simon.Simon_Play();
-	delay(15000);*/
+	//arm.begin();
+	//arm.Simon.Simon_Play();
+	//delay(15000);
 	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
@@ -55,6 +55,8 @@ void setup() {
 
 	//arm.Simon.Simon_Play();
 	//arm.Etch.Pull();
+	//arm.Etch.Release();
+	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Rubiks_Play();
 	//delay(15000);
 
@@ -70,11 +72,12 @@ void setup() {
 	// Begin line following
 	Serial.println("Starting line following");
 	
-	//FollowLineMecanum(); 
+	//FollowLineMecanum();
 	followLine();
 }
 
 void loop() {
+	
 	/*lineFollowerControl.setSide(LineFollowControl::LEFT);
 	ReadSensorData();*/
 	//FollowSide(LineFollowControl::RIGHT);
@@ -119,10 +122,10 @@ void followLine()
 	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
 	delay(100);
 
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(100);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
+	//mecanum.mecRun(-0.75, 0, 0);
+	//delay(100);
+	//mecanum.mecRun(0, 0, 0);
+	//delay(100);
 
 	Serial.println("Turn left 90");
 	//rotating to follow first branch
@@ -173,7 +176,7 @@ void followLine()
 	delay(50);
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
-
+	
 	
 	Serial.println("Wait on right line sensor");
 	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
@@ -227,7 +230,7 @@ void followLine()
 	Serial.println("Turn right 90");
 	lineFollowerControl.RotateUntilLine(0.5); 
 	delay(100);
-
+	
 
 	//savannah commented this out
 	/*mecanum.mecRun(-0.75, 0, 0);

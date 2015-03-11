@@ -130,7 +130,7 @@ void EtchControl::down()
 
 void EtchControl::Pull()
 {
-	double TimeConstant = .7;
+	double TimeConstant = 1;//0.3
 	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 1, 0, 2, 90, 90, 90, TimeConstant);
 
 
@@ -145,7 +145,7 @@ void EtchControl::Pull()
 	
 
 	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -5, 110, 83, -130, 2); // continute rotate and theta to chassis
-	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 82, -130, -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant); // move away from etch
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 80, -130, -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant); // move away from etch
 	parent->Rear_Smooth_Move(-8.3, 1.5, -2.5, 110, 90, -30, -1, 0, 2, 110, 90, -30, TimeConstant); // return to home position
 	parent->frontHomeRight(); //move front arm back down
 
@@ -158,11 +158,21 @@ void EtchControl::Pull()
 	delay(100);
 	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 4, 0, 3, 90, 90, -30, TimeConstant); // move front arm out of the way
 	delay(100);
-	parent->Rear_Smooth_Move(1, 0, 2, 110, 90, -30, 3.8, 2.5, -3.1, 110, 120, -105, TimeConstant); //drop hat down
+	parent->Rear_Smooth_Move(1, 0, 2, 110, 90, -30, 4.5, 2.8, -2.5, 110, 123, -111, TimeConstant); //drop hat down to right above the tabs
 	delay(100);
-	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 120, -105, 3.8, 2.5, -3.1, 0, 120, -105, TimeConstant); // hat leggo
+	
+	parent->Rear_Smooth_Move(4.5, 2.8, -2.5, 110, 123, -111, 4.5, 2.8, -3.7, 110, 123, -111, TimeConstant); //drop hat down into tabs
 	delay(100);
-	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 120, -105, 3.8, 2.5, 2, 0, 120, -105, TimeConstant); //move up
+	
+	
+	//fudge factoring
+	//parent->Rear_Smooth_Move(3.8, 2.5, -2.9, 110, 132, -105, 3.6, 2.4, -2.9, 110, 120, -105, TimeConstant); //move around a little bit
+	//delay(100);
+
+	
+	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 132, -105, 3.8, 2.5, -3.1, 0, 120, -105, TimeConstant); // hat leggo
+	delay(100);
+	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 110, 120, -105, 3.8, 2.5, -2, 0, 120, -105, TimeConstant); //move up
 	delay(100);
 	parent->RearHomeLeft();
 	delay(100);
@@ -187,7 +197,7 @@ void EtchControl::Pull()
 	double M4[6] = { 6, 1.25, -3, 90, 0, -90 };
 	double N4[6] = { 6, 1.25, -3, 90, 90, -90 };
 
-
+	
 	parent->Both_Smooth_Move(A4, B4, M4, N4, TimeConstant);
 }
 
@@ -219,7 +229,7 @@ void EtchControl::Grasp()
 
 void EtchControl::Release()
 {
-	double TimeConstant = .5;
+	double TimeConstant = .3;
 	// pull etch away
 	double A011[6] = { -5.5, 0, -4, closeRearGripper, 90, -90 };
 	double C011[6] = { -7.5, 0, -4, closeRearGripper, 90, -100 };
@@ -228,9 +238,9 @@ void EtchControl::Release()
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
 
 	//move arms to home
-	double A[6] = { -7.5, 0, -4, closeRearGripper, 90, -100 };
+	double A[6] = { -7.5, 0, -4, 90, 90, -100 };
 	double C[6] = { -1, 0, 2, 90, 90, -30 };
-	double M[6] = { 7.55, 1.3, -4, closeFrontGripper, 90, -102 };
+	double M[6] = { 7.55, 1.3, -4, 90, 90, -102 };
 	double N[6] = { 1, 0, 2, 90, 90, -30 };
 	parent->Both_Smooth_Move(A, C, M, N, TimeConstant);
 
@@ -259,6 +269,7 @@ void EtchControl::Release()
 	delay(100);
 	parent->RearHomeLeft();
 	parent->frontHomeLeft();
+	
 
 
 }

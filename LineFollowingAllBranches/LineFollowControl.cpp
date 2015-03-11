@@ -39,7 +39,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		leftEmitter
 		);
 
-
+	/*
 	unsigned char BackSensors[] = { 37, 36, 35, 34, 33, 32, 31, 30 };
 	const int BackEmitter = 15;
 	arrays[BACK] = new QTRSensorsRC(
@@ -48,7 +48,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		TIMEOUT,
 		BackEmitter
 		);
-	
+	*/
 
 }
 

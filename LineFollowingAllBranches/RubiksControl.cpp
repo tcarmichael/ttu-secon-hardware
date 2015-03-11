@@ -77,26 +77,61 @@ void RubiksControl::Grab()
 	
 // Squeeze together
 	double A[6]={8.5, 0, -4, 110, 92, -105};
-	double B[6]={8.5, 1.4, -4.3, 110, 92, -105};
+	double B[6]={8.5, 1.8, -4.3, 110, 92, -105};
 	double M[6]={-9, 0, -4.3, 0, 185, -105};
 	double N[6]={-9, 1, -4.3, 0, 185, -105};
 
 
 	parent->Both_Smooth_Move(A,B,M,N,TimeConstant);
 	delay(100);
-	
+
 	// Pull out
-	double A2[6] = { 8.5, 1.4, -4.3, 110, 92, -105 };
-	double B2[6] = { 8.5, 0.5, -4.3, 110, 92, -105 }; //8.5, 0, -4.3, 110, 92, -105 savannah changed
+	double A2[6] = { 8.5, 1.6, -4.3, 110, 92, -105 };
+	double B2[6] = { 8.5, 0, -4.3, 110, 92, -105 };
 	double M2[6] = { -8.5, 1, -4.3, 0, 185, -105 };
-	double N2[6]={-9, 0, -4.3, 0, 185, -105};
+	double N2[6] = { -9, 0, -4.3, 0, 185, -105 };
 
 
-	parent->Both_Smooth_Move(A2,B2,M2,N2,TimeConstant);
+	parent->Both_Smooth_Move(A2, B2, M2, N2, TimeConstant);
 	delay(100);
+
+	
 	// Pull in setup
-	double A3[6] = { 8.5, 0.5, -4.3, 110, 92, -105 }; //8.5, 0, -4.3, 110, 92, -105 savannah changed
-	double B3[6] = { 8.5, 0, -4.3, 110, 92, -105 }; //6, 0, 2, 110, 92, -105}; savannah changed
+	double A3[6] = { 8.5, 0, -4.3, 110, 92, -105 };
+	double B3[6] = { 8.5, 0, -3, 110, 92, 0 };
+	double M3[6] = { -9, 0, -4.3, 0, 185, -105 };
+	double N3[6] = { -1, 0, 2, 90, 90, 90 };
+
+
+	parent->Both_Smooth_Move(A3, B3, M3, N3, TimeConstant);
+	delay(100);
+
+	// Pull in setup step 2
+	parent->Rear_Smooth_Move(8.5, 0, -3, 110, 92, 0, 8.5, 3, -4, 110, 100, 0, TimeConstant);
+	delay(100);
+
+	// pull in wrist swing down
+	parent->Rear_Smooth_Move(8.5, 3, -4, 110, 100, 0, 8.5, 4, -4, 110, 122, -120, TimeConstant);
+	delay(100);
+
+	// pull in wrist swing down continue swing
+	//parent->Rear_Smooth_Move(8.5, 3.5, -4, 110, 110, -90, 8.5, 4, -4, 110, 115, -125, TimeConstant);
+	//delay(100);
+
+	// move out of the way
+	parent->Rear_Smooth_Move(8.5, 4, -4, 110, 100, -120, 9, 4, -2, 110, 115, -90, TimeConstant);
+	delay(100);
+
+	//prepare to place hat
+	parent->Rear_Smooth_Move(9, 4, -2, 110, 115, -90, 4.7, 2.9, -2, 110, 33, -105, TimeConstant);
+	delay(100); 
+
+
+	/* the following pulls the rubiks cube in with the front arm
+
+	// Pull in setup
+	double A3[6] = { 8.5, 0, -4.3, 110, 92, -105 }; 
+	double B3[6] = { 6, 0, 2, 110, 92, -105 }; 
 	double M3[6]={-9, 0, -4.3, 0, 185, -105};
 	double N3[6]={-9, 0, -3, 0, 185, 0};
 
@@ -113,15 +148,10 @@ void RubiksControl::Grab()
 	delay(100);
 
 	
-	// pull in x direction  -savannah commented it out
-	//parent->Front_Smooth_Move(-9, 2, -5, 0, 78, -90, -5, 2, -5, 0, 78, -90, TimeConstant);
-	//delay(100);
-	//savannah added this 
-	double A33[6] = { 8.5, 0.5, -4.3, 110, 92, -105 }; 
-	double B33[6] = { 6, 0, 2, 110, 92, -105 }; 
-	double M33[6] = { -9, 2, -5, 0, 78, -90 };
-	double N33[6] = { -5, 2, -5, 0, 74, -90 }; //Savannah changed this from 78
-	parent->Both_Smooth_Move(A33, B33, M33, N33, TimeConstant);
+	// pull in x direction 
+	parent->Front_Smooth_Move(-9, 2, -5, 0, 78, -90, -5, 2, -5, 0, 78, -90, TimeConstant);
+	delay(100);
+	
 
 
 	// move out the way
@@ -138,7 +168,7 @@ void RubiksControl::Grab()
 
 	parent->Both_Smooth_Move(A4,B4,M4,N4,TimeConstant);
 	
-	
+	*/
 
 	
 	
@@ -169,15 +199,15 @@ void RubiksControl::Rotate()
 
 
 	//reset hat
-	parent->Rear_Smooth_Move(4.5, 2.9, -2.5, 110, 180, -105,                  4.5, 2.9, -2.5, 0, 180, -105,           TimeConstant); //open grip
+	parent->Rear_Smooth_Move(4.8, 2.6, -2.5, 110, 180, -105,                  4.8, 2.6, -2.5, 0, 180, -105,           TimeConstant); //open grip 4.5
 	delay(100);
-	parent->Rear_Smooth_Move(4.5, 2.9, -2.5, 0, 180, -105,                     4.5, 2.9, -2, 0, 180, -105,           TimeConstant); //move up
+	parent->Rear_Smooth_Move(4.8, 2.6, -2.5, 0, 180, -105,                     4.8, 2.6, -2, 0, 180, -105,           TimeConstant); //move up 4.5
 	delay(100);
-	parent->Rear_Smooth_Move(4.5, 2.9, -2, 0, 180, -105,                        4.5, 2.9, -2, 0, 0, -105,           TimeConstant); //reset wrist
+	parent->Rear_Smooth_Move(4.8, 2.6, -2, 0, 180, -105,                        4.8, 2.6, -2, 0, 0, -105,           TimeConstant); //reset wrist
 	delay(100);
-	parent->Rear_Smooth_Move(  4.5, 2.9, -2, 0, 0, -105,                4.5, 2.9, -3, 0, 0, -105,           TimeConstant); //lower
+	parent->Rear_Smooth_Move( 4.8, 2.6, -2, 0, 0, -105,                4.8, 2.6, -3, 0, 0, -105,           TimeConstant); //lower  4.5 2.9
 	delay(100);
-	parent->Rear_Smooth_Move(   4.5, 2.9, -3, 0, 0, -105,                4.5, 2.9, -3, 110, 0, -105,           TimeConstant); //squeeze
+	parent->Rear_Smooth_Move(   4.8, 2.6, -3, 0, 0, -105,                4.8, 2.6, -3, 110, 0, -105,           TimeConstant); //squeeze 4.5 2.9
 	delay(100);
 	parent->Rear_Smooth_Move(    4.5, 2.9, -3, 110, 0, -105,               4.3, 2.9, -3, 110, 0, -105,           TimeConstant); // pull back just in case
 	delay(100);
@@ -195,7 +225,7 @@ void RubiksControl::Release()
 {
 	double TimeConstant=.4;
 	// ditch hat and cube
-	parent->Rear_Smooth_Move(  4.6, 2.9, -3, 105, 70, -105,                  8.5, 2.9, -3, 105, 70, -105,           TimeConstant); //pull out
+	parent->Rear_Smooth_Move(  4.6, 2.9, -3, 105, 56, -105,                  8.5, 2.9, -3, 105, 70, -105,           TimeConstant); //pull out
 	delay(100);
 
 	parent->Rear_Smooth_Move(   8.5, 2.9, -3, 105, 70, -105,                  8.5, 2.9, -3, 105, 110, -105,           TimeConstant); //rotate cube

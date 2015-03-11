@@ -1,20 +1,22 @@
+// LEDController.h
 
-/*
-#ifndef _LEDCONTROL_h
-#define _LEDCONTROL_h
+#ifndef _LEDCONTROLLER_h
+#define _LEDCONTROLLER_h
 
-// Include libraries
 #if defined(ARDUINO) && ARDUINO >= 100
-#include "Arduino.h"
+	#include "Arduino.h"
 #else
-#include "WProgram.h"
+	#include "WProgram.h"
 #endif
 
-class LEDControl
+
+class LEDController
 {
 
 
 public:
+
+	void LED_Setup();
 	void Orange_On_For(int timer);
 	void Red_On_For(int timer);
 	void White_On_For(int timer);
@@ -32,9 +34,9 @@ public:
 	void Green_Off();
 
 
-	
+
+
 };
 
 #endif
 
-*/
