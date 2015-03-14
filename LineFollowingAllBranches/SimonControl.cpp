@@ -1,7 +1,5 @@
 #include "ArmControl.h"
-#include "LEDController.h"
-
-LEDController LEDControl_Simon;
+#include "Robot.h"
 
 char temp[4] = {'b','r','g','y'};
 
@@ -9,9 +7,6 @@ int pinYellow = 4;
 int pinRed = 5;
 int pinBlue = 6;
 int pinGreen = 7;
-
-
-
 
 void SimonControl::Simon_Play()
 {

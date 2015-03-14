@@ -1,4 +1,3 @@
-
 #include "LineFollowControl.h"
 #include "Mecanum.h"
 #include "Wire.h"
@@ -7,12 +6,13 @@
 #include "ArmControl.h"
 #include "Adafruit_Light_Sensor\Adafruit_TSL2561_U.h"
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
-#include "LEDController.h"
+#include "Robot.h"
 
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
-LEDController LEDControl;
 LineFollowControl lineFollowerControl(&mecanum);
+
+LEDController leds;
 
 // Controls the arm movements
 ArmControl arm;
@@ -23,9 +23,9 @@ void setup() {
 
 
 	//Example code Line for LEDs, just change the color word
-	LEDControl.LED_Setup();
-	LEDControl.Blue_On();
-	LEDControl.Green_On();
+	leds.LED_Setup();
+	leds.Blue_On();
+	leds.Green_On();
 	
 	
 	// uncomment for David's code testing
