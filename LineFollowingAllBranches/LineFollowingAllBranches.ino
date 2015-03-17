@@ -24,8 +24,7 @@ void setup() {
 
 	//Example code Line for LEDs, just change the color word
 	leds.LED_Setup();
-	leds.Blue_On();
-	leds.Green_On();
+	
 	
 	
 	// uncomment for David's code testing
@@ -56,14 +55,19 @@ void setup() {
 	//arm.Simon.Simon_Play();
 	//arm.Etch.Pull();
 	//arm.Etch.Release();
+	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
+	//arm.Rubiks.Release();
+
 	//arm.Rubiks.Rubiks_Play();
 	//delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
 	//WaitForLed();
-
+	leds.Blue_Off();
+	leds.Green_Off();
+	leds.White_Off();
 	// Get out of the box
 	/*mecanum.mecRun(0.9, 0, 0);
 	delay(500);
@@ -77,7 +81,9 @@ void setup() {
 }
 
 void loop() {
-	
+	//arm.Rubiks.Grab();
+	//arm.Rubiks.Rotate();
+	//arm.Rubiks.Release();
 	/*lineFollowerControl.setSide(LineFollowControl::LEFT);
 	ReadSensorData();*/
 	//FollowSide(LineFollowControl::RIGHT);
@@ -106,10 +112,14 @@ void WaitForLed()
 	sensors_event_t event;
 	do {
 		tsl.getEvent(&event);
+		leds.Blue_On();
+		leds.Green_On();
+		leds.White_On();
 	} while (!event.light);
 	
 	do {
 		tsl.getEvent(&event);
+		
 	} while (event.light);
 	
 }

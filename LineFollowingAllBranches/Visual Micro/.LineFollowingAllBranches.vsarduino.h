@@ -16,13 +16,15 @@
 #define USBCON
 #define USB_MANUFACTURER "\"Unknown\""
 #define USB_PRODUCT "\"Arduino Due\""
-#define ARDUINO 160
+#define _VMDEBUG 1
+#define ARDUINO 157
 #define ARDUINO_MAIN
 #define printf iprintf
 #define __SAM__
 #define __sam__
 #define F_CPU 84000000L
 #define __cplusplus
+#define GCC_VERSION 40301
 #define ARDUINO_ARCH_SAM
 #define ARDUINO_SAM_DUE
 #define __inline__
