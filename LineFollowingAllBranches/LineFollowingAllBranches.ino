@@ -377,8 +377,13 @@ void followLine()
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
+	// Find the finish line
 	lineFollowerControl.followUntilWhite();
 	
+	// Drive completely over the finish line
+	/*mecanum.mecRun(0.75, 0, 0);
+	delay(1000);
+	mecanum.mecRun(0, 0, 0);*/
 }
 
 void FollowLineMecanum() {
