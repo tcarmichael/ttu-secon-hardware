@@ -28,9 +28,9 @@ void setup() {
 	
 	
 	// uncomment for David's code testing
-	//arm.begin();
-	//arm.Simon.Simon_Play();
-	//delay(15000);
+	/*arm.begin();
+	arm.Simon.Simon_Play();
+	delay(15000);*/
 	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
@@ -51,9 +51,9 @@ void setup() {
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
-
+	//arm.Simon.Grab();
 	//arm.Simon.Simon_Play();
-	//arm.Etch.Pull();
+	//arm.Etch.Etch_Play();
 	//arm.Etch.Release();
 	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
@@ -64,14 +64,14 @@ void setup() {
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
-	//WaitForLed();
+	WaitForLed();
 	leds.Blue_Off();
 	leds.Green_Off();
 	leds.White_Off();
 	// Get out of the box
-	/*mecanum.mecRun(0.9, 0, 0);
-	delay(500);
-	mecanum.mecRun(0, 0, 0);*/
+	mecanum.mecRun(0.9, 0, 0);
+	delay(750);
+	mecanum.mecRun(0, 0, 0);
 
 	// Begin line following
 	Serial.println("Starting line following");
@@ -107,19 +107,28 @@ void WaitForLed()
 	// Configure the sensor
 	tsl.enableAutoRange(true);
 	tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);
+
+	leds.Blue_On();
+	leds.Green_On();
+	leds.White_On();
 	
 	// Wait for the sensor to return a value
 	sensors_event_t event;
 	do {
 		tsl.getEvent(&event);
-		leds.Blue_On();
-		leds.Green_On();
-		leds.White_On();
 	} while (!event.light);
-	
+
+	leds.Orange_On();
+	leds.Red_On();
+
 	do {
+		do
+		{
+			tsl.getEvent(&event);
+		} while (event.light);
+
+		delay(1500);
 		tsl.getEvent(&event);
-		
 	} while (event.light);
 	
 }

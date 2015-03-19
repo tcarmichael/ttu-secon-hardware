@@ -19,8 +19,10 @@ public:
 	void Etch_Play();
 	void makeSpace();
 	void letterI();
-	void letterE();
+	void letterEup();
+	void letterEdown();
 	void down();
+	void up();
 	void Pull();
 	void Grasp();
 	void Release();

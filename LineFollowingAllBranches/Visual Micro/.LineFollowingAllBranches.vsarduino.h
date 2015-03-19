@@ -16,17 +16,13 @@
 #define USBCON
 #define USB_MANUFACTURER "\"Unknown\""
 #define USB_PRODUCT "\"Arduino Due\""
-#define _VMDEBUG 1
-#define ARDUINO 157
+#define ARDUINO 158
 #define ARDUINO_MAIN
 #define printf iprintf
 #define __SAM__
 #define __sam__
 #define F_CPU 84000000L
 #define __cplusplus
-#define GCC_VERSION 40301
-#define ARDUINO_ARCH_SAM
-#define ARDUINO_SAM_DUE
 #define __inline__
 #define __asm__(x)
 #define __extension__
@@ -52,37 +48,35 @@ extern "C" void __cxa_pure_virtual() {;}
 
 
 
-#include <arduino.h>
-#include <pins_arduino.h> 
-#include <variant.h> 
-#undef F
-#define F(string_literal) ((const PROGMEM char *)(string_literal))
-#undef cli
-#define cli()
-#define pgm_read_byte(address_short)
-#define pgm_read_word(address_short)
-#define pgm_read_word2(address_short)
-#define digitalPinToPort(P)
-#define digitalPinToBitMask(P) 
-#define digitalPinToTimer(P)
-#define analogInPinToBit(P)
-#define portOutputRegister(P)
-#define portInputRegister(P)
-#define portModeRegister(P)
-#include <LineFollowingAllBranches.ino>
-#include <ArmControl.cpp>
-#include <ArmControl.h>
-#include <CardControl.cpp>
-#include <CardControl.h>
-#include <EtchControl.cpp>
-#include <EtchControl.h>
-#include <LEDController.cpp>
-#include <LEDController.h>
-#include <LineFollowControl.cpp>
-#include <LineFollowControl.h>
-#include <Robot.h>
-#include <RubiksControl.cpp>
-#include <RubiksControl.h>
-#include <SimonControl.cpp>
-#include <SimonControl.h>
+
+//
+//
+void WaitForLed();
+void followLine();
+void FollowLineMecanum();
+void Strafe();
+void MoveInSquare(bool acceleration);
+void SpeedRamping();
+void FollowSide(int side);
+void ReadSensorData();
+
+#include "C:\Program Files\Arduino\hardware\arduino\sam\cores\arduino\arduino.h"
+#include "C:\Program Files\Arduino\hardware\arduino\sam\variants\arduino_due_x\pins_arduino.h" 
+#include "C:\Program Files\Arduino\hardware\arduino\sam\variants\arduino_due_x\variant.h" 
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowingAllBranches.ino"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\ArmControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\ArmControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\CardControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\CardControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\EtchControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LEDController.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LEDController.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\LineFollowControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\Robot.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\RubiksControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\RubiksControl.h"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\SimonControl.cpp"
+#include "C:\Users\radar1\Documents\GitHub\ttu-secon-hardware\LineFollowingAllBranches\SimonControl.h"
 #endif

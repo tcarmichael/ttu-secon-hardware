@@ -208,6 +208,11 @@ void SimonControl::play_sequence(int curr, int sequence[], unsigned long end_t)
 void SimonControl::press_red(unsigned long end_t)
 {
 	Serial.print("RED ");
+	delay(3750);
+	if (millis() > end_t)
+	{
+		return;
+	}
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.2, 1.3, -3.1, 180, 70, -70, TimeConstant); // from start to hover over red
 	parent->Front_Smooth_Move(-3.2, 1.3, -3.1, 180, 70, -70, -3.1, 1.4, -3.5, 150, 65, -70, 0.2); // changed from TimeConstant to 0.2 // hit red
 	//parent->frontArm(-3.1, 1.4, -3.6, 180, 70, -70); //punch red
@@ -229,6 +234,11 @@ void SimonControl::press_red(unsigned long end_t)
 void SimonControl::press_blue(unsigned long end_t)
 {
 	Serial.print("BLUE ");
+	delay(3000);
+	if (millis() > end_t)
+	{
+		return;
+	}
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.2, 1.6, -3.6, 120, 90, -75, TimeConstant); // from start to hover over blue
 	parent->Front_Smooth_Move(-4.2, 1.6, -3.6, 120, 90, -75, -4.2, 1.4, -3.9, 120, 110, -75, TimeConstant); // hit blue
 	// keep going down on z direction
@@ -240,6 +250,11 @@ void SimonControl::press_blue(unsigned long end_t)
 
 void SimonControl::press_yellow(unsigned long end_t) {
 	Serial.print("YELLOW ");
+	delay(3000);
+	if (millis() > end_t)
+	{
+		return;
+	}
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.2, 1.3, -3.7, 160, 70, -70, TimeConstant); // from start to hover over yellow
 	parent->Front_Smooth_Move(-4.2, 1.3, -3.7, 160, 70, -70, -4, 0.8, -4.1, 160, 70, -70, TimeConstant); // hit yellow
 
@@ -253,6 +268,11 @@ void SimonControl::press_yellow(unsigned long end_t) {
 void SimonControl::press_green(unsigned long end_t)
 {
 	Serial.print("GREEN ");
+	delay(4500);
+	if (millis() > end_t)
+	{
+		return;
+	}
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.8, 0.8, -3.3, 180, 70, -75, TimeConstant); // from start to hover over green
 	parent->Front_Smooth_Move(-3.8, 0.8, -3.3, 180, 70, -75, -3.8, 0.75, -3.75, 180, 70, -75, 0.2); // David changed TimeConstant to 0.2 // hit green
 	// keep going down on z direction
@@ -408,23 +428,23 @@ void SimonControl::Grab()
 	double A011[6] = { 1, 0, 2, 110, 90, -30 }; //change this 4.1, 2.5, 0, 110, 120, -105  savannah
 	double C011[6] = { 8, 0, 0, 110, 90, -105 };
 	double M011[6] = { -1, 0, 2, 90, 90, -30 };
-	double N011[6] = { -9, 0, 0, 0, 163, -30 }; //-105 to -30
+	double N011[6] = { -8.5, 0, 0, 0, 163, -30 }; //-105 to -30
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
 	delay(100);
 
 	// move both arms down
 	double A01[6] = { 8, 0, 0, 110, 90, -105 };
-	double C01[6] = { 8, 0, -4.3, 110, 90, -105 };
-	double M01[6] = { -9, 0, 0, 0, 180, -105 };
-	double N01[6] = { -9, 0, -5.6, 0, 180, -105 };
+	double C01[6] = { 8.5, 0, -4.3, 110, 92, -105 };
+	double M01[6] = { -8.5, 0, 0, 0, 180, -105 };
+	double N01[6] = { -8.5, 0, -5.6, 0, 180, -87 };// Justin altered angle to try and fix the simon squezze from squeezing the toy out
 	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
 	delay(100);
 
 	// Squeeze together
 	double A[6] = { 8.5, 0, -4.3, 110, 92, -105 };
 	double B[6] = { 8.5, 1.6, -4.3, 110, 92, -105 };
-	double M[6] = { -8.5, 0, -5.6, 0, 180, -105 };
-	double N[6] = { -8.5, .7, -5.6, 0, 180, -105 };
+	double M[6] = { -8.5, 0, -5.6, 0, 180, -87 };
+	double N[6] = { -8.5, .5, -5.6, 0, 180, -87 };
 
 
 	parent->Both_Smooth_Move(A, B, M, N, TimeConstant);
@@ -433,7 +453,7 @@ void SimonControl::Grab()
 	// Pull out
 	double A2[6] = { 8.5, 1.7, -4.3, 110, 92, -105 };
 	double B2[6] = { 8.5, 0, -4.3, 110, 92, -105 };
-	double M2[6] = { -8.5, .6, -5.6, 0, 180, -105 };
+	double M2[6] = { -8.5, .5, -5.6, 0, 180, -87 };
 	double N2[6] = { -9, 0, -5, 0, 180, -105 };
 
 

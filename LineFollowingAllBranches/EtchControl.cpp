@@ -16,13 +16,14 @@ void EtchControl::draw()
 	letterI();
 	makeSpace();
 	makeSpace();
-	letterE();
+	makeSpace();
+	letterEup(); //up refers to E being draw to end up closer on the screen to the knobs than it began
 	makeSpace();
 	makeSpace();
-	letterE();
+	letterEdown();
 	makeSpace();
 	makeSpace();
-	letterE();
+	letterEup();
 	makeSpace();
 	makeSpace();
 }
@@ -79,7 +80,7 @@ void EtchControl::letterI()
 	parent->setPosition(parent->Rear_Arm[4], 30);
 }
 
-void EtchControl::letterE()
+void EtchControl::letterEup()
 {
 	int pulselen;
 	//draw E
@@ -92,11 +93,32 @@ void EtchControl::letterE()
 		// Horizontal back
 		parent->setPosition(parent->Rear_Arm[4], 180);
 		count = 1;
+		up();
+	}
+
+	parent->setPosition(parent->Rear_Arm[4], 40);
+}
+
+void EtchControl::letterEdown()
+{
+	int pulselen;
+	//draw E
+	for (int i = 0; i < 2; i++)
+	{
+		// Horizontal forward
+		parent->setPosition(parent->Rear_Arm[4], 40);
+		delay(timing);
+
+		// Horizontal back
+		parent->setPosition(parent->Rear_Arm[4], 180);
+		count = 1;
 		down();
 	}
 
 	parent->setPosition(parent->Rear_Arm[4], 40);
 }
+
+
 
 void EtchControl::down()
 {
@@ -127,6 +149,37 @@ void EtchControl::down()
 
 }
 
+void EtchControl::up()
+{
+	int rotate = 175;
+	if (count == 1)
+	{
+		rotate = 120;
+	}
+
+
+	// Vertical line
+	delay(timing);
+
+	// Rotate wrist
+	parent->setPosition(parent->Front_Arm[4], rotate);
+	delay(timing);
+
+	// Release knob
+	parent->setPosition(parent->Front_Arm[5], openFrontGripper);
+	delay(timing);
+
+	// Scroll over
+	parent->setPosition(parent->Front_Arm[4], 14);
+	delay(timing);
+
+	// Grab knob
+	parent->setPosition(parent->Front_Arm[5], closeFrontGripper);
+	delay(timing);
+
+
+}
+
 
 void EtchControl::Pull()
 {
@@ -137,15 +190,14 @@ void EtchControl::Pull()
 	parent->Rear_Smooth_Move(-1, 0, 2, 110, 90, -30,   -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant);// setup and grip hat
 	parent->Rear_Smooth_Move(-8.3, 1.5, -2.5, 110, 90, -30, -9, 1.5, -5, 110, 90, -70, TimeConstant);// further down
 	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 90, -70, -9, 1.5, -5, 110, 84, -100, TimeConstant);// wrist rotate and theta
-
-	//fudgefactoring!
-	//parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -3, 110, 83, -85, TimeConstant); //move away from etch
-	//parent->Rear_Smooth_Move(-9, 1.5, -3, 110, 83, -85, -8.5, 1.5, -3.2, 110, 130, -110, TimeConstant);//move above etch, and orient hat to grab rear knob
-	//parent->Rear_Smooth_Move(-8.5, 1.5, -3.2, 110, 130, -110, -7.5, 1.5, -3.8, 110, 170, -110, TimeConstant); //move down to etch
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -5, 110, 84, -130, 2); // continute rotate and theta to chassis
 	
+	//set hat straight
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 80, -130, -9, 1.5, -5, 110, 85, -110, TimeConstant); //move away
+	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -110, -9, 1.5, -5.3, 110, 85, -110, TimeConstant); //set hat
 
-	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 85, -100, -9, 1.5, -5, 110, 83, -130, 2); // continute rotate and theta to chassis
-	parent->Rear_Smooth_Move(-9, 1.5, -5, 110, 80, -130, -8.3, 1.5, -2.5, 110, 90, -30, TimeConstant); // move away from etch
+
+	parent->Rear_Smooth_Move(-9, 1.5, -5.1, 110, 85, -110, - 8.3, 1.5, -2.5, 110, 90, -30, TimeConstant); // move away from etch
 	parent->Rear_Smooth_Move(-8.3, 1.5, -2.5, 110, 90, -30, -1, 0, 2, 110, 90, -30, TimeConstant); // return to home position
 	parent->frontHomeRight(); //move front arm back down
 
@@ -207,7 +259,7 @@ void EtchControl::Grasp()
 	double TimeConstant = .8;
 	// move both arms to knobs
 	double A011[6] = { -6, 0, -3, 10, 90, -90 };
-	double C011[6] = { -5.5, 0, -4.05, 10, 90, -103 };
+	double C011[6] = { -5.5, 0, -4.1, 10, 90, -103 };
 	double M011[6] = { 6, 1.25, -3, 40, 90, -90 };
 	double N011[6] = { 5.55, 1.25, -4, 40, 90, -102 };
 

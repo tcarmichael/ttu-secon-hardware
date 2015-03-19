@@ -92,12 +92,16 @@ void RubiksControl::Grab()
 	parent->Rear_Smooth_Move( 6.7, 3.2, -4.5, 110, 118, -110,    9, 3.2, -2, 110, 115, -90, TimeConstant);
 	delay(100);
 
+	//set hat straight
+	parent->Rear_Smooth_Move(9, 3.2, -2, 110, 115, -90, 9, 3.2, -5.5, 110, 115, -110, TimeConstant);
+	delay(2000);
+
 	//Intermediate Step
 	parent->Rear_Smooth_Move(9, 3.2, -2, 110, 115, -90, 6, 2.9, 0, 110, 33, -105, TimeConstant);
 	delay(100); 
 
 	//prepare to place hat
-	parent->Rear_Smooth_Move(6, 2.9, 0, 110, 33, -105, 4.7, 2.9, -2, 110, 33, -105, TimeConstant);
+	parent->Rear_Smooth_Move(6, 2.9, 0, 110, 33, -105, 4.5, 2.9, -2, 110, 33, -105, TimeConstant);
 	delay(100); 
 
 	
@@ -110,43 +114,43 @@ void RubiksControl::Rotate()
 {
 	double TimeConstant=.4;
 	// place hat on it
-	parent->Rear_Smooth_Move(4.7, 2.9, -2, 110, 33, -105,                        4.7, 2.5, -2.7, 110, 33, -105,                      TimeConstant); 
+	parent->Rear_Smooth_Move(4.5, 2.9, -2, 110, 33, -105,                        4.5, 2.5, -2.7, 110, 33, -105,                      TimeConstant); 
 	delay(100);
 
-	// Fudge factoring
-	parent->Rear_Smooth_Move( 4.7, 3.1, -2.5, 110, 33, -105,                          4.7, 2.3, -2.3, 110, 33, -105,                        TimeConstant); //really make sure hat is there
+	// Fudge factoring savannah changed -2.5 to -2.8
+	parent->Rear_Smooth_Move( 4.5, 3.1, -2.8, 110, 33, -105,                          4.5, 2.3, -2.3, 110, 33, -105,                        TimeConstant); //really make sure hat is there
 	delay(100);
-	parent->Rear_Smooth_Move( 4.5, 2.5, -2.5, 110, 33, -105,                          4.9, 2.5, -2.5, 110, 33, -105,                        TimeConstant); //really make sure hat is there
+	parent->Rear_Smooth_Move( 4.5, 2.5, -2.8, 110, 33, -105,                          4.9, 2.5, -2.8, 110, 33, -105,                        TimeConstant); //really make sure hat is there
 	delay(100);
 	
-	parent->Rear_Smooth_Move(4.7, 2.9, -2.5, 110, 33, -105,                        4.3, 2.9, -3, 110, 33, -105,                      TimeConstant); //Push hat down and back
+	parent->Rear_Smooth_Move(4.5, 2.9, -2.8, 110, 33, -105,                        4.3, 2.9, -3, 110, 33, -105,                      TimeConstant); //Push hat down and back
 	delay(100);
 	
 
 	//// rotating
 	//savannah changed this from 4.8 to 4.3
-	parent->Rear_Smooth_Move(  4.5, 2.9, -3, 110, 33, -105,                     4.3, 2.9, -2.7, 110, 180, -105,  TimeConstant);                               //rotate hat
+	parent->Rear_Smooth_Move(  4.5, 2.9, -3, 110, 33, -105,                     4.1, 2.9, -2.7, 110, 180, -105,  TimeConstant);                               //rotate hat
 	delay(100);
 
 
 	//reset hat
-	parent->Rear_Smooth_Move(4.8, 2.6, -2.5, 110, 180, -105,                  4.8, 2.6, -2.5, 0, 180, -105,           TimeConstant); //open grip 4.5
+	parent->Rear_Smooth_Move(4.5, 2.6, -2.5, 110, 180, -105,                  4.5, 2.6, -2.5, 0, 180, -105,           TimeConstant); //open grip 4.5
 	delay(100);
-	parent->Rear_Smooth_Move(4.8, 2.6, -2.5, 0, 180, -105,                     4.8, 2.6, -2, 0, 180, -105,           TimeConstant); //move up 4.5
+	parent->Rear_Smooth_Move(4.5, 2.6, -2.5, 0, 180, -105,                     4.5, 2.6, 2, 0, 180, -105,           TimeConstant); //move up 4.5
 	delay(100);
-	parent->Rear_Smooth_Move(4.8, 2.6, -2, 0, 180, -105,                        4.8, 2.6, -2, 0, 0, -105,           TimeConstant); //reset wrist
+	parent->Rear_Smooth_Move(4.5, 2.6, 2, 0, 180, -105,                        4.5, 2.6, 2, 0, 0, -105,           TimeConstant); //reset wrist
 	delay(100);
-	parent->Rear_Smooth_Move( 4.8, 2.6, -2, 0, 0, -105,                4.8, 2.6, -3, 0, 0, -105,           TimeConstant); //lower  4.5 2.9
+	parent->Rear_Smooth_Move( 4.5, 2.6, 2, 0, 0, -105,                4.5, 2.6, -3, 0, 0, -105,           TimeConstant); //lower  4.5 2.9
 	delay(100);
-	parent->Rear_Smooth_Move(   4.8, 2.6, -3, 0, 0, -105,                4.8, 2.6, -3, 110, 0, -105,           TimeConstant); //squeeze 4.5 2.9
+	parent->Rear_Smooth_Move(   4.5, 2.6, -3, 0, 0, -105,                4.5, 2.6, -3, 110, 0, -105,           TimeConstant); //squeeze 4.5 2.9
 	delay(100);
-	parent->Rear_Smooth_Move(    4.5, 2.9, -3, 110, 0, -105,               4.3, 2.9, -3, 110, 0, -105,           TimeConstant); // pull back just in case
+	parent->Rear_Smooth_Move(    4.5, 2.9, -3, 110, 0, -105,               4.1, 2.9, -3, 110, 0, -105,           TimeConstant); // pull back just in case
 	delay(100);
 
 
 	//changed 4.6 t0 4.3 by savannah
 	// rotate again
-	parent->Rear_Smooth_Move(  4.3, 2.9, -3, 110, 0, -105,               4.1, 2.9, -3, 105, 50, -105,           TimeConstant); //rotate
+	parent->Rear_Smooth_Move(  4.3, 2.9, -3, 110, 0, -105,               4.1, 2.9, -3, 105, 60, -105,           TimeConstant); //rotate
 	delay(100);
 	
 
@@ -157,7 +161,7 @@ void RubiksControl::Release()
 {
 	double TimeConstant=.4;
 	// ditch hat and cube
-	parent->Rear_Smooth_Move(  4.6, 2.9, -3, 105, 56, -105,                  8.5, 2.9, -3, 105, 70, -105,           TimeConstant); //pull out
+	parent->Rear_Smooth_Move(  4.6, 2.9, -3.1, 105, 60, -105,                  8.5, 2.9, -3, 105, 70, -105,           TimeConstant); //pull out
 	delay(100);
 
 	parent->Rear_Smooth_Move(   8.5, 2.9, -3, 105, 70, -105,                  8.5, 2.9, -3, 105, 110, -105,           TimeConstant); //rotate cube
