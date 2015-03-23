@@ -90,6 +90,7 @@
     </ClInclude>
     <ClInclude Include="RubiksControl.h" />
     <ClInclude Include="SimonControl.h" />
+    <ClInclude Include="Visual Micro\.LineFollowingAllBranches.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArmControl.cpp" />
