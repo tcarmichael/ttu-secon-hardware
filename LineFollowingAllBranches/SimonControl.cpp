@@ -298,7 +298,8 @@ void SimonControl::press_yellow(unsigned long end_t) {
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.2, 1.3, -3.7, 160, 70, -70, TimeConstant); // from start to hover over yellow
-	parent->Front_Smooth_Move(-4.2, 1.3, -3.7, 160, 70, -70, -4, 0.8, -4.1, 160, 70, -70, TimeConstant); // hit yellow
+	parent->Front_Smooth_Move(-4.2, 1.3, -3.7, 160, 70, -70, -4, 0.8, -3.7, 160, 70, -70, TimeConstant); 
+	parent->Front_Smooth_Move(-4, 0.8, -3.7, 160, 70, -70, -4, 0.8, -4.2, 160, 70, -70, TimeConstant); // hit yellow
 
 	// keep going down on z direction
 	move_down(-4, 0.8, -4.2, 160, 70, -70, end_t);
