@@ -208,11 +208,25 @@ void SimonControl::play_sequence(int curr, int sequence[], unsigned long end_t)
 void SimonControl::press_red(unsigned long end_t)
 {
 	Serial.print("RED ");
+	
+	/*
 	delay(3750);
 	if (millis() > end_t)
 	{
 		return;
 	}
+	*/
+
+	// Shorten the delay and check for the end of time more often
+	for (int z = 0; z < 14; z++)
+	{
+		delay(250);
+		if (millis() > end_t)
+		{
+			return;
+		}
+	}
+
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.2, 1.3, -3.1, 180, 70, -70, TimeConstant); // from start to hover over red
 	parent->Front_Smooth_Move(-3.2, 1.3, -3.1, 180, 70, -70, -3.1, 1.4, -3.5, 150, 65, -70, 0.2); // changed from TimeConstant to 0.2 // hit red
 	//parent->frontArm(-3.1, 1.4, -3.6, 180, 70, -70); //punch red
@@ -234,11 +248,25 @@ void SimonControl::press_red(unsigned long end_t)
 void SimonControl::press_blue(unsigned long end_t)
 {
 	Serial.print("BLUE ");
+	
+	/*
 	delay(3000);
 	if (millis() > end_t)
 	{
 		return;
 	}
+	*/
+
+	// Shorten the delay and check for the end of time more often
+	for (int z = 0; z < 12; z++)
+	{
+		delay(250);
+		if (millis() > end_t)
+		{
+			return;
+		}
+	}
+
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.2, 1.6, -3.6, 120, 90, -75, TimeConstant); // from start to hover over blue
 	parent->Front_Smooth_Move(-4.2, 1.6, -3.6, 120, 90, -75, -4.2, 1.4, -3.9, 120, 110, -75, TimeConstant); // hit blue
 	// keep going down on z direction
@@ -250,11 +278,25 @@ void SimonControl::press_blue(unsigned long end_t)
 
 void SimonControl::press_yellow(unsigned long end_t) {
 	Serial.print("YELLOW ");
+	
+	/*
 	delay(3000);
 	if (millis() > end_t)
 	{
 		return;
 	}
+	*/
+
+	// Shorten the delay and check for the end of time more often
+	for (int z = 0; z < 12; z++)
+	{
+		delay(250);
+		if (millis() > end_t)
+		{
+			return;
+		}
+	}
+
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.2, 1.3, -3.7, 160, 70, -70, TimeConstant); // from start to hover over yellow
 	parent->Front_Smooth_Move(-4.2, 1.3, -3.7, 160, 70, -70, -4, 0.8, -4.1, 160, 70, -70, TimeConstant); // hit yellow
 
@@ -268,11 +310,25 @@ void SimonControl::press_yellow(unsigned long end_t) {
 void SimonControl::press_green(unsigned long end_t)
 {
 	Serial.print("GREEN ");
+	
+	/*
 	delay(4500);
 	if (millis() > end_t)
 	{
 		return;
 	}
+	*/
+
+	// Shorten the delay and check for the end of time more often
+	for (int z = 0; z < 17; z++)
+	{
+		delay(250);
+		if (millis() > end_t)
+		{
+			return;
+		}
+	}
+
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.8, 0.8, -3.3, 180, 70, -75, TimeConstant); // from start to hover over green
 	parent->Front_Smooth_Move(-3.8, 0.8, -3.3, 180, 70, -75, -3.8, 0.75, -3.75, 180, 70, -75, 0.2); // David changed TimeConstant to 0.2 // hit green
 	// keep going down on z direction
