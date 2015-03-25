@@ -5,11 +5,8 @@
 #include "LineFollowControl.h"
 
 LineFollowControl::LineFollowControl(Mecanum* mecanum) : sensorValues()
-, corner_rotations()
+, corner_rotations(), mecanumControl(mecanum)
 {
-
-	mecanumControl = mecanum;
-
 	const int TIMEOUT = 2000;
 
 	unsigned char frontSensors[] = { 22,23,24,25,26,27,28,29 };
