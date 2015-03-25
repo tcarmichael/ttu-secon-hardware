@@ -4,7 +4,7 @@
 
 #include "LineFollowControl.h"
 
-LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensorValues()
+LineFollowControl::LineFollowControl(Mecanum* mecanum) : sensorValues()
 , corner_rotations()
 {
 
@@ -72,7 +72,6 @@ void LineFollowControl::setSide(int side) {
 
 		Kp = 0.35 / FOLLOWER_OFFSET;
 		Kd = 0.00000001;
-		fudge_factor = 0.0;
 		break;
 
 	case RIGHT:
@@ -82,7 +81,6 @@ void LineFollowControl::setSide(int side) {
 		Kp = 0.4 / FOLLOWER_OFFSET;
 		//Kd = 0.00001;
 		Kd = 0;
-		fudge_factor = 0.00;
 		break;
 
 	case LEFT:
@@ -90,7 +88,6 @@ void LineFollowControl::setSide(int side) {
 
 		Kp = 0.3 / FOLLOWER_OFFSET;
 		Kd = 0.000001;
-		fudge_factor = 0.0;
 		break;
 
 	case BACK:
@@ -264,7 +261,7 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	// Send the speed
 	/*Serial.print("\tSpeed: ");
 	Serial.print(speed);*/
-	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation + fudge_factor);
+	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation);
 
 	// Output the values
 	for (int i = 0; i < 8; i++)

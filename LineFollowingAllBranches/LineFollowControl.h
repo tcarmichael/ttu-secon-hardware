@@ -53,8 +53,6 @@ private:
 	double Ki;
 	QTRSensorsRC* arrays[NUM_ARRAYS];
 	Mecanum* mecanumControl;
-	// Makes the robot drive exactly straight
-	double fudge_factor;
 	unsigned int sensorValues[NUM_SENSORS];
 	bool corner_rotations;
 
