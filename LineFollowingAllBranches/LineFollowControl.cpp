@@ -358,8 +358,6 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 {
 	mecanumControl->mecRun(0, 0, rotation);
 
-	unsigned int sensors[NUM_SENSORS];
-
 	// Wait for black
 	while (IsCenteredOnLine(side))
 	{
