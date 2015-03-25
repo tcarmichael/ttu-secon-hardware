@@ -239,26 +239,10 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	//double speed = 0.7;
 	if (speed < 0) speed = 0;
 
-	// Calculate the opposite angle
-	double angle_offset = 0;
-	//if (opposite_sensor != -1)
-	//{
-	//	// Constant Kp
-	//	const double opposite_Kp = 0.01 *(PI / 2) / FOLLOWER_OFFSET;
-
-	//	unsigned int other_sensors[NUM_SENSORS];
-
-	//	position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
-	//	error = position - FOLLOWER_OFFSET;
-
-	//	// Put the position into the PID
-	//	angle_offset = opposite_Kp * error;
-	//}
-
 	// Send the speed
 	/*Serial.print("\tSpeed: ");
 	Serial.print(speed);*/
-	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation);
+	mecanumControl->mecRun(speed, currentAngle, rotation);
 
 	// Output the values
 	for (int i = 0; i < 8; i++)
@@ -286,7 +270,6 @@ void LineFollowControl::followInfinitely()
 	// Infinite loop
 	while(true) {
 		lastError = update(lastError, LineFollowControl::LEFT);
-		// UpdateAngle(LineFollowControl::RIGHT, LineFollowControl::LEFT);
 	}
 }
 
