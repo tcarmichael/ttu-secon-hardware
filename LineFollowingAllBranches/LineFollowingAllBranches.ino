@@ -576,3 +576,97 @@ void ReadSensorData() {
 
 	delay(1000);
 }
+
+// side - Side of the robot that operates the toy
+void FindBranch(int toy_side)
+{
+	// Navigation constants
+	const double ROTATION_SPEED = 0.75;
+	const double NAVIGATION_SPEED = 0.5;
+	const unsigned long CROSS_LINE_DELAY = 150;
+	const unsigned long BACKUP_DELAY = 200;
+
+	// Follow the main path until it detects a branch
+	int detected_branch = lineFollowerControl.followUntilLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+
+	// Detect which direction to go on the branches
+	double branch_rotation = ROTATION_SPEED;
+	if (detected_branch == LineFollowControl::LEFT)
+	{
+		branch_rotation *= -1;
+	} else if (detected_branch == LineFollowControl::RIGHT)
+	{
+		branch_rotation *= 1;
+	}
+
+	// Detect which direction to rotate to reach the toy
+	double toy_rotation = ROTATION_SPEED;
+	if (toy_side == LineFollowControl::LEFT)
+	{
+		toy_rotation *= -1;
+	} else if (toy_side == LineFollowControl::RIGHT)
+	{
+		toy_rotation *= 1;
+	}
+
+	// Rotate to follow branch
+	lineFollowerControl.RotateUntilLine(branch_rotation);
+	delay(100);
+
+	// Follow the branch to the box
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	// Back up from the box
+	mecanum.mecRun(-NAVIGATION_SPEED, 0, 0);
+	delay(BACKUP_DELAY);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+	
+	// Orient on first box
+	int other_sensor = -1;
+	if (toy_side == LineFollowControl::LEFT)
+	{
+		other_sensor = LineFollowControl::RIGHT;
+	} else if (toy_side == LineFollowControl::RIGHT)
+	{
+		other_sensor = LineFollowControl::LEFT;
+	}
+	lineFollowerControl.RotateUntilLine(toy_rotation, other_sensor); 
+	delay(100);
+
+	// Center on the line
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+	delay(100);
+}
+
+void ReturnToMain(double branch_rotation, double toy_rotation)
+{
+	// Navigation constants 
+	const double NAVIGATION_SPEED = 0.5;
+	const unsigned long CROSS_LINE_DELAY = 200;
+
+	// Rotate back on the branch
+	lineFollowerControl.RotateUntilLine(toy_rotation);
+	delay(100);
+
+	// Follow the branch back to the main path
+	lineFollowerControl.followUntilWhite();
+	delay(100);
+
+	// Cross over the main branch
+	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
+	delay(CROSS_LINE_DELAY);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+
+	// Turn back to main branch
+	lineFollowerControl.RotateUntilLine(branch_rotation);
+	delay(100);
+
+	// Go backwards to make sure we didn't turn into a corner on the main branch
+	mecanum.mecRun(-NAVIGATION_SPEED, 0, 0);
+	delay(100);
+	mecanum.mecRun(0, 0, 0);
+	delay(100);
+}

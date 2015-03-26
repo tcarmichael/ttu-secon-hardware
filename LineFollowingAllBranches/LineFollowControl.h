@@ -38,7 +38,7 @@ public:
 	double getCurrentAngle();
 
 	void followUntilWhite();
-	void followUntilLine(int);
+	int followUntilLine(int, int);
 
 private:
 	// Constant data members
