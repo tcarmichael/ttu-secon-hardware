@@ -363,7 +363,6 @@ void LineFollowControl::RotateUntilLine(double rotation)
 void LineFollowControl::RotateUntilLine(double rotation, int side)
 {
 	mecanumControl->mecRun(0, 0, rotation);
-
 	unsigned int sensors[NUM_SENSORS];
 
 	// Wait for black

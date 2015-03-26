@@ -164,34 +164,34 @@ void ArmControl::FrontFlipToRight()
 
 void ArmControl::RearHomeLeft()
 {
-	rearArm(1, 0, 2, 110, 90, -30);
+	rearArm(1, 0, 2, GripConstant, 90, -30);
 	delay(500);
 }
 
 
 void ArmControl::RearHomeRight()
 {
-	rearArm(-1, 0, 2, 110, 90, -30);
+	rearArm(-1, 0, 2, GripConstant, 90, -30);
 	delay(500);
 }
 
 
 void ArmControl::RearFlipToRight()
 {
-	rearArm(3, 0, 5, 110, 90, 0);
+	rearArm(3, 0, 5, GripConstant, 90, 0);
 	delay(500);
 
-	rearArm(-3, 0, 5, 110, 90, 0);
+	rearArm(-3, 0, 5, GripConstant, 90, 0);
 	delay(500);
 }
 
 
 void ArmControl::RearFlipToLeft()
 {
-	rearArm(-3, 0, 5, 110, 90, 0);
+	rearArm(-3, 0, 5, GripConstant, 90, 0);
 	delay(500);
 
-	rearArm(3, 0, 5, 110, 90, 0);
+	rearArm(3, 0, 5, GripConstant, 90, 0);
 	delay(500);
 }
 
