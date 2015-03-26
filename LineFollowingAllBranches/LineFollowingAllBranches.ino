@@ -592,7 +592,7 @@ void FindBranch(int toy_side, GameControl* game)
 	const unsigned long BACKUP_DELAY = 200;
 
 	// Follow the main path until it detects a branch
-	int detected_branch = lineFollowerControl.followUntilLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
 	// Detect which direction to go on the branches
 	double branch_rotation = ROTATION_SPEED;

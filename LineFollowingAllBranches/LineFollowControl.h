@@ -70,6 +70,7 @@ public:
 	void set_corner_rotations(bool corner_rotations);
 	bool IsExactlyCenteredOnLine(int sensor);
 	void DefaultCalibrationOtherSide();
+	int SearchForBranch(int sensor1, int sensor2);
 };
 
 #endif

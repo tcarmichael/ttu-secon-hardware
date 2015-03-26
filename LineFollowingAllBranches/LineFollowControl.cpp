@@ -526,3 +526,29 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 		arrays[BACK]->calibratedMinimumOn[i] = backCalibratedMin[i];
 	}
 }
+
+
+int LineFollowControl::SearchForBranch(int sensor1, int sensor2)
+{
+	int last_error = 0;
+	int detected_side = -1;
+
+	while (true)
+	{
+		if (IsCenteredOnLine(sensor1))
+		{
+			detected_side = sensor1;
+			break;
+		}
+
+		if (IsCenteredOnLine(sensor2))
+		{
+			detected_side = sensor2;
+			break;
+		}
+
+		last_error = update(last_error);
+	}
+
+	return detected_side;
+}
