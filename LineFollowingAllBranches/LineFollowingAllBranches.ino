@@ -582,7 +582,6 @@ void ReadSensorData() {
 
 	delay(1000);
 }
-
 // side - Side of the robot that operates the toy
 void FindBranch(int toy_side, GameControl* game)
 {

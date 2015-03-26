@@ -133,7 +133,7 @@ void LineFollowControl::followUntilWhite() {
 	mecanumControl->mecRun(0, 0, 0);
 }
 
-int LineFollowControl::followUntilLine(int side1, int side2) {
+void LineFollowControl::followUntilLine(int side) {
 	int lastError = 0;
 
 	if (currentSide == RIGHT || currentSide == LEFT) {
@@ -150,30 +150,21 @@ int LineFollowControl::followUntilLine(int side1, int side2) {
 		} while (sensorValues[3] > 800 || sensorValues[4] > 800);
 	}
 	else {
-		int detected_side = -1;
 
-		while (true)
+		/*do
 		{
-			if (IsCenteredOnLine(side1)
-			{
-				detected_side = side1;
-				break;
-			}
+			lastError = update(lastError);
 
-			if (IsCenteredOnLine(side2)
-			{
-				detected_side = side2;
-				break;
-			}
+			arrays[side]->read(sensorValues, QTR_EMITTERS_ON);
+		} while (sensorValues[5] > 800);*/
 
+		while (!IsCenteredOnLine(side)) {
 			lastError = update(lastError);
 		}
 	}
 
 	// Turn off the motors
 	mecanumControl->mecRun(0, 0, 0);
-
-	return detected_side;
 }
 
 QTRSensorsRC* LineFollowControl::getCurrentSensor() {
