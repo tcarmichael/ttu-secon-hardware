@@ -37,6 +37,7 @@ private:
 	// Arm speed variables
 	const static double SPEED;
 	const static int SPS = 3;
+	const static double GripConstant = 100;
 
 	Adafruit_PWMServoDriver pwm;
 
