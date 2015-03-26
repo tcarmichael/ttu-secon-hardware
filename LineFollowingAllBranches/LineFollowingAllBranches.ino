@@ -62,6 +62,9 @@ void setup() {
 	//arm.Rubiks.Rubiks_Play();
 	//delay(15000);
 
+
+
+	
 	// Wait for start signal
 	Serial.println("Waiting for LED");
 	WaitForLed();
@@ -78,6 +81,7 @@ void setup() {
 	
 	//FollowLineMecanum();
 	followLine();
+	
 }
 
 void loop() {
