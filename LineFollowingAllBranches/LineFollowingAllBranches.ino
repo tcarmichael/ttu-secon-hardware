@@ -83,7 +83,7 @@ void setup() {
 	Serial.println("Starting line following");
 	
 	//FollowLineMecanum();
-	followLine();
+	FollowLine();
 }
 
 void loop() {
@@ -139,266 +139,22 @@ void WaitForLed()
 	
 }
 
-void followLine()
+void FollowLine()
 {
-	// Follow the front line sensor until the left line sensor finds a line
-	Serial.println("Following the front line sensor");
+	// Follow the front line-following sensor
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(100);
 
-	//mecanum.mecRun(-0.75, 0, 0);
-	//delay(100);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
-
-	Serial.println("Turn left 90");
-	//rotating to follow first branch
-	lineFollowerControl.RotateUntilLine(-0.25); //-0.5 savannah changed this
-	delay(100);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(200);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-	
-	//rotate to orient on first box
-	lineFollowerControl.RotateUntilLine(0.75, LineFollowControl::RIGHT); 
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(100);
-
-	// Play Simon here
-	Serial.println("Play Simon");
-	arm.Simon.Play();
-
-	Serial.println("Turn right 180");
-	lineFollowerControl.RotateUntilLine(0.75);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-
-	delay(100);
-	// Savannah uncommented this section
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	// turn left back to main branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.75);
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-	
-	
-	Serial.println("Wait on right line sensor");
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(100);
-
-	
-	//mecanum.mecRun(0.75, 0, 0); //-0.75 Savannah changed this
-	//delay(50);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
-	
-	//turns right at second branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5); //0.5 savannah changed this 
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(100); //150 savannah changed
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	lineFollowerControl.RotateUntilLine(-0.6, LineFollowControl::LEFT);
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(100);
-
-	// Play game here
-	Serial.println("Play Etch-A-Sketch");
-	arm.Etch.Play();
-
-	Serial.println("Turn left 180");
-	lineFollowerControl.RotateUntilLine(-0.6);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	//Savannah uncommented this section
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150); //savannah changed this from 200
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	//turn to main branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5); 
-	delay(100);
-	
-
-	//savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(100);
-
-	//mecanum.mecRun(0.75, 0, 0); //-0.75 savannah changed
-	//delay(100);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
-
-	//turn left to third branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(200);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	lineFollowerControl.RotateUntilLine(0.5, LineFollowControl::RIGHT);
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-
-	// Play Rubiks here
-	Serial.println("Play Rubik's Cube");
-	arm.Rubiks.Play();
-
-	Serial.println("Turn right 180");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	//turn back to main branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	//Savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	Serial.println("Wait on right line sensor");
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(100);
-
-	//Savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(100);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	//turn to final branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	bool oldBoard = false;
-	if (oldBoard)
-	{
-		Serial.println("Go straight");
-		mecanum.mecRun(1.0, 0, 0);
-		delay(150);
-		mecanum.mecRun(0, 0, 0);
-		delay(100);
-
-		lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
-		delay(100);
-	}
-	else
-	{
-		
-		mecanum.mecRun(-0.75, 0, 0);
-		delay(200); //Savannah changed this was 100
-		mecanum.mecRun(0, 0, 0);
-		delay(100);
-
-		lineFollowerControl.RotateUntilLine(-0.6, LineFollowControl::LEFT);
-		delay(100);
-
-		// And boom goes the dynamite
-		lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-		delay(100);
-	}
-
-	// Play game here
-	arm.Card.Play();
-	
-	Serial.println("Turn left almost 180");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	//Savannah uncommented this
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150); //savannah changed from 100
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
+	// Play each of the games
+	FindBranch(LineFollowControl::LEFT, &arm.Simon);
+	FindBranch(LineFollowControl::LEFT, &arm.Etch);
+	FindBranch(LineFollowControl::LEFT, &arm.Rubiks);
+	FindBranch(LineFollowControl::LEFT, &arm.Card);
 
 	// Find the finish line
 	lineFollowerControl.followUntilWhite();
-	
+
 	// Drive completely over the finish line
-	/*mecanum.mecRun(0.75, 0, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);*/
+
 }
 
 void FollowLineMecanum() {
@@ -646,13 +402,6 @@ void FindBranch(int toy_side, GameControl* game)
 
 	// Play the game
 	game->Play();
-}
-
-void ReturnToMain(double branch_rotation, double toy_rotation)
-{
-	// Navigation constants 
-	const double NAVIGATION_SPEED = 0.5;
-	const unsigned long CROSS_LINE_DELAY = 200;
 
 	// Rotate back on the branch
 	lineFollowerControl.RotateUntilLine(toy_rotation);

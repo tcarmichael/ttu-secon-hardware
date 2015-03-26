@@ -2,7 +2,7 @@
 
 class GameControl;
 
-class CardControl : GameControl
+class CardControl : public GameControl
 {
 	// Wrapper for the Simon functions
 

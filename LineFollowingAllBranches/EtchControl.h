@@ -2,7 +2,7 @@
 
 class GameControl;
 
-class EtchControl : GameControl
+class EtchControl : public GameControl
 {
 	// Wrapper for the Etch-A-Sketch functions
 private:
