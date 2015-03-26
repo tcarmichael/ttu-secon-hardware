@@ -1,16 +1,13 @@
+#include "GameControl.h"
 
-class ArmControl;
-
-class RubiksControl
+class RubiksControl : public GameControl
 {
 	// Wrapper for the Rubik's cube functions
-private:
-	ArmControl* parent;
 
 public:
-	RubiksControl(ArmControl* parent) : parent(parent) {}
+	RubiksControl(ArmControl* parent) : GameControl(parent) {}
 	void Grab();
 	void Rotate();
 	void Release();
-	void Rubiks_Play();
+	void Play();
 };

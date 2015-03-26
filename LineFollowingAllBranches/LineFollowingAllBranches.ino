@@ -8,6 +8,12 @@
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
 #include "Robot.h"
 
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "Arduino.h"
+#else
+	#include "WProgram.h"
+#endif
+
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
 LineFollowControl lineFollowerControl(&mecanum);
@@ -29,7 +35,7 @@ void setup() {
 	
 	// uncomment for David's code testing
 	/*arm.begin();
-	arm.Simon.Simon_Play();
+	arm.Simon.Play();
 	delay(15000);*/
 	
 	// Initialize the mecanum wheels
@@ -52,14 +58,14 @@ void setup() {
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
-	//arm.Simon.Simon_Play();
-	//arm.Etch.Etch_Play();
+	//arm.Simon.Play();
+	//arm.Etch.Play();
 	//arm.Etch.Release();
 	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Release();
 
-	//arm.Rubiks.Rubiks_Play();
+	//arm.Rubiks.Play();
 	//delay(15000);
 
 	// Wait for start signal
@@ -170,7 +176,7 @@ void followLine()
 
 	// Play Simon here
 	Serial.println("Play Simon");
-	arm.Simon.Simon_Play();
+	arm.Simon.Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(0.75);
@@ -229,7 +235,7 @@ void followLine()
 
 	// Play game here
 	Serial.println("Play Etch-A-Sketch");
-	arm.Etch.Etch_Play();
+	arm.Etch.Play();
 
 	Serial.println("Turn left 180");
 	lineFollowerControl.RotateUntilLine(-0.6);
@@ -287,7 +293,7 @@ void followLine()
 
 	// Play Rubiks here
 	Serial.println("Play Rubik's Cube");
-	arm.Rubiks.Rubiks_Play();
+	arm.Rubiks.Play();
 
 	Serial.println("Turn right 180");
 	lineFollowerControl.RotateUntilLine(0.5);
@@ -360,7 +366,7 @@ void followLine()
 	}
 
 	// Play game here
-	arm.Card.Card_Play();
+	arm.Card.Play();
 	
 	Serial.println("Turn left almost 180");
 	lineFollowerControl.RotateUntilLine(-0.5);
@@ -409,7 +415,7 @@ void FollowLineMecanum() {
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Simon
 	//delay(5000);
-	arm.Simon.Simon_Play();
+	arm.Simon.Play();
 	
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
@@ -428,7 +434,7 @@ void FollowLineMecanum() {
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play Etch-A-Sketch
 	//delay(5000);
-	arm.Etch.Etch_Play();
+	arm.Etch.Play();
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
@@ -447,7 +453,7 @@ void FollowLineMecanum() {
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Play the Rubik's cube
 	//delay(5000);
-	arm.Rubiks.Rubiks_Play();
+	arm.Rubiks.Play();
 
 	Serial.println("Following the right line sensor");
 	lineFollowerControl.setSide(LineFollowControl::RIGHT);
@@ -467,7 +473,7 @@ void FollowLineMecanum() {
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	// Pick up the card
 	//delay(5000);
-	arm.Card.Card_Play();
+	arm.Card.Play();
 
 	Serial.println("Following the left line sensor");
 	lineFollowerControl.setSide(LineFollowControl::LEFT);
@@ -578,7 +584,7 @@ void ReadSensorData() {
 }
 
 // side - Side of the robot that operates the toy
-void FindBranch(int toy_side)
+void FindBranch(int toy_side, GameControl* game)
 {
 	// Navigation constants
 	const double ROTATION_SPEED = 0.75;
@@ -638,6 +644,9 @@ void FindBranch(int toy_side)
 	// Center on the line
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 	delay(100);
+
+	// Play the game
+	game->Play();
 }
 
 void ReturnToMain(double branch_rotation, double toy_rotation)

@@ -1,7 +1,7 @@
 #include "ArmControl.h"
 #include "Arduino.h"
 
-void EtchControl::Etch_Play()
+void EtchControl::Play()
 {
 	Pull();
 	Grasp();

@@ -1,7 +1,7 @@
 #include "ArmControl.h"
 
 double gripAngle = 115;
-void RubiksControl::Rubiks_Play()
+void RubiksControl::Play()
 {
 	Grab();
 	Rotate();

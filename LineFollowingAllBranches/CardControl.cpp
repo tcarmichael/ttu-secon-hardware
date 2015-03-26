@@ -1,6 +1,6 @@
 #include "ArmControl.h"
 
-void CardControl::Card_Play()
+void CardControl::Play()
 {
 
 parent->frontHomeRight();

@@ -11,6 +11,7 @@
 
 //#include "Adafruit_PWMServoDriver.h"
 #include <Adafruit_MotorShield.h>
+#include "GameControl.h"
 #include "EtchControl.h"
 #include "SimonControl.h"
 #include "RubiksControl.h"
