@@ -47,7 +47,7 @@ void SimonControl::Play()
 	
 
 	unsigned long start_time = millis();
-	unsigned long end_time = start_time + 15000UL;
+	unsigned long end_time = start_time + 15000UL; 
 	int sequence[MAX_SEQUENCE];
 	int current = 0;
 	bool start = true;
@@ -232,7 +232,7 @@ void SimonControl::press_red(unsigned long end_t)
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.2, 1.3, -3.1, 180, 70, -70, TimeConstant); // from start to hover over red
-	parent->Front_Smooth_Move(-3.2, 1.3, -3.1, 180, 70, -70, -3.1, 1.4, -3.5, 150, 65, -70, 0.2); // changed from TimeConstant to 0.2 // hit red
+	parent->Front_Smooth_Move(-3.2, 1.3, -3.1, 180, 70, -70, -3.1, 1.4, -3.6, 150, 65, -70, 0.2); // changed from TimeConstant to 0.2 // hit red
 	//parent->frontArm(-3.1, 1.4, -3.6, 180, 70, -70); //punch red
 	//add error function here
 	move_down(-3.1, 1.4, -3.6, 150, 70, -70, end_t);
@@ -272,9 +272,9 @@ void SimonControl::press_blue(unsigned long end_t)
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.3, 1.7, -3.6, 120, 90, -75, TimeConstant); // from start to hover over blue
-	parent->Front_Smooth_Move(-4.3, 1.7, -3.6, 120, 90, -75, -4.35, 1.4, -3.9, 120, 110, -75, 0.29); // hit blue
+	parent->Front_Smooth_Move(-4.3, 1.7, -3.6, 120, 90, -75, -4.35, 1.4, -4, 120, 110, -75, 0.29); // hit blue
 	// keep going down on z direction
-	move_down(-4.2, 1.4, -3.9, 120, 110, -75, end_t);
+	move_down(-4.2, 1.4, -4, 120, 110, -75, end_t);
 	parent->frontArm(-4.2, 1.6, -3.6, 180, 70, -75); // hover over blue
 	//parent->Front_Smooth_Move(-4, 1.4, -4.2, 120, 110, -75, -4.2, 1.6, -3.6, 180, 70, -75, TimeConstant); // hover over blue
 	// dont uncomment//parent->Front_Smooth_Move(-4.2, 1.5, -3.6, 180, 70, -75, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // from blue to start
@@ -302,11 +302,11 @@ void SimonControl::press_yellow(unsigned long end_t) {
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.5, 1.2, -3.4, 160, 70, -70, TimeConstant); // from start to hover over yellow
-	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.5, 1.2, -4.2, 160, 70, -70, 0.5); // hit yellow
+	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.45, 1.2, -4.28, 160, 70, -73.5, 0.4); // hit yellow
 
 	// keep going down on z direction
-	move_down(-4.5, 1.2, -4.2, 160, 70, -70, end_t);
-	parent->frontArm(-4.5, 1.3, -3.7, 180, 70, -70); //hover over yellow
+	move_down(-4.45, 1.2, -4.28, 160, 70, -73.5, end_t);
+	parent->frontArm(-4.45, 1.2, -3.5, 160, 70, -73.5); //hover over yellow
 	//parent->Front_Smooth_Move(-4.2, 0.8, -4.1, 180, 70, -70, -4.5, 1.3, -3.7, 180, 70, -70, TimeConstant); // hover over yellow
 	// dont uncomment//parent->Front_Smooth_Move(-4.5, 1.3, -3.7, 180, 70, -70, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // from yellow to start
 }
@@ -333,10 +333,10 @@ void SimonControl::press_green(unsigned long end_t)
 		}
 	}
 
-	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -3.8, 0.79, -3.3, 180, 70, -74, TimeConstant); // from start to hover over green
-	parent->Front_Smooth_Move(-3.8, 0.79, -3.3, 180, 70, -74, -3.7, 0.79, -3.75, 180, 70, -74, 0.2); // David changed TimeConstant to 0.2 // hit green
+	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.3, 1.3, -3.6, 120, 90, -76, TimeConstant); // from start to hover over green
+	parent->Front_Smooth_Move(-4.3, 1.3, -3.6, 120, 90, -76, -4.25, 1.3, -4, 120, 60, -76.5, 0.2); // David changed TimeConstant to 0.2 // hit green
 	// keep going down on z direction
-	move_down(-3.65, 0.79, -3.75, 180, 70, -73, end_t);
+	move_down(-4.25, 1.3, -4, 120, 60, -76.5, end_t);
 	parent->frontArm(-3.8, 0.8, -3.3, 180, 70, -75); //hover over green
 	//parent->Front_Smooth_Move(-3.8, 0.8, -3.5, 180, 70, -75, -3.8, 0.8, -3.3, 180, 70, -75, TimeConstant); // hover over green
 	// dont uncomment//parent->Front_Smooth_Move(-3.8, 0.8, -3.3, 180, 70, -75, -4, 1.5, -3.7, 180, 70, -70, TimeConstant);
@@ -547,11 +547,11 @@ void SimonControl::Grab()
 	parent->Front_Smooth_Move(-7, 2, -5, 50, 80, -90, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // move above start button
 
 	//move rear arm to hold simon
-	parent->Rear_Smooth_Move(7.5, 0, -5, GripConstant, 92, -105, 8.5, 0, -5, GripConstant, 130, -105, TimeConstant); // move out in x
+	parent->Rear_Smooth_Move(7.5, 0, -5, GripConstant, 92, -105, 8.5, 0, -5, GripConstant, 95, -105, TimeConstant); // move out in x 8.5, 0, -5, GripConstant, 95, -105
 	delay(100);
-	parent->Rear_Smooth_Move(8.5, 0, -5, GripConstant, 130, -105, 8.5, 2, -5, GripConstant, 130, -105, TimeConstant); // move in front of simon in y
+	parent->Rear_Smooth_Move(8.5, 0, -5, GripConstant, 95, -105, 8.6, 3.5, -5, GripConstant, 100, -105, TimeConstant); // move in front of simon in y 8.6, 2.5, -5, GripConstant, 100, -105,
 	delay(100);
-	parent->Rear_Smooth_Move(8.5, 2, -5, GripConstant, 130, -105, 7, 2, -5, GripConstant, 130, -105, TimeConstant); //hold simon
+	parent->Rear_Smooth_Move(8.6, 3.5, -5, GripConstant, 100, -105, 8.5, 3, -5, GripConstant, 100, -115, TimeConstant); //hold simon 7.3, 3, -5, GripConstant, 100, -105
 	delay(100);
 
 }
