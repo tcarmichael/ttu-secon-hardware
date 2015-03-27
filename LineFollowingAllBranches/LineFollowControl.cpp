@@ -363,19 +363,12 @@ void LineFollowControl::RotateUntilLine(double rotation)
 void LineFollowControl::RotateUntilLine(double rotation, int side)
 {
 	mecanumControl->mecRun(0, 0, rotation);
-	unsigned int sensors[NUM_SENSORS];
 
-	// Wait for black
-	while (IsCenteredOnLine(side))
-	{
-		// Wait
-	}
+	// Wait for sensor to leave the current line
+	while (!IsCenterOffLine(side));
 
-	// Wait for white
-	while (!IsCenteredOnLine(side)) 
-	{
-		// Wait
-	}
+	// Wait for sensor to detect the new line
+	while (!IsCenteredOnLine(side));
 
 	mecanumControl->mecRun(0, 0, 0);
 }
@@ -588,4 +581,16 @@ double LineFollowControl::CalculateAngle(int front_distance, int back_distance)
 	}
 
 	return Theta;
+}
+
+
+bool LineFollowControl::IsCenterOffLine(int sensor)
+{
+	const int THRESHOLD = 800;
+
+	// Read the raw values from the line sensor
+	arrays[sensor]->read(sensorValues);
+
+	// If the middle two sensors detect a line
+	return !(sensorValues[3] < THRESHOLD || sensorValues[4] < THRESHOLD);
 }
