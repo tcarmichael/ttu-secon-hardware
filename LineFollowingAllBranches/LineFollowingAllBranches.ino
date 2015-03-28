@@ -75,9 +75,10 @@ void setup() {
 	leds.Green_Off();
 	leds.White_Off();
 	// Get out of the box
-	/*mecanum.mecRun(0.9, 0, 0);
-	delay(750);
-	mecanum.mecRun(0, 0, 0);*/
+	mecanum.mecRun(0.5, 0, 0);
+	while (!(lineFollowerControl.IsCenterOffLine(LineFollowControl::LEFT)
+		&& lineFollowerControl.IsCenterOffLine(LineFollowControl::RIGHT)));
+	mecanum.mecRun(0, 0, 0);
 
 	// Begin line following
 	Serial.println("Starting line following");
