@@ -546,3 +546,14 @@ int LineFollowControl::SearchForBranch(int sensor1, int sensor2)
 
 	return detected_side;
 }
+
+bool LineFollowControl::IsCenterOffLine(int sensor)
+{
+	const int THRESHOLD = 800;
+
+	// Read the raw values from the line sensor
+	arrays[sensor]->read(sensorValues);
+
+	// If the middle two sensors detect a line
+	return !(sensorValues[3] < THRESHOLD || sensorValues[4] < THRESHOLD);
+}
