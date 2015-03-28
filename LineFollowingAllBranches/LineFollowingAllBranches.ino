@@ -342,7 +342,7 @@ void ReadSensorData() {
 void FindBranch(int toy_side, GameControl* game)
 {
 	// Navigation constants
-	const double ROTATION_SPEED = 0.75;
+	const double ROTATION_SPEED = 0.5;
 	const double NAVIGATION_SPEED = 0.5;
 	const unsigned long CROSS_LINE_DELAY = 150;
 	const unsigned long BACKUP_DELAY = 200;
