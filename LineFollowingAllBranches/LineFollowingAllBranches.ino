@@ -364,10 +364,10 @@ void FindBranch(int toy_side, GameControl* game)
 	double toy_rotation = ROTATION_SPEED;
 	if (toy_side == LineFollowControl::LEFT)
 	{
-		toy_rotation *= -1;
+		toy_rotation *= 1;
 	} else if (toy_side == LineFollowControl::RIGHT)
 	{
-		toy_rotation *= 1;
+		toy_rotation *= -1;
 	}
 
 	// Rotate to follow branch
