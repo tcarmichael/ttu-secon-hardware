@@ -345,7 +345,6 @@ void FindBranch(int toy_side, GameControl* game)
 	// Navigation constants
 	const double ROTATION_SPEED = 0.5;
 	const double NAVIGATION_SPEED = 0.5;
-	const unsigned long CROSS_LINE_DELAY = 150;
 	const unsigned long BACKUP_DELAY = 200;
 
 	// Follow the main path until it detects a branch
@@ -413,8 +412,17 @@ void FindBranch(int toy_side, GameControl* game)
 	delay(100);
 
 	// Cross over the main branch
+	bool left_cross = false;
+	bool right_cross = false;
+
 	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
-	delay(CROSS_LINE_DELAY);
+	while (!left_cross || !right_cross)
+	{
+		// Wait for both sensors to cross over the line
+		// We use booleans to store the state in case the sensors cross at different times
+		left_cross = lineFollowerControl.IsCenteredOnLine(LineFollowControl::LEFT);
+		right_cross = lineFollowerControl.IsCenteredOnLine(LineFollowControl::RIGHT);
+	}
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 
