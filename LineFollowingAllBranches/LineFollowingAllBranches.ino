@@ -146,9 +146,9 @@ void FollowLine()
 
 	// Play each of the games
 	FindBranch(LineFollowControl::LEFT, &arm.Simon);
-	FindBranch(LineFollowControl::LEFT, &arm.Etch);
+	FindBranch(LineFollowControl::RIGHT, &arm.Etch);
 	FindBranch(LineFollowControl::LEFT, &arm.Rubiks);
-	FindBranch(LineFollowControl::LEFT, &arm.Card);
+	FindBranch(LineFollowControl::RIGHT, &arm.Card);
 
 	// Find the finish line
 	lineFollowerControl.followUntilWhite();
