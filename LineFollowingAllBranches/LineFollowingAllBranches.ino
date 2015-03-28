@@ -74,15 +74,9 @@ void setup() {
 	leds.Blue_Off();
 	leds.Green_Off();
 	leds.White_Off();
-	// Get out of the box
-	mecanum.mecRun(0.5, 0, 0);
-	while (!(lineFollowerControl.IsCenterOffLine(LineFollowControl::LEFT)
-		&& lineFollowerControl.IsCenterOffLine(LineFollowControl::RIGHT)));
-	mecanum.mecRun(0, 0, 0);
 
 	// Begin line following
 	Serial.println("Starting line following");
-	
 	FollowLine();
 }
 
@@ -143,6 +137,12 @@ void FollowLine()
 {
 	// Follow the front line-following sensor
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
+
+	// Get out of the box
+	/*mecanum.mecRun(0.5, 0, 0);
+	while (!(lineFollowerControl.IsCenterOffLine(LineFollowControl::LEFT)
+	&& lineFollowerControl.IsCenterOffLine(LineFollowControl::RIGHT)));
+	mecanum.mecRun(0, 0, 0);*/
 
 	// Play each of the games
 	FindBranch(LineFollowControl::LEFT, &arm.Simon);
@@ -261,6 +261,8 @@ void FindBranch(int toy_side, GameControl* game)
 	const double NAVIGATION_SPEED = 0.5;
 	const unsigned long BACKUP_DELAY = 200;
 
+	lineFollowerControl.set_speed(NAVIGATION_SPEED);
+
 	// Follow the main path until it detects a branch
 	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
@@ -286,17 +288,14 @@ void FindBranch(int toy_side, GameControl* game)
 
 	// Rotate to follow branch
 	lineFollowerControl.RotateUntilLine(branch_rotation);
-	delay(100);
 
 	// Follow the branch to the box
 	lineFollowerControl.followUntilWhite();
-	delay(100);
 
 	// Back up from the box
 	mecanum.mecRun(-NAVIGATION_SPEED, 0, 0);
 	delay(BACKUP_DELAY);
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
 	
 	// Orient on first box
 	int other_sensor = -1;
@@ -307,46 +306,35 @@ void FindBranch(int toy_side, GameControl* game)
 	{
 		other_sensor = LineFollowControl::LEFT;
 	}
-	lineFollowerControl.RotateUntilLine(toy_rotation, other_sensor); 
-	delay(100);
+	lineFollowerControl.RotateUntilLine(toy_rotation, other_sensor);
 
 	// Center on the line
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(100);
 
 	// Play the game
 	game->Play();
 
 	// Rotate back on the branch
 	lineFollowerControl.RotateUntilLine(toy_rotation);
-	delay(100);
 
 	// Follow the branch back to the main path
 	lineFollowerControl.followUntilWhite();
-	delay(100);
 
 	// Cross over the main branch
 	bool left_cross = false;
 	bool right_cross = false;
 
 	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
-	while (!left_cross || !right_cross)
-	{
-		// Wait for both sensors to cross over the line
-		// We use booleans to store the state in case the sensors cross at different times
-		left_cross = lineFollowerControl.IsCenteredOnLine(LineFollowControl::LEFT);
-		right_cross = lineFollowerControl.IsCenteredOnLine(LineFollowControl::RIGHT);
-	}
+	// Wait for one sensor to cross over the line
+	while (!(lineFollowerControl.IsCenteredOnLine(LineFollowControl::LEFT, true)
+		|| lineFollowerControl.IsCenteredOnLine(LineFollowControl::RIGHT, true)));
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
 
 	// Turn back to main branch
 	lineFollowerControl.RotateUntilLine(branch_rotation);
-	delay(100);
 
 	// Go forward to move past previously taken branch
 	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
 	while (!lineFollowerControl.IsCenterOffLine(detected_branch));
 	mecanum.mecRun(0, 0, 0);
-	delay(100);
 }

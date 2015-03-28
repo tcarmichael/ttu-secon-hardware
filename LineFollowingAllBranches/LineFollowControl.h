@@ -55,6 +55,8 @@ private:
 	Mecanum* mecanumControl;
 	unsigned int sensorValues[NUM_SENSORS];
 	bool corner_rotations;
+	// Controls how quickly the robot moves forward while navigating the line
+	double nav_speed;
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
@@ -70,8 +72,9 @@ public:
 	bool IsExactlyCenteredOnLine(int sensor);
 	void DefaultCalibrationOtherSide();
 	int SearchForBranch(int sensor1, int sensor2);
-	bool IsCenteredOnLine(int sensor);
+	bool IsCenteredOnLine(int sensor, bool offset);
 	bool IsCenterOffLine(int sensor);
+	void set_speed(double speed);
 };
 
 #endif
