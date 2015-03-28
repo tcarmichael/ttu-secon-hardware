@@ -83,7 +83,6 @@ void setup() {
 	// Begin line following
 	Serial.println("Starting line following");
 	
-	//FollowLineMecanum();
 	FollowLine();
 }
 
@@ -156,91 +155,6 @@ void FollowLine()
 
 	// Drive completely over the finish line
 
-}
-
-void FollowLineMecanum() {
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play Simon
-	//delay(5000);
-	arm.Simon.Play();
-	
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, 3 * PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play Etch-A-Sketch
-	//delay(5000);
-	arm.Etch.Play();
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play the Rubik's cube
-	//delay(5000);
-	arm.Rubiks.Play();
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilWhite();
-
-
-	mecanum.mecRun(0.6, 3 * PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Pick up the card
-	//delay(5000);
-	arm.Card.Play();
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilWhite();
-
-	Serial.println("Done");
 }
 
 void Strafe()
