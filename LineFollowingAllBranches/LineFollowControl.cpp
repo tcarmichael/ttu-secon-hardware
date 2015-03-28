@@ -341,17 +341,11 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 {
 	mecanumControl->mecRun(0, 0, rotation);
 
-	// Wait for black
-	while (IsCenteredOnLine(side))
-	{
-		// Wait
-	}
+	// Wait for sensor to leave the current line
+	while (!IsCenterOffLine(side));
 
-	// Wait for white
-	while (!IsCenteredOnLine(side)) 
-	{
-		// Wait
-	}
+	// Wait for sensor to detect the new line
+	while (!IsCenteredOnLine(side));
 
 	mecanumControl->mecRun(0, 0, 0);
 }

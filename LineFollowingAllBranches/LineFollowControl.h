@@ -61,6 +61,7 @@ private:
 	int update(int lastError, int oppositeSensor = -1);
 	bool CenterSensor(int sensor);
 	bool IsCenteredOnLine(int sensor);
+	bool IsCenterOffLine(int sensor);
 public:
 	void followInfinitely();
 	void defaultCalibration(void);
