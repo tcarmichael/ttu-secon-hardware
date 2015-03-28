@@ -60,8 +60,6 @@ private:
 	int whiteCount(QTRSensorsRC* array);
 	int update(int lastError, int oppositeSensor = -1);
 	bool CenterSensor(int sensor);
-	bool IsCenteredOnLine(int sensor);
-	bool IsCenterOffLine(int sensor);
 public:
 	void followInfinitely();
 	void defaultCalibration(void);
@@ -72,6 +70,8 @@ public:
 	bool IsExactlyCenteredOnLine(int sensor);
 	void DefaultCalibrationOtherSide();
 	int SearchForBranch(int sensor1, int sensor2);
+	bool IsCenteredOnLine(int sensor);
+	bool IsCenterOffLine(int sensor);
 };
 
 #endif

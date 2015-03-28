@@ -421,9 +421,9 @@ void FindBranch(int toy_side, GameControl* game)
 	lineFollowerControl.RotateUntilLine(branch_rotation);
 	delay(100);
 
-	// Go backwards to make sure we didn't turn into a corner on the main branch
-	mecanum.mecRun(-NAVIGATION_SPEED, 0, 0);
-	delay(100);
+	// Go forward to move past previously taken branch
+	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
+	while (!lineFollowerControl.IsCenterOffLine(detected_branch));
 	mecanum.mecRun(0, 0, 0);
 	delay(100);
 }
