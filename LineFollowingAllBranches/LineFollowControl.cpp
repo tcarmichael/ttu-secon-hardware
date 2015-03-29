@@ -18,7 +18,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : sensorValues()
 		TIMEOUT,
 		frontEmitter
 		);
-	arrays[FRONT]->set_alpha(0.4);
+	arrays[FRONT]->set_alpha(0.125);
 
 	unsigned char rightSensors[] = { 45, 44, 43, 42, 41, 40, 39, 38 };
 	const int rightEmitter = 16;
