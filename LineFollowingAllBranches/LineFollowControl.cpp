@@ -72,7 +72,7 @@ void LineFollowControl::setSide(int side) {
 		currentAngle = 0;
 
 		Kp = 0.35 / FOLLOWER_OFFSET;
-		Kd = 0.0000001;
+		Kd = 0.0001;
 		break;
 
 	case RIGHT:
