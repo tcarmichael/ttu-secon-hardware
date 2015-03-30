@@ -1,16 +1,12 @@
+#include "GameControl.h"
 
+class GameControl;
 
-class ArmControl;
-
-class SimonControl
+class SimonControl : public GameControl
 {
 	// Wrapper for the Simon functions
-private:
-	ArmControl* parent;
-
-
 public:
-	SimonControl(ArmControl* parent) : parent(parent) {}
+	SimonControl(ArmControl* parent) : GameControl(parent) {}
 	void Play();
 	void Grab();
 	void Release();

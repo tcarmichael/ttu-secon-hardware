@@ -8,7 +8,7 @@ int pinRed = 5;
 int pinBlue = 6;
 int pinGreen = 7;
 
-void SimonControl::Simon_Play()
+void SimonControl::Play()
 {
 	//LEDControl_Simon.Orange_Off();
 	//LEDControl_Simon.Red_Off();
@@ -16,7 +16,7 @@ void SimonControl::Simon_Play()
 	//LEDControl_Simon.Blue_Off();
 	//LEDControl_Simon.Green_Off();
 	Grab();
-	Play();
+	Simon_Play();
 	Release();
 	//LEDControl_Simon.Orange_Off();
 	//LEDControl_Simon.Red_Off();
@@ -25,7 +25,7 @@ void SimonControl::Simon_Play()
 	//LEDControl_Simon.Green_Off();
 }
 
-void SimonControl::Play()
+void SimonControl::Simon_Play()
 {
 
 

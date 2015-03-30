@@ -4,12 +4,10 @@
 
 #include "LineFollowControl.h"
 
-LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensorValues()
-, corner_rotations()
+LineFollowControl::LineFollowControl(Mecanum* mecanum) : sensorValues()
+, corner_rotations(), mecanumControl(mecanum)
+, nav_speed(0.5)
 {
-
-	mecanumControl = mecanum;
-
 	const int TIMEOUT = 2000;
 
 	unsigned char frontSensors[] = { 22,23,24,25,26,27,28,29 };
@@ -20,6 +18,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		TIMEOUT,
 		frontEmitter
 		);
+	arrays[FRONT]->set_alpha(0.125);
 
 	unsigned char rightSensors[] = { 45, 44, 43, 42, 41, 40, 39, 38 };
 	const int rightEmitter = 16;
@@ -29,6 +28,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		TIMEOUT,
 		rightEmitter
 		);
+	arrays[RIGHT]->set_alpha(1);
 
 	unsigned char leftSensors[] = { 53, 52, 51, 50, 49, 48, 47, 46 };
 	const int leftEmitter = 17;
@@ -38,6 +38,7 @@ LineFollowControl::LineFollowControl(Mecanum* mecanum) : fudge_factor(0), sensor
 		TIMEOUT,
 		leftEmitter
 		);
+	arrays[LEFT]->set_alpha(1);
 
 	/*
 	unsigned char BackSensors[] = { 37, 36, 35, 34, 33, 32, 31, 30 };
@@ -71,8 +72,7 @@ void LineFollowControl::setSide(int side) {
 		currentAngle = 0;
 
 		Kp = 0.35 / FOLLOWER_OFFSET;
-		Kd = 0.00000001;
-		fudge_factor = 0.0;
+		Kd = 0.0001;
 		break;
 
 	case RIGHT:
@@ -82,7 +82,6 @@ void LineFollowControl::setSide(int side) {
 		Kp = 0.4 / FOLLOWER_OFFSET;
 		//Kd = 0.00001;
 		Kd = 0;
-		fudge_factor = 0.00;
 		break;
 
 	case LEFT:
@@ -90,7 +89,6 @@ void LineFollowControl::setSide(int side) {
 
 		Kp = 0.3 / FOLLOWER_OFFSET;
 		Kd = 0.000001;
-		fudge_factor = 0.0;
 		break;
 
 	case BACK:
@@ -116,8 +114,8 @@ void LineFollowControl::followUntilWhite() {
 				bool left_center, right_center;
 				do
 				{
-					left_center = IsCenteredOnLine(LEFT);
-					right_center = IsCenteredOnLine(RIGHT);
+					left_center = IsCenteredOnLine(LEFT, false);
+					right_center = IsCenteredOnLine(RIGHT, false);
 				} while (!left_center && !right_center);
 
 				if (left_center)
@@ -164,7 +162,7 @@ void LineFollowControl::followUntilLine(int side) {
 			arrays[side]->read(sensorValues, QTR_EMITTERS_ON);
 		} while (sensorValues[5] > 800);*/
 
-		while (!IsCenteredOnLine(side)) {
+		while (!IsCenteredOnLine(side, true)) {
 			lastError = update(lastError);
 		}
 	}
@@ -231,55 +229,14 @@ int LineFollowControl::update(int lastError, int opposite_sensor) {
 	// Calculate the error
 	// Positive error is to the left; negative error is to the right
 	int error = position - FOLLOWER_OFFSET;
-	Serial.println(error);
 
 	// Convert the error into a motor speed
 	double rotation = Kp * error + Kd * (error - lastError);
 
-	// Bounds-checking
-	//rotation = (rotation > 1) ? 1 : rotation;
-	//rotation = (rotation < -1) ? -1 : rotation;
-
 	// Calculate the speed
-	double speed = 0.5 * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));  // Savannah changed this 0.9
-	//double speed = 0.7;
+	double speed = nav_speed * (1.0 - abs(error) / ((double)FOLLOWER_OFFSET));
 	if (speed < 0) speed = 0;
-
-	// Calculate the opposite angle
-	double angle_offset = 0;
-	//if (opposite_sensor != -1)
-	//{
-	//	// Constant Kp
-	//	const double opposite_Kp = 0.01 *(PI / 2) / FOLLOWER_OFFSET;
-
-	//	unsigned int other_sensors[NUM_SENSORS];
-
-	//	position = arrays[opposite_sensor]->readLine(other_sensors, QTR_EMITTERS_ON, 1);
-	//	error = position - FOLLOWER_OFFSET;
-
-	//	// Put the position into the PID
-	//	angle_offset = opposite_Kp * error;
-	//}
-
-	// Send the speed
-	/*Serial.print("\tSpeed: ");
-	Serial.print(speed);*/
-	mecanumControl->mecRun(speed, currentAngle - angle_offset, rotation + fudge_factor);
-
-	// Output the values
-	for (int i = 0; i < 8; i++)
-	{
-		Serial.print(sensorValues[i]);
-		Serial.print(' ');
-	}
-	Serial.println();
-	/*Serial.print("Error: ");
-	Serial.print(error);*/
-	/*Serial.print("\tSpeed: ");
-	Serial.print(speed);
-	Serial.print("\tRotation: ");*/
-	//Serial.println(rotation);
-	/*Serial.println();*/
+	mecanumControl->mecRun(speed, currentAngle, rotation);
 
 	return error;
 }
@@ -292,7 +249,6 @@ void LineFollowControl::followInfinitely()
 	// Infinite loop
 	while(true) {
 		lastError = update(lastError, LineFollowControl::LEFT);
-		// UpdateAngle(LineFollowControl::RIGHT, LineFollowControl::LEFT);
 	}
 }
 
@@ -368,7 +324,7 @@ void LineFollowControl::RotateUntilLine(double rotation, int side)
 	while (!IsCenterOffLine(side));
 
 	// Wait for sensor to detect the new line
-	while (!IsCenteredOnLine(side));
+	while (!IsCenteredOnLine(side, false));
 
 	mecanumControl->mecRun(0, 0, 0);
 }
@@ -384,27 +340,14 @@ void LineFollowControl::CenterOnLine(int sensor1, int sensor2)
 		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		if ( (position1 < 3600 && position1 > 3400) && (position2 < 3600 && position2 > 3400) ) return;
-		Serial.print(position1);
-		Serial.print(' ');
-		Serial.print(position2);
-		Serial.println();
 
 		CenterSensor(sensor1);
-		delay(100);
 		
 		position1 = arrays[sensor1]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		position2 = arrays[sensor2]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
 		if ((position1 < 3600 && position1 > 3400) && (position2 < 3600 && position2 > 3400)) return;
-		Serial.print(position1);
-		Serial.print(' ');
-		Serial.print(position2);
-		Serial.println();
 
 		CenterSensor(sensor2);
-		delay(100);
-		
-		
-
 	}
 }
 
@@ -460,12 +403,24 @@ void LineFollowControl::set_corner_rotations(bool new_corner_rotations)
 }
 
 
-bool LineFollowControl::IsCenteredOnLine(int sensor)
+bool LineFollowControl::IsCenteredOnLine(int sensor, bool offset)
 {
 	const int THRESHOLD = 800;
 
 	// Read the raw values from the line sensor
 	arrays[sensor]->read(sensorValues);
+
+	if (offset)
+	{
+		if (sensor == LineFollowControl::RIGHT)
+		{
+			return sensorValues[2] < THRESHOLD && sensorValues[3] < THRESHOLD;
+		}
+		else if (sensor == LineFollowControl::LEFT)
+		{
+			return sensorValues[5] < THRESHOLD && sensorValues[6] < THRESHOLD;
+		}
+	}
 
 	// If the middle two sensors detect a line
 	return sensorValues[3] < THRESHOLD && sensorValues[4] < THRESHOLD;
@@ -545,44 +500,30 @@ void LineFollowControl::DefaultCalibrationOtherSide()
 }
 
 
-void LineFollowControl::UpdateAngle(int front_sensor, int back_sensor)
+int LineFollowControl::SearchForBranch(int sensor1, int sensor2)
 {
-	const double Kp = 1.0;
+	int last_error = 0;
+	int detected_side = -1;
 
-	int front_distance = arrays[front_sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
-	int back_distance = arrays[front_sensor]->readLine(sensorValues, QTR_EMITTERS_ON, 1);
-
-	double angle = CalculateAngle(front_distance, back_distance);
-
-	double error = Kp * angle;
-
-	double speed = 1.0 * (1.0 - abs(angle) / (PI / 2));
-
-	// Write to the motors
-	mecanumControl->mecRun(speed, currentAngle, error);
-}
-
-
-double LineFollowControl::CalculateAngle(int front_distance, int back_distance)
-{
-	// 0.0010714 cm/unit
-	front_distance *= 0.0010714;
-	back_distance *= 0.0010714;
-
-	double Theta = 0;
-
-	if (front_distance / front_distance == back_distance / back_distance)
+	while (true)
 	{
-		Theta = (PI / 2) - atan2(7.5, (front_distance + back_distance));
-	}
-	else
-	{
-		Theta = (PI / 2) - atan2(7.5, (front_distance - back_distance));
+		if (IsCenteredOnLine(sensor1, true))
+		{
+			detected_side = sensor1;
+			break;
+		}
+
+		if (IsCenteredOnLine(sensor2, true))
+		{
+			detected_side = sensor2;
+			break;
+		}
+
+		last_error = update(last_error);
 	}
 
-	return Theta;
+	return detected_side;
 }
-
 
 bool LineFollowControl::IsCenterOffLine(int sensor)
 {
@@ -593,4 +534,10 @@ bool LineFollowControl::IsCenterOffLine(int sensor)
 
 	// If the middle two sensors detect a line
 	return !(sensorValues[3] < THRESHOLD || sensorValues[4] < THRESHOLD);
+}
+
+
+void LineFollowControl::set_speed(double speed)
+{
+	nav_speed = speed;
 }

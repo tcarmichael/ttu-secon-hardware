@@ -8,6 +8,12 @@
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
 #include "Robot.h"
 
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "Arduino.h"
+#else
+	#include "WProgram.h"
+#endif
+
 // Interacts with the mecanum wheels and the motor shield
 Mecanum mecanum;
 LineFollowControl lineFollowerControl(&mecanum);
@@ -29,7 +35,7 @@ void setup() {
 	
 	// uncomment for David's code testing
 	/*arm.begin();
-	arm.Simon.Simon_Play();
+	arm.Simon.Play();
 	delay(15000);*/
 	
 	// Initialize the mecanum wheels
@@ -52,36 +58,26 @@ void setup() {
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
-	//arm.Simon.Simon_Play();
-	//arm.Etch.Etch_Play();
+	//arm.Simon.Play();
+	//arm.Etch.Play();
 	//arm.Etch.Release();
 	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Release();
 
-	//arm.Rubiks.Rubiks_Play();
+	//arm.Rubiks.Play();
 	//delay(15000);
 
-
-
-	
 	// Wait for start signal
 	Serial.println("Waiting for LED");
-	WaitForLed();
+	//WaitForLed();
 	leds.Blue_Off();
 	leds.Green_Off();
 	leds.White_Off();
-	// Get out of the box
-	mecanum.mecRun(0.9, 0, 0);
-	delay(750);
-	mecanum.mecRun(0, 0, 0);
 
 	// Begin line following
 	Serial.println("Starting line following");
-	
-	//FollowLineMecanum();
-	followLine();
-	
+	FollowLine();
 }
 
 void loop() {
@@ -137,351 +133,28 @@ void WaitForLed()
 	
 }
 
-void followLine()
+void FollowLine()
 {
-	// Follow the front line sensor until the left line sensor finds a line
-	Serial.println("Following the front line sensor");
+	// Follow the front line-following sensor
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(100);
 
-	//mecanum.mecRun(-0.75, 0, 0);
-	//delay(100);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
+	// Get out of the box
+	/*mecanum.mecRun(0.5, 0, 0);
+	while (!(lineFollowerControl.IsCenterOffLine(LineFollowControl::LEFT)
+	&& lineFollowerControl.IsCenterOffLine(LineFollowControl::RIGHT)));
+	mecanum.mecRun(0, 0, 0);*/
 
-	Serial.println("Turn left 90");
-	//rotating to follow first branch
-	lineFollowerControl.RotateUntilLine(-0.25); //-0.5 savannah changed this
-	delay(100);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(200);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-	
-	//rotate to orient on first box
-	lineFollowerControl.RotateUntilLine(0.75, LineFollowControl::RIGHT); 
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(100);
-
-	// Play Simon here
-	Serial.println("Play Simon");
-	arm.Simon.Simon_Play();
-
-	Serial.println("Turn right 180");
-	lineFollowerControl.RotateUntilLine(0.75);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-
-	delay(100);
-	// Savannah uncommented this section
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	// turn left back to main branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.75);
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-	
-	
-	Serial.println("Wait on right line sensor");
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(100);
-
-	
-	//mecanum.mecRun(0.75, 0, 0); //-0.75 Savannah changed this
-	//delay(50);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
-	
-	//turns right at second branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5); //0.5 savannah changed this 
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(100); //150 savannah changed
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	lineFollowerControl.RotateUntilLine(-0.6, LineFollowControl::LEFT);
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	delay(100);
-
-	// Play game here
-	Serial.println("Play Etch-A-Sketch");
-	arm.Etch.Etch_Play();
-
-	Serial.println("Turn left 180");
-	lineFollowerControl.RotateUntilLine(-0.6);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	//Savannah uncommented this section
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150); //savannah changed this from 200
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	//turn to main branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5); 
-	delay(100);
-	
-
-	//savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	delay(100);
-
-	//mecanum.mecRun(0.75, 0, 0); //-0.75 savannah changed
-	//delay(100);
-	//mecanum.mecRun(0, 0, 0);
-	//delay(100);
-
-	//turn left to third branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	mecanum.mecRun(-0.75, 0, 0);
-	delay(200);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	lineFollowerControl.RotateUntilLine(0.5, LineFollowControl::RIGHT);
-	delay(100);
-
-	// And boom goes the dynamite
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-
-	// Play Rubiks here
-	Serial.println("Play Rubik's Cube");
-	arm.Rubiks.Rubiks_Play();
-
-	Serial.println("Turn right 180");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	//turn back to main branch
-	Serial.println("Turn left 90");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	//Savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(50);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	Serial.println("Wait on right line sensor");
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-	delay(100);
-
-	//Savannah commented this out
-	/*mecanum.mecRun(-0.75, 0, 0);
-	delay(100);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);*/
-
-	//turn to final branch
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	bool oldBoard = false;
-	if (oldBoard)
-	{
-		Serial.println("Go straight");
-		mecanum.mecRun(1.0, 0, 0);
-		delay(150);
-		mecanum.mecRun(0, 0, 0);
-		delay(100);
-
-		lineFollowerControl.RotateUntilLine(-1.0, LineFollowControl::LEFT);
-		delay(100);
-	}
-	else
-	{
-		
-		mecanum.mecRun(-0.75, 0, 0);
-		delay(200); //Savannah changed this was 100
-		mecanum.mecRun(0, 0, 0);
-		delay(100);
-
-		lineFollowerControl.RotateUntilLine(-0.6, LineFollowControl::LEFT);
-		delay(100);
-
-		// And boom goes the dynamite
-		lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-		delay(100);
-	}
-
-	// Play game here
-	arm.Card.Card_Play();
-	
-	Serial.println("Turn left almost 180");
-	lineFollowerControl.RotateUntilLine(-0.5);
-	delay(100);
-
-	lineFollowerControl.followUntilWhite();
-	delay(100);
-
-	//Savannah uncommented this
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150); //savannah changed from 100
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
-
-	Serial.println("Turn right 90");
-	lineFollowerControl.RotateUntilLine(0.5);
-	delay(100);
-
-	Serial.println("Go straight");
-	mecanum.mecRun(0.75, 0, 0);
-	delay(150);
-	mecanum.mecRun(0, 0, 0);
-	delay(100);
+	// Play each of the games
+	FindBranch(LineFollowControl::LEFT, &arm.Simon);
+	FindBranch(LineFollowControl::RIGHT, &arm.Etch);
+	FindBranch(LineFollowControl::LEFT, &arm.Rubiks);
+	FindBranch(LineFollowControl::RIGHT, &arm.Card);
 
 	// Find the finish line
 	lineFollowerControl.followUntilWhite();
-	
+
 	// Drive completely over the finish line
-	/*mecanum.mecRun(0.75, 0, 0);
-	delay(1000);
-	mecanum.mecRun(0, 0, 0);*/
-}
 
-void FollowLineMecanum() {
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-	
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play Simon
-	//delay(5000);
-	arm.Simon.Simon_Play();
-	
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-	
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, 3 * PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play Etch-A-Sketch
-	//delay(5000);
-	arm.Etch.Etch_Play();
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::LEFT);
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilWhite();
-
-	mecanum.mecRun(0.6, PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Play the Rubik's cube
-	//delay(5000);
-	arm.Rubiks.Rubiks_Play();
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilLine(LineFollowControl::RIGHT);
-
-	Serial.println("Following the right line sensor");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	lineFollowerControl.followUntilWhite();
-
-
-	mecanum.mecRun(0.6, 3 * PI / 2, 0);
-	delay(200);
-	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
-	// Pick up the card
-	//delay(5000);
-	arm.Card.Card_Play();
-
-	Serial.println("Following the left line sensor");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	lineFollowerControl.followUntilLine(LineFollowControl::FRONT);
-
-	Serial.println("Following the front line sensor");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	lineFollowerControl.followUntilWhite();
-
-	Serial.println("Done");
 }
 
 void Strafe()
@@ -579,4 +252,89 @@ void ReadSensorData() {
 	Serial.println(position);
 
 	delay(1000);
+}
+// side - Side of the robot that operates the toy
+void FindBranch(int toy_side, GameControl* game)
+{
+	// Navigation constants
+	const double ROTATION_SPEED = 0.5;
+	const double NAVIGATION_SPEED = 0.5;
+	const unsigned long BACKUP_DELAY = 200;
+
+	lineFollowerControl.set_speed(NAVIGATION_SPEED);
+
+	// Follow the main path until it detects a branch
+	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+
+	// Detect which direction to go on the branches
+	double branch_rotation = ROTATION_SPEED;
+	if (detected_branch == LineFollowControl::LEFT)
+	{
+		branch_rotation *= -1;
+	} else if (detected_branch == LineFollowControl::RIGHT)
+	{
+		branch_rotation *= 1;
+	}
+
+	// Detect which direction to rotate to reach the toy
+	double toy_rotation = ROTATION_SPEED;
+	if (toy_side == LineFollowControl::LEFT)
+	{
+		toy_rotation *= 1;
+	} else if (toy_side == LineFollowControl::RIGHT)
+	{
+		toy_rotation *= -1;
+	}
+
+	// Rotate to follow branch
+	lineFollowerControl.RotateUntilLine(branch_rotation);
+
+	// Follow the branch to the box
+	lineFollowerControl.followUntilWhite();
+
+	// Back up from the box
+	mecanum.mecRun(-NAVIGATION_SPEED, 0, 0);
+	delay(BACKUP_DELAY);
+	mecanum.mecRun(0, 0, 0);
+	
+	// Orient on first box
+	int other_sensor = -1;
+	if (toy_side == LineFollowControl::LEFT)
+	{
+		other_sensor = LineFollowControl::RIGHT;
+	} else if (toy_side == LineFollowControl::RIGHT)
+	{
+		other_sensor = LineFollowControl::LEFT;
+	}
+	lineFollowerControl.RotateUntilLine(toy_rotation, other_sensor);
+
+	// Center on the line
+	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
+
+	// Play the game
+	game->Play();
+
+	// Rotate back on the branch
+	lineFollowerControl.RotateUntilLine(toy_rotation);
+
+	// Follow the branch back to the main path
+	lineFollowerControl.followUntilWhite();
+
+	// Cross over the main branch
+	bool left_cross = false;
+	bool right_cross = false;
+
+	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
+	// Wait for one sensor to cross over the line
+	while (!(lineFollowerControl.IsCenteredOnLine(LineFollowControl::LEFT, true)
+		|| lineFollowerControl.IsCenteredOnLine(LineFollowControl::RIGHT, true)));
+	mecanum.mecRun(0, 0, 0);
+
+	// Turn back to main branch
+	lineFollowerControl.RotateUntilLine(branch_rotation);
+
+	// Go forward to move past previously taken branch
+	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
+	while (!lineFollowerControl.IsCenterOffLine(detected_branch));
+	mecanum.mecRun(0, 0, 0);
 }

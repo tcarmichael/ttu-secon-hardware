@@ -53,17 +53,15 @@ private:
 	double Ki;
 	QTRSensorsRC* arrays[NUM_ARRAYS];
 	Mecanum* mecanumControl;
-	// Makes the robot drive exactly straight
-	double fudge_factor;
 	unsigned int sensorValues[NUM_SENSORS];
 	bool corner_rotations;
+	// Controls how quickly the robot moves forward while navigating the line
+	double nav_speed;
 
 	// Functions
 	int whiteCount(QTRSensorsRC* array);
 	int update(int lastError, int oppositeSensor = -1);
 	bool CenterSensor(int sensor);
-	bool IsCenteredOnLine(int sensor);
-	bool IsCenterOffLine(int sensor);
 public:
 	void followInfinitely();
 	void defaultCalibration(void);
@@ -73,8 +71,10 @@ public:
 	void set_corner_rotations(bool corner_rotations);
 	bool IsExactlyCenteredOnLine(int sensor);
 	void DefaultCalibrationOtherSide();
-	void UpdateAngle(int front_sensor, int back_sensor);
-	double CalculateAngle(int front_distance, int back_distance);
+	int SearchForBranch(int sensor1, int sensor2);
+	bool IsCenteredOnLine(int sensor, bool offset);
+	bool IsCenterOffLine(int sensor);
+	void set_speed(double speed);
 };
 
 #endif

@@ -1,11 +1,11 @@
+#include "GameControl.h"
 
-class ArmControl;
+class GameControl;
 
-class EtchControl
+class EtchControl : public GameControl
 {
 	// Wrapper for the Etch-A-Sketch functions
 private:
-	ArmControl* parent;
 	const int closeRearGripper = 95;
 	const int openRearGripper = 50;
 	const int closeFrontGripper = 145;
@@ -14,9 +14,9 @@ private:
 	int count = 0;
 
 public:
-	EtchControl(ArmControl* parent) : parent(parent) {}
+	EtchControl(ArmControl* parent) : GameControl(parent) {}
 
-	void Etch_Play();
+	void Play();
 	void makeSpace();
 	void letterI();
 	void letterEup();
