@@ -58,7 +58,7 @@ void setup() {
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
-	//arm.Simon.Play();
+	arm.Simon.Play();
 	//arm.Etch.Play();
 	//arm.Etch.Release();
 	//arm.Rubiks.Grab();
@@ -66,11 +66,11 @@ void setup() {
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	//delay(15000);
+	delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
-	//WaitForLed();
+	WaitForLed();
 	leds.Blue_Off();
 	leds.Green_Off();
 	leds.White_Off();
@@ -139,10 +139,10 @@ void FollowLine()
 	lineFollowerControl.setSide(LineFollowControl::FRONT);
 
 	// Get out of the box
-	/*mecanum.mecRun(0.5, 0, 0);
+	mecanum.mecRun(0.5, 0, 0);
 	while (!(lineFollowerControl.IsCenterOffLine(LineFollowControl::LEFT)
 	&& lineFollowerControl.IsCenterOffLine(LineFollowControl::RIGHT)));
-	mecanum.mecRun(0, 0, 0);*/
+	mecanum.mecRun(0, 0, 0);
 
 	// Play each of the games
 	FindBranch(LineFollowControl::LEFT, &arm.Simon);

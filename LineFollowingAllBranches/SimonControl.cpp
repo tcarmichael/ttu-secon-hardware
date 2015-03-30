@@ -302,10 +302,10 @@ void SimonControl::press_yellow(unsigned long end_t) {
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.5, 1.2, -3.4, 160, 70, -70, TimeConstant); // from start to hover over yellow
-	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.45, 1.2, -4.28, 160, 70, -73.5, 0.4); // hit yellow
+	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.48, 1.2, -4.28, 160, 70, -74, 0.4); // hit yellow
 
 	// keep going down on z direction
-	move_down(-4.45, 1.2, -4.28, 160, 70, -73.5, end_t);
+	move_down(-4.48, 1.2, -4.28, 160, 70, -74, end_t);
 	parent->frontArm(-4.45, 1.2, -3.5, 160, 70, -73.5); //hover over yellow
 	//parent->Front_Smooth_Move(-4.2, 0.8, -4.1, 180, 70, -70, -4.5, 1.3, -3.7, 180, 70, -70, TimeConstant); // hover over yellow
 	// dont uncomment//parent->Front_Smooth_Move(-4.5, 1.3, -3.7, 180, 70, -70, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // from yellow to start
