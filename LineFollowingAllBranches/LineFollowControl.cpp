@@ -70,9 +70,11 @@ void LineFollowControl::setSide(int side) {
 	switch (side) {
 	case FRONT:
 		currentAngle = 0;
-
-		Kp = 0.35 / FOLLOWER_OFFSET;
-		Kd = 0.0001;
+		//.0001 is functional wheras .00001 is not
+		//.01 is too high
+		//.001 I see osicillation ish
+		Kp = .0003;
+		Kd = 0.003;
 		break;
 
 	case RIGHT:
