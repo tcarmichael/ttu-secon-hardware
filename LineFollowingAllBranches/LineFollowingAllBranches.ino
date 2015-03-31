@@ -31,13 +31,6 @@ void setup() {
 	//Example code Line for LEDs, just change the color word
 	leds.LED_Setup();
 	
-	
-	
-	// uncomment for David's code testing
-	/*arm.begin();
-	arm.Simon.Play();
-	delay(15000);*/
-	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
 	mecanum.begin();
@@ -58,7 +51,7 @@ void setup() {
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
-	arm.Simon.Play();
+	//arm.Simon.Play();
 	//arm.Etch.Play();
 	//arm.Etch.Release();
 	//arm.Rubiks.Grab();
@@ -66,7 +59,7 @@ void setup() {
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	delay(15000);
+	//delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
