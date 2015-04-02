@@ -31,13 +31,6 @@ void setup() {
 	//Example code Line for LEDs, just change the color word
 	leds.LED_Setup();
 	
-	
-	
-	// uncomment for David's code testing
-	/*arm.begin();
-	arm.Simon.Play();
-	delay(15000);*/
-	
 	// Initialize the mecanum wheels
 	Serial.println("Initializing the mecanum wheels");
 	mecanum.begin();
