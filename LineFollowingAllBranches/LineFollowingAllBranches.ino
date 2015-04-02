@@ -50,8 +50,8 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	//arm.frontHomeLeft();
-	//arm.RearHomeLeft();
+	arm.frontHomeLeft();
+	arm.RearHomeLeft();
 	//arm.frontHomeRight();
 	//arm.RearHomeRight();
 	
@@ -60,13 +60,13 @@ void setup() {
 	//arm.Simon.Grab();
 	//arm.Simon.Play();
 	//arm.Etch.Pull();
-	arm.Etch.Release();
+	//arm.Etch.Release();
 	//arm.Etch.Play();
 	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	delay(15000);
+	//delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
