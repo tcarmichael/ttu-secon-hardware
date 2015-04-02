@@ -515,15 +515,15 @@ void SimonControl::Grab()
 	double A2[6] = { 8.5, 1.7, -4.3, GripConstant, 92, -105 };
 	double B2[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
 	double M2[6] = { -8.5, .5, -5.6, 0, 180, -87 };
-	double N2[6] = { -9, 0, -5, 0, 180, -105 };
+	double N2[6] = { -9, 0, -5, 0, 180, -87 }; //105
 
 
 	parent->Both_Smooth_Move(A2, B2, M2, N2, TimeConstant);
 	delay(100);
 	// Pull in setup
 	double A3[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
-	double B3[6] = { 7.5, 0, -5, GripConstant, 92, -105 };
-	double M3[6] = { -9, 0, -4.3, 0, 163, -105 };
+	double B3[6] = { 7.5, -1, -5, GripConstant, 92, -105 };
+	double M3[6] = { -9, 0, -4.3, 0, 163, -87 };
 	double N3[6] = { -9, 0, -4.5, 0, 163, -50 };
 
 
@@ -547,11 +547,11 @@ void SimonControl::Grab()
 	parent->Front_Smooth_Move(-7, 2, -5, 50, 80, -90, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // move above start button
 
 	//move rear arm to hold simon
-	parent->Rear_Smooth_Move(7.5, 0, -5, GripConstant, 92, -105, 8.5, 0, -5, GripConstant, 95, -105, TimeConstant); // move out in x 8.5, 0, -5, GripConstant, 95, -105
+	parent->Rear_Smooth_Move(7.5, -1, -5, GripConstant, 92, -105, 8.5, -0.5, -5, GripConstant, 95, -105, TimeConstant); // move out in x 8.5, 0, -5, GripConstant, 95, -105
 	delay(100);
-	parent->Rear_Smooth_Move(8.5, 0, -5, GripConstant, 95, -105, 8.6, 3.5, -5, GripConstant, 100, -105, TimeConstant); // move in front of simon in y 8.6, 2.5, -5, GripConstant, 100, -105,
+	parent->Rear_Smooth_Move(8.5, -0.5, -5, GripConstant, 95, -105, 8.6, 2.8, -5, GripConstant, 100, -105, TimeConstant); // move in front of simon in y 8.6, 2.5, -5, GripConstant, 100, -105,
 	delay(100);
-	parent->Rear_Smooth_Move(8.6, 3.5, -5, GripConstant, 100, -105, 8.5, 3, -5, GripConstant, 100, -115, TimeConstant); //hold simon 7.3, 3, -5, GripConstant, 100, -105
+	parent->Rear_Smooth_Move(8.6, 2.8, -5, GripConstant, 100, -105, 8.5, 2.5, -5, GripConstant, 100, -115, TimeConstant); //hold simon 7.3, 3, -5, GripConstant, 100, -105
 	delay(100);
 
 }

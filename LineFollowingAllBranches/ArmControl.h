@@ -25,6 +25,8 @@ class ArmControl
 	friend class CardControl;
 
 private:
+
+
 	const static int SERVOMIN = 150; // This is the 'minimum' pulse length count (out of 4096)
 	const static int SERVOMAX = 650; // This is the 'maximum' pulse length count (out of 4096)
 
@@ -49,6 +51,7 @@ public:
 	SimonControl Simon;
 	RubiksControl Rubiks;
 	CardControl Card;
+	double newWR = -10;
 
 	void begin();
 	void flipFlop(void);

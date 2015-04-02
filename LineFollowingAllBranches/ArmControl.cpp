@@ -86,6 +86,7 @@ void ArmControl::setPosition(int pin, int position)
 
 int ArmControl::rearArm(double x, double y, double z, int g, double wr, int wa)
 {
+	wr = wr + newWR;
 	double r = sqrt(x*x + y*y);
 	z = z + r*(.5);
 	wa=wa+3*r;

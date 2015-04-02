@@ -50,18 +50,18 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	arm.frontHomeLeft();
-	arm.RearHomeLeft();
+	//arm.frontHomeLeft();
+	//arm.RearHomeLeft();
 	//arm.frontHomeRight();
 	//arm.RearHomeRight();
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
-	arm.Simon.Play();
+	//arm.Simon.Play();
+	//arm.Etch.Pull();
+	arm.Etch.Release();
 	//arm.Etch.Play();
-	//arm.Etch.Release();
-	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Release();
 

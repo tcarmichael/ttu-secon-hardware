@@ -223,14 +223,14 @@ void EtchControl::Pull()
 	
 	parent->Front_Smooth_Move(1, 0, 2, 90, 90, -30, 4, 0, 0, 90, 90,-90, TimeConstant); // move front arm out of the way
 	
-	parent->Rear_Smooth_Move(1, 0, 2, GripperSqueezeHat, 90, -30, 4.5, 2.8, -2.5, GripperSqueezeHat, 123, -111, TimeConstant); //drop hat down to right above the tabs
+	parent->Rear_Smooth_Move(1, 0, 2, GripperSqueezeHat, 90, -30, 4.5, 2.2, -2.5, GripperSqueezeHat, 113, -110, TimeConstant); //drop hat down to right above the tabs
 
-	
-	parent->Rear_Smooth_Move(4.5, 2.8, -2.5, GripperSqueezeHat, 123, -111, 4.2, 2.8, -2.9, GripperSqueezeHat, 123, -111, TimeConstant); //drop hat down into tabs
-	
-	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, GripperSqueezeHat, 123, -105, 3.8, 2.5, -3.1, 0, 123, -105, TimeConstant); // hat leggo
-	
-	parent->Rear_Smooth_Move(3.8, 2.5, -3.1, 0, 123, -105, 3.8, 2.5, 0, 0, 120, -105, TimeConstant); //move up
+	delay(200);
+	parent->Rear_Smooth_Move(4.5, 2.2, -2.5, GripperSqueezeHat, 113, -111, 4.2, 2.1, -2.9, GripperSqueezeHat, 113, -110, TimeConstant); //drop hat down into tabs
+	delay(200);
+	parent->Rear_Smooth_Move(3.8, 2.1, -3.1, GripperSqueezeHat, 113, -105, 3.8, 2.1, -3.1, 0, 113, -105, TimeConstant); // hat leggo
+	delay(200);
+	parent->Rear_Smooth_Move(3.8, 2.1, -3.1, 0, 113, -105, 3.8, 2.3, 0, 0, 120, -105, TimeConstant); //move up
 
 	double JusRearStart_Move4[6] = { 3.8, 2.5, 0, 0, 120, -105 };
 	double JusRearEnd_Move4[6] = { 1, 0, 2, 110, 90, -30 };
@@ -265,7 +265,7 @@ void EtchControl::Grasp()
 	
 	// move both arms to knobs
 	double A011[6] = { -6, 0, -3, 50, 90, -110 };
-	double C011[6] = { -6, 0, -4.4, 10, 30, -110 };
+	double C011[6] = { -6, 0.25, -4.4, 10, 30, -110 };
 	double M011[6] = { 5.5, 1.6, -3, 90, 90, -100 };
 	double N011[6] = { 5.8, 1.6, -4.1, 40, 14, -104 };
 
@@ -275,8 +275,8 @@ void EtchControl::Grasp()
 
 
 	//Close Grippers
-	double JusRearStart_Move5[6] = { -6, 0, -4.4, 10, 30, -110 };
-	double JusRearEnd_Move5[6] = { -6, 0, -4.4, closeRearGripper, 30, -110 };
+	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, 10, 30, -110 };
+	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 30, -110 };
 	double JusFrontStart_Move511[6] = { 5.8, 1.6, -4.1, 40, 14, -104 };
 	double JusFrontEnd_Move5[6] = { 5.8, 1.6, -4.1, closeFrontGripper, 14, -104 };
 
@@ -343,9 +343,9 @@ void EtchControl::Release()
 	
 	parent->Rear_Smooth_Move(3.9, 2.2, -0.1, 20, 120, -105, 4.0, 2.4, -3.1, 0, 120, -105, TimeConstant); //move rear arm to grab rubik hat -bend to it
 	delay(100);
-	parent->Rear_Smooth_Move(4.0, 2.4, -3.1, 0, 120, -105, 4.0, 2.4, -3.1, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
+	parent->Rear_Smooth_Move(4.0, 2.4, -3.1, 0, 120, -105, 3.99, 2.4, -3.1, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
 	delay(100);
-	parent->Rear_Smooth_Move(4.1, 2.4, -3.1, 110, 120, -105, 4.1, 2.4, 0, 110, 120, -105, TimeConstant); //lift hat up
+	parent->Rear_Smooth_Move(3.98, 2.4, -3.1, 110, 120, -105, 4.1, 2.4, 0, 110, 120, -105, TimeConstant); //lift hat up
 	delay(100);
 	parent->RearHomeLeft();
 	parent->frontHomeLeft();
