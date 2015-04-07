@@ -47,7 +47,7 @@ void SimonControl::Simon_Play()
 	
 
 	unsigned long start_time = millis();
-	unsigned long end_time = start_time + 15000UL; 
+	unsigned long end_time = start_time + 60000UL; //15000UL
 	int sequence[MAX_SEQUENCE];
 	int current = 0;
 	bool start = true;
@@ -302,10 +302,10 @@ void SimonControl::press_yellow(unsigned long end_t) {
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.5, 1.2, -3.4, 160, 70, -70, TimeConstant); // from start to hover over yellow
-	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.48, 1.2, -4.28, 160, 70, -74, 0.4); // hit yellow
+	parent->Front_Smooth_Move(-4.5, 1.2, -3.4, 160, 70, -70, -4.48, 1.2, -4.28, 160, 70, -75, 0.4); // hit yellow
 
 	// keep going down on z direction
-	move_down(-4.48, 1.2, -4.28, 160, 70, -74, end_t);
+	move_down(-4.48, 1.2, -4.28, 160, 70, -75, end_t);
 	parent->frontArm(-4.45, 1.2, -3.5, 160, 70, -73.5); //hover over yellow
 	//parent->Front_Smooth_Move(-4.2, 0.8, -4.1, 180, 70, -70, -4.5, 1.3, -3.7, 180, 70, -70, TimeConstant); // hover over yellow
 	// dont uncomment//parent->Front_Smooth_Move(-4.5, 1.3, -3.7, 180, 70, -70, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // from yellow to start
@@ -495,15 +495,15 @@ void SimonControl::Grab()
 
 	// move both arms down
 	double A01[6] = { 8, 0, 0, GripConstant, 90, -105 };
-	double C01[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
+	double C01[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
 	double M01[6] = { -8.5, 0, 0, 0, 180, -105 };
 	double N01[6] = { -8.5, 0, -5.6, 0, 180, -87 };// Justin altered angle to try and fix the simon squezze from squeezing the toy out
 	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
 	delay(100);
 
 	// Squeeze together
-	double A[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
-	double B[6] = { 8.5, 1.6, -4.3, GripConstant, 92, -105 };
+	double A[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
+	double B[6] = { 8.5, 1.6, -4.4, GripConstant, 92, -105 };
 	double M[6] = { -8.5, 0, -5.6, 0, 180, -87 };
 	double N[6] = { -8.5, .5, -5.6, 0, 180, -87 };
 
@@ -512,8 +512,8 @@ void SimonControl::Grab()
 	delay(100);
 
 	// Pull out
-	double A2[6] = { 8.5, 1.7, -4.3, GripConstant, 92, -105 };
-	double B2[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
+	double A2[6] = { 8.5, 1.7, -4.4, GripConstant, 92, -105 };
+	double B2[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
 	double M2[6] = { -8.5, .5, -5.6, 0, 180, -87 };
 	double N2[6] = { -9, 0, -5, 0, 180, -87 }; //105
 
@@ -521,7 +521,7 @@ void SimonControl::Grab()
 	parent->Both_Smooth_Move(A2, B2, M2, N2, TimeConstant);
 	delay(100);
 	// Pull in setup
-	double A3[6] = { 8.5, 0, -4.3, GripConstant, 92, -105 };
+	double A3[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
 	double B3[6] = { 7.5, -1, -5, GripConstant, 92, -105 };
 	double M3[6] = { -9, 0, -4.3, 0, 163, -87 };
 	double N3[6] = { -9, 0, -4.5, 0, 163, -50 };
