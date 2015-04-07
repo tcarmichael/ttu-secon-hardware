@@ -55,7 +55,7 @@ void setup() {
 	//arm.Etch.Pull();
 	//arm.Etch.Release();
 	//arm.Etch.Play();
-	//arm.Rubiks.Rotate();
+	arm.Rubiks.Play();
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
