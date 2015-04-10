@@ -420,7 +420,7 @@ bool LineFollowControl::IsCenteredOnLine(int sensor, bool offset)
 		}
 		else if (sensor == LineFollowControl::LEFT)
 		{
-			return sensorValues[5] < THRESHOLD && sensorValues[6] < THRESHOLD;
+			return sensorValues[4] < THRESHOLD && sensorValues[5] < THRESHOLD;
 		}
 	}
 
