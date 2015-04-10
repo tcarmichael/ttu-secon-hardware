@@ -131,12 +131,12 @@ void RubiksControl::Rotate()
 
 	//// rotating 90 degrees
 	//savannah changed this from 4.8 to 4.3
-	parent->Rear_Smooth_Move(4.7, 2.6, -3, GripConstant, wristConstant, -105, 4.5, 2.6, -2.7, GripConstant, 137, -105, TimeConstant);                               //rotate hat
+	parent->Rear_Smooth_Move(4.7, 2.6, -3, GripConstant, wristConstant, -105, 4.5, 2.6, -2.7, GripConstant, 130, -105, TimeConstant);         //rotate hat  CHANGING ROTATE FOR COMPETITION FROM 137
 
 
 
-		parent->Rear_Smooth_Move(4.5, 2.6, -2.5, GripConstant, 137, -104, 5.6, 2.3, -2.7, GripConstant, 135, -105, TimeConstant); //so we don't move the rubiks out from the skid
-		parent->Rear_Smooth_Move(5.6, 2.3, -2.7, GripConstant, 135, -105, 5.4, 2.3, -1.8, GripConstant, 135, -105, TimeConstant); //move up 4.5
+		parent->Rear_Smooth_Move(4.5, 2.6, -2.5, GripConstant, 130, -104, 5.6, 2.3, -2.7, GripConstant, 128, -105, TimeConstant); //so we don't move the rubiks out from the skid  CHANGING FROM 137 and 135
+		parent->Rear_Smooth_Move(5.6, 2.3, -2.7, GripConstant, 128, -105, 5.4, 2.3, -1.8, GripConstant, 128, -105, TimeConstant); //move up 4.5    CHANGING FROM 135 and 135
 
 
 		parent->Rear_Smooth_Move(4.6, 2.3, -1.8, GripConstant, wristConstant, -105, 4.65, 2.4, -2.7, GripConstant, wristConstant, -104, TimeConstant); //move down
@@ -154,7 +154,7 @@ void RubiksControl::Rotate()
 
 		//// rotating 90 degrees
 		//savannah changed this from 4.8 to 4.3
-		parent->Rear_Smooth_Move(4.6, 2.9, -2.9, GripConstant, wristConstant, -105, 4.5, 2.9, -2.7, GripConstant, 140, -105, TimeConstant);                               //rotate hat
+		parent->Rear_Smooth_Move(4.6, 2.9, -2.9, GripConstant, wristConstant, -105, 4.5, 2.9, -2.7, GripConstant, 130, -105, TimeConstant);       //rotate hat  CHANGING 140 ROTATE
 		
 
 	//parent->Rear_Smooth_Move(4.5, 2.6, 2, GripConstant, 33, -105, 4.6, 2.65, -3, GripConstant, 33, -105, TimeConstant); //lower  4.5 2.9
@@ -178,7 +178,7 @@ void RubiksControl::Release()
 	double TimeConstant=.4;
 	double GripConstant = 100;
 	// ditch hat and cube
-	parent->Rear_Smooth_Move(  4.6, 2.9, -3.1, GripConstant, 140, -105,                  8.5, 2.9, -3.2, GripConstant, 115, -105,           TimeConstant); //pull out
+	parent->Rear_Smooth_Move(  4.6, 2.9, -3.1, GripConstant, 130, -105,                  8.5, 2.9, -3.2, GripConstant, 115, -105,           TimeConstant); //pull out  CHANGING 140 rotate
 	
 
 	//parent->Rear_Smooth_Move(   8.5, 2.9, -3, GripConstant, 140, -105,                  8.5, 2.9, -3, GripConstant, 33, -105,           TimeConstant); //rotate cube

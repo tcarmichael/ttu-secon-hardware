@@ -334,9 +334,9 @@ void SimonControl::press_green(unsigned long end_t)
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.3, 1.3, -3.6, 120, 90, -76, TimeConstant); // from start to hover over green
-	parent->Front_Smooth_Move(-4.3, 1.3, -3.6, 120, 90, -76, -4.25, 1.3, -4, 120, 60, -76.5, 0.2); // David changed TimeConstant to 0.2 // hit green
+	parent->Front_Smooth_Move(-4.3, 1.3, -3.6, 120, 90, -76, -4.25, 1.3, -4, 120, 60, -77, 0.2); // David changed TimeConstant to 0.2 // hit green
 	// keep going down on z direction
-	move_down(-4.25, 1.3, -4, 120, 60, -76.5, end_t);
+	move_down(-4.25, 1.3, -4, 120, 60, -77, end_t);
 	parent->frontArm(-3.8, 0.8, -3.3, 180, 70, -75); //hover over green
 	//parent->Front_Smooth_Move(-3.8, 0.8, -3.5, 180, 70, -75, -3.8, 0.8, -3.3, 180, 70, -75, TimeConstant); // hover over green
 	// dont uncomment//parent->Front_Smooth_Move(-3.8, 0.8, -3.3, 180, 70, -75, -4, 1.5, -3.7, 180, 70, -70, TimeConstant);
