@@ -268,6 +268,9 @@ void FindBranch(int toy_side, GameControl* game)
 	// Follow the main path until it detects a branch
 	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
+	// Green LED is on when going down a branch
+	leds.Green_On();
+
 	// Detect which direction to go on the branches
 	double branch_rotation = ROTATION_SPEED;
 	if (detected_branch == LineFollowControl::LEFT)
@@ -334,6 +337,9 @@ void FindBranch(int toy_side, GameControl* game)
 
 	// Turn back to main branch
 	lineFollowerControl.RotateUntilLine(branch_rotation);
+
+	// Green LED is off on main branch
+	leds.Green_Off();
 
 	// Go forward to move past previously taken branch
 	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
