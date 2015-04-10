@@ -183,6 +183,7 @@ void EtchControl::up()
 
 void EtchControl::Pull()
 {
+	
 	double TimeConstant = .5;//0.3
 	double GripperSqueezeHat = 100;
 	
@@ -217,7 +218,7 @@ void EtchControl::Pull()
 		
 	//return hat and come back
 	
-	parent->RearFlipToLeft();
+	parent->RearFlipToLeft(); 
 	
 	parent->RearHomeLeft();
 	
@@ -333,19 +334,21 @@ void EtchControl::Release()
 	parent->RearFlipToLeft();
 	parent->RearHomeLeft();
 
-
+	
 	//grab hat from skid
 	double A001[6] = { 1, 0, 2, 90, 90, -30 };
 	double C001[6] = { 3.9, 2.2, -0.1, 20, 120, -105 };
 	double M001[6] = { -1, 0, 2, 90, 90, -30 };
 	double N001[6] = { -1, 0, 2, 90, 90, 90 };
 	parent->Both_Smooth_Move(A001, C001, M001, N001, TimeConstant);
-	parent->Rear_Smooth_Move(3.9, 2.2, -0.1, 20, 120, -105, 4.1, 2.2, -3.1, -5, 120, -107, TimeConstant+0.6); //move rear arm to grab rubik hat -bend to it
-	delay(500);
-	parent->Rear_Smooth_Move(4.1, 2.2, -3.1, -5, 120, -107, 3.99, 2.2, -3.3, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
-	delay(500);
-	parent->Rear_Smooth_Move(3.98, 2.2, -3.2, 110, 120, -105, 4.1, 2.4, 0, 110, 120, -105, TimeConstant); //lift hat up
-	delay(100);
+	parent->Rear_Smooth_Move(3.9, 2.2, -0.1, 20, 120, -105, 4.2, 2.2, -3.1, -5, 120, -107, TimeConstant+0.6); //move rear arm to grab rubik hat -bend to it
+
+	parent->Rear_Smooth_Move(4.2, 2.2, -3.1, -5, 120, -107, 4, 2.2, -3.3, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
+
+
+	parent->Rear_Smooth_Move(4, 2.2, -3.2, 110, 120, -105, 4.1, 2.4, 0, 110, 120, -105, TimeConstant); //lift hat up
+
+
 	parent->RearHomeLeft();
 	parent->frontHomeLeft();
 	
