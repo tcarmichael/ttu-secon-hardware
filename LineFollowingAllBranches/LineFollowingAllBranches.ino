@@ -268,6 +268,11 @@ void FindBranch(int toy_side, GameControl* game)
 	// Follow the main path until it detects a branch
 	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
+	// Backup and center on branch
+	mecanum.mecRun(-0.5, 0, 0);
+	while (!lineFollowerControl.IsCenteredOnLine(detected_branch, false));
+	mecanum.mecRun(0, 0, 0);
+
 	// Green LED is on when going down a branch
 	leds.Green_On();
 

@@ -509,13 +509,13 @@ int LineFollowControl::SearchForBranch(int sensor1, int sensor2)
 
 	while (true)
 	{
-		if (IsCenteredOnLine(sensor1, true))
+		if (IsCenteredOnLine(sensor1, false))
 		{
 			detected_side = sensor1;
 			break;
 		}
 
-		if (IsCenteredOnLine(sensor2, true))
+		if (IsCenteredOnLine(sensor2, false))
 		{
 			detected_side = sensor2;
 			break;
