@@ -147,7 +147,9 @@ void FollowLine()
 	lineFollowerControl.followUntilWhite();
 
 	// Drive completely over the finish line
-
+	mecanum.mecRun(1.0, 0, 0);
+	delay(1000);
+	mecanum.mecRun(0, 0, 0);
 }
 
 void Strafe()
