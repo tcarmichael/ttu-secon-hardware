@@ -77,7 +77,14 @@ void loop() {
 	//arm.Rubiks.Grab();
 	//arm.Rubiks.Rotate();
 	//arm.Rubiks.Release();
-	/*lineFollowerControl.setSide(LineFollowControl::LEFT);
+	/*Serial.println("f");
+	lineFollowerControl.setSide(LineFollowControl::FRONT);
+	ReadSensorData();
+	Serial.println("l");
+	lineFollowerControl.setSide(LineFollowControl::LEFT);
+	ReadSensorData();
+	Serial.println("r");
+	lineFollowerControl.setSide(LineFollowControl::RIGHT);
 	ReadSensorData();*/
 	//FollowSide(LineFollowControl::RIGHT);
 	//SpeedRamping();
