@@ -54,8 +54,8 @@ void setup() {
 	//arm.Simon.Play();
 	//arm.Etch.Pull();
 	//arm.Etch.Release();
-	//arm.Etch.Play();
-	//arm.Rubiks.Play();
+	//arm.Etch.Release();
+	//.Rubiks.Play();
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
