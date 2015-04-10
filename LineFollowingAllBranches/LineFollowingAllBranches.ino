@@ -329,6 +329,12 @@ void FindBranch(int toy_side, GameControl* game)
 	// Rotate back on the branch
 	lineFollowerControl.RotateUntilLine(toy_rotation);
 
+	// Small backup
+	// Just in case we immediately run into the main branch
+	mecanum.mecRun(-0.5, 0, 0);
+	delay(100);
+	mecanum.mecRun(0, 0, 0);
+
 	// Follow the branch back to the main path
 	lineFollowerControl.followUntilWhite();
 
@@ -344,12 +350,6 @@ void FindBranch(int toy_side, GameControl* game)
 
 	// Turn back to main branch
 	lineFollowerControl.RotateUntilLine(branch_rotation);
-
-	// Small backup
-	// Just in case we immediately run into the main branch
-	mecanum.mecRun(-0.5, 0, 0);
-	delay(100);
-	mecanum.mecRun(0, 0, 0);
 
 	// Green LED is off on main branch
 	leds.Green_Off();
