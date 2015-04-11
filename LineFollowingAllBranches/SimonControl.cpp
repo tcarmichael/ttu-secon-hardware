@@ -66,13 +66,13 @@ void SimonControl::Simon_Play()
 		int curr_color;
 		// Wait for Simon sequence
 		// Serial.println("Waiting for Simon");
-		Serial.println("Waiiting for color");
+		Serial.println("Waiting for color");
 
 		for (int i = 0; i <= current; i++)
 		{
 			unsigned long start_wait = millis();
 			unsigned long end_wait = start_wait + 6000UL;
-			unsigned long first_time = end_wait - 1000UL;
+			unsigned long first_time = end_wait - 4000UL;
 			unsigned long three_sec = start_wait + 3000UL;
 
 			do
@@ -92,7 +92,7 @@ void SimonControl::Simon_Play()
 				{
 					if (millis() > first_time)
 					{
-						curr_color = 1;
+						curr_color = 3;
 					}
 				}
 
@@ -161,6 +161,10 @@ void SimonControl::Simon_Play()
 		{
 			break;
 		}
+		leds.Red_Off();
+		leds.Blue_Off();
+		leds.Green_Off();
+		leds.Orange_Off();
 
 		play_sequence(current, sequence, end_time);
 		delay(500); // delay needed after the arm plays a sequence
@@ -180,7 +184,10 @@ DONE:
 	Serial.println(start_time);
 	Serial.println(millis());
 	
-	
+	leds.Red_Off();
+		leds.Blue_Off();
+		leds.Green_Off();
+		leds.Orange_Off();
 }
 
 void SimonControl::play_sequence(int curr, int sequence[], unsigned long end_t)
@@ -191,7 +198,7 @@ void SimonControl::play_sequence(int curr, int sequence[], unsigned long end_t)
 		{
 			break;
 		}
-		parent->frontArm(-4, 1.5, -3.4, 180, 70, -70);
+		parent->frontArm(-4, 1.5, -3.2, 180, 70, -70);
 		switch (sequence[i]) {
 		case 1:
 			press_red(end_t);
@@ -301,8 +308,8 @@ void SimonControl::press_yellow(unsigned long end_t) {
 		}
 	}
 
-	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.5, 1.2, -3.4, 160, 70, -70, TimeConstant); // from start to hover over yellow
-	parent->Front_Smooth_Move(-4.5, 1.25, -3.4, 160, 70, -70, -4.48, 1.25, -4.28, 160, 70, -75, 0.4); // hit yellow
+	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.5, 1.2, -3.3, 160, 70, -70, TimeConstant); // from start to hover over yellow
+	parent->Front_Smooth_Move(-4.5, 1.25, -3.3, 160, 70, -70, -4.48, 1.25, -4.28, 160, 70, -75, 0.4); // hit yellow
 
 	// keep going down on z direction
 	move_down(-4.48, 1.3, -4.28, 160, 70, -75, end_t);
@@ -334,9 +341,9 @@ void SimonControl::press_green(unsigned long end_t)
 	}
 
 	parent->Front_Smooth_Move(-4, 1.5, -3.4, 180, 70, -70, -4.3, 1.3, -3.6, 120, 90, -76, TimeConstant); // from start to hover over green
-	parent->Front_Smooth_Move(-4.3, 1.3, -3.6, 120, 90, -76, -4.25, 1.3, -4, 120, 60, -77, 0.2); // David changed TimeConstant to 0.2 // hit green
+	parent->Front_Smooth_Move(-4.3, 1.3, -3.6, 120, 90, -76, -4.2, 1.3, -4, 120, 60, -77, 0.2); // David changed TimeConstant to 0.2 // hit green
 	// keep going down on z direction
-	move_down(-4.25, 1.3, -4, 120, 60, -77, end_t);
+	move_down(-4.2, 1.3, -4, 120, 60, -77, end_t);
 	parent->frontArm(-3.8, 0.8, -3.3, 180, 70, -75); //hover over green
 	//parent->Front_Smooth_Move(-3.8, 0.8, -3.5, 180, 70, -75, -3.8, 0.8, -3.3, 180, 70, -75, TimeConstant); // hover over green
 	// dont uncomment//parent->Front_Smooth_Move(-3.8, 0.8, -3.3, 180, 70, -75, -4, 1.5, -3.7, 180, 70, -70, TimeConstant);
@@ -434,12 +441,14 @@ int SimonControl::get_color()
 	{
 		//Serial.print("RED");
 		color = 1;
+		leds.Red_On();
 		//LEDControl_Simon.Red_On(); // Turn on the Red LED on the LED bar
 	}
 	else if (blueValue > 750)
 	{
 		//Serial.print("BLUE");
 		color = 2;
+		leds.Blue_On();
 		//LEDControl_Simon.Blue_On(); // Turn on the Blue LED on the LED bar
 	}
 	//    else if (yellowValue == 0 && greenValue == 0) {
@@ -450,12 +459,14 @@ int SimonControl::get_color()
 	{
 		//Serial.print("YELLOW");
 		color = 3;
+		leds.Orange_On();
 		//LEDControl_Simon.Orange_On(); // Turn on the Orange LED on the LED bar
 	}
 	else if (greenValue > 750) 
 	{
 		//Serial.print("GREEN");
 		color = 4;
+		leds.Green_On();
 		//LEDControl_Simon.Green_On(); // Turn on the Green LED on the LED bar
 	}
 
@@ -467,22 +478,6 @@ void SimonControl::Grab()
 
 	double TimeConstant = .5;
 	double GripConstant = 100;
-	parent->frontHomeLeft();
-	parent->RearHomeLeft();
-
-	/*//grab hat from skid
-	double A001[6] = { 1, 0, 2, 90, 90, -30 };
-	double C001[6] = { 3.9, 2.2, -0.1, 20, 120, -105 };
-	double M001[6] = { -1, 0, 2, 90, 90, -30 };
-	double N001[6] = { -1, 0, 2, 90, 90, 90 };
-	parent->Both_Smooth_Move(A001, C001, M001, N001, TimeConstant);
-
-	parent->Rear_Smooth_Move(3.9, 2.2, -0.1, 20, 120, -105, 4.0, 2.5, -3.1, 0, 120, -105, TimeConstant); //move rear arm to grab rubik hat -bend to it
-	delay(100);
-	parent->Rear_Smooth_Move(4.0, 2.5, -3.1, 0, 120, -105, 4.0, 2.5, -3.1, 110, 120, -105, TimeConstant); //move rear arm to grab rubik hat -grasp it
-	delay(100);
-	parent->Rear_Smooth_Move(4.1, 2.5, -3.1, 110, 120, -105, 4.1, 2.5, 0, 110, 120, -105, TimeConstant); //lift hat up
-	delay(100);*/
 
 	// Forcing simon to center position
 	// move both arms out
@@ -490,16 +485,14 @@ void SimonControl::Grab()
 	double C011[6] = { 8, 0, 0, GripConstant, 90, -105 };
 	double M011[6] = { -1, 0, 2, 90, 90, -30 };
 	double N011[6] = { -8.5, 0, 0, 0, 163, -30 }; //-105 to -30
-	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
-	delay(100);
+	parent->Both_Smooth_Move(A011, C011, M011, N011, 0.4);
 
 	// move both arms down
 	double A01[6] = { 8, 0, 0, GripConstant, 90, -105 };
 	double C01[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
 	double M01[6] = { -8.5, 0, 0, 0, 180, -105 };
 	double N01[6] = { -8.5, 0, -5.6, 0, 180, -87 };// Justin altered angle to try and fix the simon squezze from squeezing the toy out
-	parent->Both_Smooth_Move(A01, C01, M01, N01, TimeConstant);
-	delay(100);
+	parent->Both_Smooth_Move(A01, C01, M01, N01, 0.4);
 
 	// Squeeze together
 	double A[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
@@ -508,8 +501,7 @@ void SimonControl::Grab()
 	double N[6] = { -8.5, .5, -5.6, 0, 180, -87 };
 
 
-	parent->Both_Smooth_Move(A, B, M, N, TimeConstant);
-	delay(100);
+	parent->Both_Smooth_Move(A, B, M, N, 0.4);
 
 	// Pull out
 	double A2[6] = { 8.5, 1.7, -4.4, GripConstant, 92, -105 };
@@ -518,8 +510,7 @@ void SimonControl::Grab()
 	double N2[6] = { -9, 0, -5, 0, 180, -87 }; //105
 
 
-	parent->Both_Smooth_Move(A2, B2, M2, N2, TimeConstant);
-	delay(100);
+	parent->Both_Smooth_Move(A2, B2, M2, N2, 0.3);
 	// Pull in setup
 	double A3[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
 	double B3[6] = { 7.5, -1, -5, GripConstant, 92, -105 };
@@ -527,32 +518,24 @@ void SimonControl::Grab()
 	double N3[6] = { -9, 0, -4.5, 0, 163, -50 };
 
 
-	parent->Both_Smooth_Move(A3, B3, M3, N3, TimeConstant);
-	delay(100);
+	parent->Both_Smooth_Move(A3, B3, M3, N3, 0.3);
 	// Pull in setup step 2
 	parent->Front_Smooth_Move(-9, 0, -4.5, 0, 163, -50, -9, 2, -5, 0, 80, -50, TimeConstant);
-	delay(100);
 
 	// pull in wrist swing down
 	parent->Front_Smooth_Move(-9, 2, -5, 0, 80, -50, -9.2, 2, -5.2, 50, 80, -90, TimeConstant);
-	delay(100);
 
 	// pull in x direction 
 	parent->Front_Smooth_Move(-9.2, 2, -5.2, 0, 80, -90, -6, 2, -5.75, 50, 80, -110, TimeConstant);
-	delay(100);
 
 	//move front arm out of the way
-	parent->Front_Smooth_Move(-6, 2, -5.5, 50, 80, -110, -7, 2, -5, 50, 80, -90, TimeConstant); //move back
-	delay(100);
-	parent->Front_Smooth_Move(-7, 2, -5, 50, 80, -90, -4, 1.5, -3.7, 180, 70, -70, TimeConstant); // move above start button
+	parent->Front_Smooth_Move(-6, 2, -5.5, 50, 80, -110, -7, 2, -5, 50, 80, -90, 0.3); //move back
+	parent->Front_Smooth_Move(-7, 2, -5, 50, 80, -90, -4, 1.5, -3.6, 180, 70, -70, TimeConstant); // move above start button
 
 	//move rear arm to hold simon
-	parent->Rear_Smooth_Move(7.5, -1, -5, GripConstant, 92, -105, 8.5, -0.5, -5, GripConstant, 95, -105, TimeConstant); // move out in x 8.5, 0, -5, GripConstant, 95, -105
-	delay(100);
-	parent->Rear_Smooth_Move(8.5, -0.5, -5, GripConstant, 95, -105, 8.6, 2.8, -5, GripConstant, 100, -105, TimeConstant); // move in front of simon in y 8.6, 2.5, -5, GripConstant, 100, -105,
-	delay(100);
-	parent->Rear_Smooth_Move(8.6, 2.8, -5, GripConstant, 100, -105, 8.5, 2.5, -5, GripConstant, 100, -115, TimeConstant); //hold simon 7.3, 3, -5, GripConstant, 100, -105
-	delay(100);
+	parent->Rear_Smooth_Move(7.5, -1, -5, GripConstant, 92, -105, 8.5, -0.5, -5, GripConstant, 95, -105, 0.4); // move out in x 8.5, 0, -5, GripConstant, 95, -105
+	parent->Rear_Smooth_Move(8.5, -0.5, -5, GripConstant, 95, -105, 8.6, 2.8, -5, GripConstant, 100, -105, 0.4); // move in front of simon in y 8.6, 2.5, -5, GripConstant, 100, -105,
+	parent->Rear_Smooth_Move(8.6, 2.8, -5, GripConstant, 100, -105, 8.5, 2.35, -5, GripConstant, 100, -115, 0.4); //hold simon 7.3, 3, -5, GripConstant, 100, -105
 
 }
 
@@ -561,40 +544,17 @@ void SimonControl::Release()
 	double TimeConstant = .5;
 	double GripConstant = 100;
 	//take hat to skid and move front arm home
-	double A001[6] = { 7, 2, -5, GripConstant, 130, -105 };
-	double C001[6] = { 7, 0, -5, GripConstant, 130, -105 };
-	double M001[6] = { -4, 1.5, -3.3, 180, 70, -70 };
-	double N001[6] = { -2, 1.5, -3.6, 180, 70, -70 }; //push simon out
+
+	parent->Rear_Smooth_Move(7, 2, -5, GripConstant, 130, -105, 7, 0, -5, GripConstant, 130, -105, TimeConstant);
+	parent->Front_Smooth_Move(-4, 1.5, -3.3, 180, 70, -70, -4, 0, -2, 180, 70, -70, TimeConstant);	
+
+	double A001[6] = { 7, 0, -5, GripConstant, 130, -105 };
+	double C001[6] = { 1, 0, 2, 90, 90, -30 };
+	double M001[6] = { -4, 0, -2, 180, 70, -70, };
+	double N001[6] = { -1, 0, 2, 90, 90, -30 }; //push simon out
 	parent->Both_Smooth_Move(A001, C001, M001, N001, TimeConstant);
-	parent->Front_Smooth_Move(-2, 1.5, -3.6, 180, 70, -70, -4, 0, -2, 180, 70, -70, TimeConstant);
-	delay(100);
-	parent->Front_Smooth_Move(-4, 0, -2, 180, 70, -70, -1, 0, 2, 90, 90, -30, TimeConstant);
-	delay(100);
-	
-	// david uncommented this
-	//parent->Front_Smooth_Move(-1, 0, 2, 90, 90, -30, -1, 0, 2, 90, 90, 90, TimeConstant);
-	//delay(100);
-	//parent->Rear_Smooth_Move(7, 0, -5, GripConstant, 130, -105, 4.0, 2.5, -2, GripConstant, 120, -105, TimeConstant);
-	//delay(100);
-	// and changed it to
-	parent->Rear_Smooth_Move(7, 0, -5, GripConstant, 130, -105, 7, 0, 0, GripConstant, 130, -105, TimeConstant);
-	delay(100);
-	//parent->Rear_Smooth_Move(7, 0, -2, GripConstant, 130, -105, 4.0, 0, -2, GripConstant, 120, -105, TimeConstant);
-	//delay(100);
 
 
-	/*parent->Rear_Smooth_Move(4.0, 2.5, -2, GripConstant, 120, -105, 4, 2.5, -3.1, GripConstant, 120, -105, TimeConstant); //drop hat down
-	delay(100);
-
-	parent->Rear_Smooth_Move(4, 2.5, -3.1, GripConstant, 120, -105, 4, 2.5, -3.1, 0, 120, -105, TimeConstant); // hat leggo
-	delay(100);
-
-	parent->Rear_Smooth_Move(4, 2.5, -3.1, GripConstant, 120, -105, 4, 2.5, 2, 0, 120, -105, TimeConstant); //move up
-	delay(100);*/
-
-
-	parent->RearHomeLeft();
-	parent->frontHomeLeft();
 	parent->FrontFlipToRight();
 	parent->frontHomeRight();
 	parent->RearFlipToRight();

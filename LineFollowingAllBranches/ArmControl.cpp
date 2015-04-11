@@ -5,7 +5,7 @@
 #include "ArmControl.h"
 #include <cmath>
 
-const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 10 intentionally
+const int ArmControl::Front_Arm[NUM_SERVOS] = { 10,10,10,10,10 };// skips 10 intentionally (8, 9, 11, 12, 13, 14 )
 const int ArmControl::Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
 
 
@@ -133,20 +133,20 @@ int ArmControl::rearArm(double x, double y, double z, int g, double wr, int wa)
 void ArmControl::frontHomeRight()
 {
 	frontArm(1, 0, 2, 90, 90, -30);
-	delay(500);
+	delay(200);
 }
 
 void ArmControl::frontHomeLeft()
 {
 	frontArm(-1, 0, 2, 90, 90, -30);
-	delay(500);
+	delay(200);
 }
 
 
 void ArmControl::FrontFlipToLeft()
 {
 	frontArm(3, 0, 5, 90, 90, 0);
-	delay(500);
+	delay(200);
 
 	frontArm(-3, 0, 5, 90, 90, 0);
 	delay(500);
@@ -156,7 +156,7 @@ void ArmControl::FrontFlipToLeft()
 void ArmControl::FrontFlipToRight()
 {
 	frontArm(-3, 0, 5, 90, 90, 0);
-	delay(500);
+	delay(200);
 
 	frontArm(3, 0, 5, 90, 90, 0);
 	delay(500);
@@ -166,21 +166,21 @@ void ArmControl::FrontFlipToRight()
 void ArmControl::RearHomeLeft()
 {
 	rearArm(1, 0, 2, GripConstant, 90, -40);
-	delay(500);
+	delay(200);
 }
 
 
 void ArmControl::RearHomeRight()
 {
 	rearArm(-1, 0, 2, GripConstant, 90, -40);
-	delay(500);
+	delay(200);
 }
 
 
 void ArmControl::RearFlipToRight()
 {
 	rearArm(3, 0, 5, GripConstant, 90, 0);
-	delay(500);
+	delay(200);
 
 	rearArm(-3, 0, 5, GripConstant, 90, 0);
 	delay(500);
@@ -190,7 +190,7 @@ void ArmControl::RearFlipToRight()
 void ArmControl::RearFlipToLeft()
 {
 	rearArm(-3, 0, 5, GripConstant, 90, 0);
-	delay(500);
+	delay(200);
 
 	rearArm(3, 0, 5, GripConstant, 90, 0);
 	delay(500);

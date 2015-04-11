@@ -43,23 +43,22 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	arm.frontHomeLeft();
-	arm.RearHomeLeft();
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
+	//arm.frontHomeLeft();
+	//arm.RearHomeLeft();
+	arm.frontHomeRight();
+	arm.RearHomeRight();
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
 	//arm.Simon.Play();
-	//arm.Etch.Pull();
 	//arm.Etch.Release();
-	//arm.Etch.Release();
-	//.Rubiks.Play();
+	arm.Etch.Play();
+	//arm.Rubiks.Play();
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	//delay(15000);
+	delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");

@@ -10,7 +10,8 @@ private:
 	const int openRearGripper = 50;
 	const int closeFrontGripper = 145;
 	const int openFrontGripper  = 90;
-	const int timing = 250;
+	const int timing = 180;
+	const int Clawtiming = 50;
 	int count = 0;
 
 public:
