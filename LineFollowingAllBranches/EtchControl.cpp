@@ -3,9 +3,9 @@
 
 void EtchControl::Play()
 {
-	//Pull();
-	//Grasp();
-	//delay(timing);
+	Pull();
+	Grasp();
+	delay(timing);
 	//draw();
 	//Release();
 }
@@ -112,19 +112,7 @@ void EtchControl::letterEup()
 	parent->setPosition(parent->Rear_Arm[4], 40);
 	delay(timing);
 }
-void EtchControl::DerpyHome()
-{
-	parent->setPosition(9, 90);
-	delay(timing);
-	parent->setPosition(11, 90);
-	delay(timing);
-	parent->setPosition(12, -120);
-	delay(timing);
-	parent->setPosition(13, 90);
-	delay(timing);
-	parent->setPosition(14, 90);
-	delay(timing);
-}
+
 void EtchControl::letterEdown()
 {
 	int pulselen;

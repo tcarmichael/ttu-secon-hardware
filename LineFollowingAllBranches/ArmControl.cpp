@@ -180,7 +180,7 @@ void ArmControl::RearHomeRight()
 void ArmControl::RearFlipToRight()
 {
 	rearArm(3, 0, 5, GripConstant, 90, 0);
-	delay(400);
+	delay(200);
 
 	rearArm(-3, 0, 5, GripConstant, 90, 0);
 	delay(500);
@@ -190,7 +190,7 @@ void ArmControl::RearFlipToRight()
 void ArmControl::RearFlipToLeft()
 {
 	rearArm(-3, 0, 5, GripConstant, 90, 0);
-	delay(400);
+	delay(200);
 
 	rearArm(3, 0, 5, GripConstant, 90, 0);
 	delay(500);

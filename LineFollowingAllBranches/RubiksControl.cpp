@@ -13,7 +13,7 @@ void RubiksControl::Grab()
 
 	double GripConstant = 100;
 	
-	//parent->frontHomeLeft();
+	parent->frontHomeLeft();
 	parent->RearHomeLeft();
 
 
@@ -21,7 +21,7 @@ void RubiksControl::Grab()
 
 	// Forcing Rubiks to center position
 
-	/*
+
 	// move both arms out
 	double A011[6] = { 1, 0, 2, GripConstant, 90, -30 }; // savannah changed 4.1, 2.5, 0, GripConstant, 120, -105
 	double C011[6]={  8, 0, 0, GripConstant, 90, -105};
@@ -30,12 +30,11 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A011,C011,M011,N011,0.3);
-	*/
-	parent->Rear_Smooth_Move(1, 0, 2, GripConstant, 90, -30  ,     8, 0, 0, GripConstant, 90, -105,.3);
+	
 
 	//parent->Rear_Smooth_Move(4.1, 2.5, 0, GripConstant, 120, -105,         8, 0, 0, GripConstant, 90, -105, TimeConstant); //move rear arm up out 
 	
-/*
+
 	
 // move both arms down
 	double A01[6]={8, 0, 0, GripConstant, 90, -105};
@@ -76,13 +75,10 @@ void RubiksControl::Grab()
 
 
 	parent->Both_Smooth_Move(A3, B3, M3, N3, 0.3);
-	*/
-	//Pull in setup just rear
-	parent->Rear_Smooth_Move(8, 0, 0, GripConstant, 90, -105, 8.5, 3, -4, GripConstant, 100, 0, 0.3);
-
+	
 	
 	// Pull in setup step 2
-	//parent->Rear_Smooth_Move(8.5, 0, -3, GripConstant, 92, 0, 8.5, 3, -4, GripConstant, 100, 0, 0.3);
+	parent->Rear_Smooth_Move(8.5, 0, -3, GripConstant, 92, 0, 8.5, 3, -4, GripConstant, 100, 0, 0.3);
 	
 
 	// pull in wrist swing down
@@ -118,12 +114,8 @@ void RubiksControl::Rotate()
 	//// rotating 90 degrees
 	parent->Rear_Smooth_Move(4.9, 2.1, -2.7, GripConstant, 21, -110, 4.9, 2.1, -2.7, GripConstant, 130, -110, TimeConstant);   
 
-	//move up from cube
-	parent->Rear_Smooth_Move( 4.9, 2.1, -2.7, GripConstant, 130, -110, 4.9, 2.1, 0, GripConstant, 110, -110,0.3);
-
-	//move away 
-	parent->Rear_Smooth_Move(4.9, 2.1, 0, GripConstant, 110, -110, 8.5, 2.9, -2.5, GripConstant, 110, -110,0.3);
-
+	//move away and up from cube
+	parent->Rear_Smooth_Move( 4.9, 2.1, -2.7, GripConstant, 130, -110, 8.5, 2.9, -2.5, GripConstant, 110, -110,0.3);
 
 	//reset hat wrist
 	parent->Rear_Smooth_Move(8.5, 2.9, -2.5, GripConstant, 110, -110,8.5, 2.9, -2.5, GripConstant, 20, -110, 0.1);
@@ -132,11 +124,11 @@ void RubiksControl::Rotate()
 	parent->Rear_Smooth_Move( 8.5, 2.9, -2.5, GripConstant, 20, -110, 7.5, 3.4, -2.6, GripConstant, 21, -129,0.3);
 
 	//in x and let theta out to grab hat
-	parent->Rear_Smooth_Move(7.5, 3.4, -2.6, GripConstant, 21, -129, 4.9, 2.1, -2.71, GripConstant, 21, -110,0.3);
+	parent->Rear_Smooth_Move(7.5, 3.4, -2.6, GripConstant, 21, -129, 4.9, 2.1, -2.7, GripConstant, 21, -110,0.3);
 
 		//// rotating 90 degrees
 		//savannah changed this from 4.8 to 4.3
-		parent->Rear_Smooth_Move(4.9, 2.1, -2.71, GripConstant, 21, -110, 4.9, 2.1, -2.71, GripConstant, 130, -110, TimeConstant);
+		parent->Rear_Smooth_Move(4.9, 2.1, -2.7, GripConstant, 21, -110, 4.9, 2.1, -2.7, GripConstant, 130, -110, TimeConstant);
 
 }
 
@@ -153,11 +145,10 @@ void RubiksControl::Release()
 	parent->Rear_Smooth_Move(     8.5, 2.9, -3, GripConstant, 115, -105,                   8.5, 2.9, 1, GripConstant, 115, -105,           TimeConstant); //pull up
 	parent->Rear_Smooth_Move(      8.5, 2.9, 1, GripConstant, 115, -105,                   1, 0, 2, GripConstant, 90, -30,           TimeConstant); //pull up
 
-	parent->RearFlipToRight();
-	parent->RearHomeRight();
-	//parent->frontHomeLeft();
-	//parent->FrontFlipToRight();
-	//parent->frontHomeRight();
+	
+	parent->frontHomeLeft();
+	parent->FrontFlipToRight();
+	parent->frontHomeRight();
 	
 }
 

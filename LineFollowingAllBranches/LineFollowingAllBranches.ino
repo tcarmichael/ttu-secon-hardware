@@ -44,24 +44,21 @@ void setup() {
 	// Set the arms in position
 	arm.begin();
 	//arm.frontHomeLeft();
-	arm.RearHomeLeft();
-	//arm.Etch.DerpyHome();
-	
-	//arm.frontHomeRight();
-	//arm.RearHomeRight();
+	//arm.RearHomeLeft();
+	arm.frontHomeRight();
+	arm.RearHomeRight();
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
 	//arm.Simon.Play();
 	//arm.Etch.Release();
-	//arm.Etch.Play();
+	arm.Etch.Play();
 	//arm.Rubiks.Play();
 	//arm.Rubiks.Release();
-	//arm.Card.Play();
-	
+
 	//arm.Rubiks.Play();
-	//delay(15000);
+	delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
@@ -148,7 +145,7 @@ void FollowLine()
 
 	// Play each of the games
 	FindBranch(LineFollowControl::LEFT, &arm.Simon);
-	FindBranch(LineFollowControl::RIGHT, NULL);
+	FindBranch(LineFollowControl::RIGHT, &arm.Etch);
 	FindBranch(LineFollowControl::LEFT, &arm.Rubiks);
 	FindBranch(LineFollowControl::RIGHT, &arm.Card);
 
@@ -262,7 +259,7 @@ void FindBranch(int toy_side, GameControl* game)
 {
 	// Navigation constants
 	const double ROTATION_SPEED = 0.5;
-	const double NAVIGATION_SPEED = 0.6;
+	const double NAVIGATION_SPEED = 0.5;
 	const unsigned long BACKUP_DELAY = 200;
 
 	lineFollowerControl.set_speed(NAVIGATION_SPEED);
@@ -326,14 +323,7 @@ void FindBranch(int toy_side, GameControl* game)
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
 	// Play the game
-	if (game == NULL)
-	{
-		delay(2000);
-	}
-	else
-	{
-		game->Play();
-	}
+	game->Play();
 
 	// Rotate back on the branch
 	lineFollowerControl.RotateUntilLine(toy_rotation);
