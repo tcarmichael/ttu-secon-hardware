@@ -28,4 +28,5 @@ public:
 	void Grasp();
 	void Release();
 	void draw();
+	void DerpyHome();
 };

@@ -11,6 +11,7 @@ public:
 	void Grab();
 	void Release();
 	void Simon_Play();
+	void Simon_Jank();
 	const int MAX_SEQUENCE = 32;
 	const int TimeConstant = 1.5;
 	int get_color();

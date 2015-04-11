@@ -15,14 +15,24 @@ void SimonControl::Play()
 	//LEDControl_Simon.White_Off();
 	//LEDControl_Simon.Blue_Off();
 	//LEDControl_Simon.Green_Off();
-	Grab();
-	Simon_Play();
-	Release();
+	//Grab();
+	//Simon_Play();
+	//Release();
 	//LEDControl_Simon.Orange_Off();
 	//LEDControl_Simon.Red_Off();
 	//LEDControl_Simon.White_Off();
 	//LEDControl_Simon.Blue_Off();
 	//LEDControl_Simon.Green_Off();
+	Simon_Jank();
+}
+
+void SimonControl::Simon_Jank()
+{
+	double GripConstant = 100;
+	parent->Rear_Smooth_Move(1, 0, 2, GripConstant, 90, -30,               7, 2, -5.6, GripConstant, 90, -10, .7); // extend arm over card
+	parent->Rear_Smooth_Move(7, 2, -5.6, GripConstant, 90, -10,                   6, 2, -7, GripConstant, 98, -50, 0.5); // lower arm to card
+	parent->Rear_Smooth_Move( 6, 2, -7, GripConstant, 100, -55, 1, 0, 2, GripConstant, 90, -30, 0.5); // lower arm to card
+	delay(5400);
 }
 
 void SimonControl::Simon_Play()
