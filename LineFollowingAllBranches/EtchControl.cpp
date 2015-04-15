@@ -6,8 +6,8 @@ void EtchControl::Play()
 	Pull();
 	Grasp();
 	delay(timing);
-	//draw();
-	//Release();
+	draw();
+	Release();
 }
 void EtchControl::draw()
 {
@@ -272,7 +272,7 @@ void EtchControl::Grasp()
 
 	double TimeConstant = .6;//0.8;
 
-
+	
 	double savA[6] = { -1, 0, 2, 90, 90, -30 };
 	double savB[6] = { -6, 0, -3, 50, 90, -110 };
 	double savM[6] = { 1, 0, 2, 90, 90, -30 };
@@ -285,24 +285,24 @@ void EtchControl::Grasp()
 	// move both arms to knobs
 	double A011[6] = { -6, 0, -3, 50, 90, -110 };
 	double C011[6] = { -6, 0.25, -4.4, 10, 30, -110 };
-	double M011[6] = { 5.5, 1.6, -3, 90, 90, -100 };
-	double N011[6] = { 5.8, 1.6, -4.1, 40, 14, -104 };
+	double M011[6] = { 5.4, 1.5, -3.5, 90, 90, -100 };
+	double N011[6] = { 5.4, 1.5, -3.5, 40, 14, -95 };
 
 
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
 
-
+	
 
 	//Close Grippers
 	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, 10, 30, -110 };
 	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 30, -110 };
-	double JusFrontStart_Move511[6] = { 5.8, 1.6, -4, 40, 14, -104 };
-	double JusFrontEnd_Move5[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+	double JusFrontStart_Move511[6] = { 5.4, 1.5, -3.5, 40, 14, -95 };
+	double JusFrontEnd_Move5[6] = { 5.4, 1.5, -3.5, closeFrontGripper, 14, -95 };
 
 
 	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.1);
 
-
+	
 }
 
 void EtchControl::Release()
@@ -311,7 +311,7 @@ void EtchControl::Release()
 	// pull etch away
 	double A011[6] = { -6, 0, -4.4, closeRearGripper, 30, -110 };
 	double C011[6] = { -9, 0, -6, closeRearGripper, 90, -110 };
-	double M011[6] = { 5.8, 1.6, -4.0, closeFrontGripper, 14, -104 };
+	double M011[6] = { 5.4, 1.5, -3.5, closeFrontGripper, 14, -95 };
 	double N011[6] = { 8.7, 1.3, -6, closeFrontGripper, 90, -102 };
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
 	

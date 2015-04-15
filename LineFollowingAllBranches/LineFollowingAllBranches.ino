@@ -58,7 +58,7 @@ void setup() {
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	delay(15000);
+	//delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
