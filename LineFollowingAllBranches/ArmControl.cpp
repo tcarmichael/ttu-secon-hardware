@@ -5,7 +5,7 @@
 #include "ArmControl.h"
 #include <cmath>
 
-const int ArmControl::Front_Arm[NUM_SERVOS] = { 10,10,10,10,10 };// skips 10 intentionally (8, 9, 11, 12, 13, 14 )
+const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 10 intentionally (8, 9, 11, 12, 13, 14 )
 const int ArmControl::Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
 
 
@@ -63,8 +63,9 @@ int ArmControl::frontArm(double x, double y, double z, int g, double wr, int wa)
 		return 1;
 	double Wris = abs(wa - Elbow - Shoulder) - 90;
 
+	double OffsetDueToNewServo = 6;
 	// Output the positions
-	setPosition(Front_Arm[1], Shoulder);
+	setPosition(Front_Arm[1], Shoulder+OffsetDueToNewServo);
 	setPosition(Front_Arm[2], 180 - Elbow);
 	setPosition(Front_Arm[3], 180 - Wris);
 	setPosition(Front_Arm[0], Base_Rotation);

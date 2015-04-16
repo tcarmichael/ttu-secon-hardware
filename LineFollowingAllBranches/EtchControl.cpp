@@ -6,8 +6,8 @@ void EtchControl::Play()
 	Pull();
 	Grasp();
 	delay(timing);
-	//draw();
-	//Release();
+	draw();
+	Release();
 }
 void EtchControl::draw()
 {
@@ -272,7 +272,7 @@ void EtchControl::Grasp()
 
 	double TimeConstant = .6;//0.8;
 
-
+	
 	double savA[6] = { -1, 0, 2, 90, 90, -30 };
 	double savB[6] = { -6, 0, -3, 50, 90, -110 };
 	double savM[6] = { 1, 0, 2, 90, 90, -30 };
@@ -280,7 +280,7 @@ void EtchControl::Grasp()
 
 
 	parent->Both_Smooth_Move(savA, savB, savM, savN, TimeConstant); //prepare arms to grab knobs
-
+	
 	
 	// move both arms to knobs
 	double A011[6] = { -6, 0, -3, 50, 90, -110 };
@@ -292,7 +292,7 @@ void EtchControl::Grasp()
 	parent->Both_Smooth_Move(A011, C011, M011, N011, TimeConstant);
 
 
-
+	
 	//Close Grippers
 	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, 10, 30, -110 };
 	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 30, -110 };
@@ -301,7 +301,7 @@ void EtchControl::Grasp()
 
 
 	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.1);
-
+	
 
 }
 
