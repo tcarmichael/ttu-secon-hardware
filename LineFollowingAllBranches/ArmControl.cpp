@@ -63,8 +63,9 @@ int ArmControl::frontArm(double x, double y, double z, int g, double wr, int wa)
 		return 1;
 	double Wris = abs(wa - Elbow - Shoulder) - 90;
 
+	double OffsetDueToNewServo = 6;
 	// Output the positions
-	setPosition(Front_Arm[1], Shoulder);
+	setPosition(Front_Arm[1], Shoulder+OffsetDueToNewServo);
 	setPosition(Front_Arm[2], 180 - Elbow);
 	setPosition(Front_Arm[3], 180 - Wris);
 	setPosition(Front_Arm[0], Base_Rotation);
