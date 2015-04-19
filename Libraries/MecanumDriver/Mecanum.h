@@ -13,7 +13,7 @@ class Mecanum
 {
 	public:
 		Mecanum() {};
-		void mecRun(double magnitude, double rotation);
+		void mecRun(double magnitude, double angle, double rotation);
 		void begin();
 		void WriteDirect(int, int, int, int);
 		void set_angle(double angle);

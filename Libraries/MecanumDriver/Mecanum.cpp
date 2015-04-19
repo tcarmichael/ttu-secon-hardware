@@ -30,10 +30,15 @@ void Mecanum::WriteDirect(int motor1, int motor2, int motor3, int motor4)
 // input magnitude has to be between -1 and 1
 // input angle has to be between 0 and 2 PI
 // input rotation has to be between -1 and 1
-void Mecanum::mecRun(double magnitude, double rotation) {
+void Mecanum::mecRun(double magnitude, double angle, double rotation) {
   // Wheel 1 is front left, wheel 2 is front right
   // Wheel 3 is rear left, wheel4 is rear right
   // Voltage multiplier for each wheels.
+
+	if (angle != _angle)
+	{
+		set_angle(angle);
+	}
   
   // Calculating the voltage multiplier
 	double voltages[4] = {
