@@ -260,7 +260,7 @@ void FindBranch(int toy_side, GameControl* game)
 {
 	// Navigation constants
 	const double ROTATION_SPEED = 0.5;
-	const double NAVIGATION_SPEED = 0.5;
+	const double NAVIGATION_SPEED = 0.6;
 	const unsigned long BACKUP_DELAY = 200;
 
 	lineFollowerControl.set_speed(NAVIGATION_SPEED);
