@@ -80,8 +80,8 @@ void Mecanum::mecRun(double magnitude, double angle, double rotation) {
 
 void Mecanum::set_angle(double angle)
 {
-	_mag[0] = _mag(angle+PI_4);
-	_mag[1] = _mag(angle+PI_4);
+	_mag[0] = sin(angle+PI_4);
+	_mag[1] = cos(angle+PI_4);
 	_mag[2] = _mag[1];
 	_mag[3] = _mag[0];
 }
