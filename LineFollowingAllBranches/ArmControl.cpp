@@ -5,7 +5,7 @@
 #include "ArmControl.h"
 #include <cmath>
 
-const int ArmControl::Front_Arm[NUM_SERVOS] = { 10,10,10,10,10 };// skips 10 intentionally (8, 9, 11, 12, 13, 14 )
+const int ArmControl::Front_Arm[NUM_SERVOS] = { 8, 9, 11, 12, 13, 14 };// skips 10 intentionally (8, 9, 11, 12, 13, 14 )
 const int ArmControl::Rear_Arm[NUM_SERVOS] = { 0, 1, 2, 3, 4, 5 };
 
 

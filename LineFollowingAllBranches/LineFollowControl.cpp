@@ -73,8 +73,8 @@ void LineFollowControl::setSide(int side) {
 		//.0001 is functional wheras .00001 is not
 		//.01 is too high
 		//.001 I see osicillation ish
-		Kp = .0003;
-		Kd = 0.003;
+		Kp = .00015;
+		Kd = 0.0003;
 		break;
 
 	case RIGHT:
@@ -407,10 +407,10 @@ void LineFollowControl::set_corner_rotations(bool new_corner_rotations)
 
 bool LineFollowControl::IsCenteredOnLine(int sensor, bool offset)
 {
-	const int THRESHOLD = 800;
+	const int THRESHOLD = 200;
 
 	// Read the raw values from the line sensor
-	arrays[sensor]->read(sensorValues);
+	arrays[sensor]->readCalibrated(sensorValues);
 
 	if (offset)
 	{
@@ -424,6 +424,9 @@ bool LineFollowControl::IsCenteredOnLine(int sensor, bool offset)
 		}
 	}
 
+	Serial.println("Sensors");
+	Serial.println(sensorValues[3]);
+	Serial.println(sensorValues[4]);
 	// If the middle two sensors detect a line
 	return sensorValues[3] < THRESHOLD && sensorValues[4] < THRESHOLD;
 }
@@ -523,6 +526,8 @@ int LineFollowControl::SearchForBranch(int sensor1, int sensor2)
 
 		last_error = update(last_error);
 	}
+
+	mecanumControl->mecRun(0, 0, 0);
 
 	return detected_side;
 }

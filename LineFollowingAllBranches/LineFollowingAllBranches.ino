@@ -43,26 +43,25 @@ void setup() {
 
 	// Set the arms in position
 	arm.begin();
-	//arm.frontHomeLeft();
-	//arm.RearHomeLeft();
-	arm.frontHomeRight();
-	arm.RearHomeRight();
+	arm.frontHomeLeft();
+	arm.RearHomeLeft();
+	/*arm.frontHomeRight();
+	arm.RearHomeRight();*/
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
 	//arm.Simon.Grab();
 	//arm.Simon.Play();
 	//arm.Etch.Release();
-	arm.Etch.Play();
+	//arm.Etch.Play();
 	//arm.Rubiks.Play();
 	//arm.Rubiks.Release();
 
 	//arm.Rubiks.Play();
-	delay(15000);
 
 	// Wait for start signal
 	Serial.println("Waiting for LED");
-	WaitForLed();
+	//WaitForLed();
 	leds.Blue_Off();
 	leds.Green_Off();
 	leds.White_Off();
@@ -258,8 +257,8 @@ void ReadSensorData() {
 void FindBranch(int toy_side, GameControl* game)
 {
 	// Navigation constants
-	const double ROTATION_SPEED = 0.5;
-	const double NAVIGATION_SPEED = 0.5;
+	const double ROTATION_SPEED = 0.7;
+	const double NAVIGATION_SPEED = 0.95;
 	const unsigned long BACKUP_DELAY = 200;
 
 	lineFollowerControl.set_speed(NAVIGATION_SPEED);
@@ -268,6 +267,7 @@ void FindBranch(int toy_side, GameControl* game)
 	int detected_branch = lineFollowerControl.SearchForBranch(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
 	// Backup and center on branch
+	delay(50);
 	mecanum.mecRun(-0.5, 0, 0);
 	while (!lineFollowerControl.IsCenteredOnLine(detected_branch, false));
 	mecanum.mecRun(0, 0, 0);
@@ -323,7 +323,7 @@ void FindBranch(int toy_side, GameControl* game)
 	lineFollowerControl.CenterOnLine(LineFollowControl::LEFT, LineFollowControl::RIGHT);
 
 	// Play the game
-	game->Play();
+	//game->Play();
 
 	// Rotate back on the branch
 	lineFollowerControl.RotateUntilLine(toy_rotation);
@@ -338,13 +338,16 @@ void FindBranch(int toy_side, GameControl* game)
 	lineFollowerControl.followUntilWhite();
 
 	// Cross over the main branch
-	bool left_cross = false;
-	bool right_cross = false;
-
 	mecanum.mecRun(NAVIGATION_SPEED, 0, 0);
 	// Wait for one sensor to cross over the line
 	while (!(lineFollowerControl.IsCenteredOnLine(LineFollowControl::LEFT, true)
 		|| lineFollowerControl.IsCenteredOnLine(LineFollowControl::RIGHT, true)));
+	mecanum.mecRun(0, 0, 0);
+
+	// Backup and center on branch
+	delay(50);
+	mecanum.mecRun(-0.5, 0, 0);
+	while (!lineFollowerControl.IsCenteredOnLine(detected_branch, false));
 	mecanum.mecRun(0, 0, 0);
 
 	// Turn back to main branch

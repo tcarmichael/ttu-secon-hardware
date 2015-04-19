@@ -10,21 +10,32 @@ void Mecanum::begin() {
 		motors[i] = Moto_Shield.getMotor(i+1);
 	}
 
+	// Initialize last directions and speeds
+	WriteDirect(0, 0, 0, 0);
+
 	// Initialize the angle
 	set_angle(0);
 }
 
 void Mecanum::WriteDirect(int motor1, int motor2, int motor3, int motor4)
 {
-	motors[0]->run((motor1 > 0) ? FORWARD : BACKWARD);
-	motors[1]->run((motor2 > 0) ? FORWARD : BACKWARD);
-	motors[2]->run((motor3 > 0) ? FORWARD : BACKWARD);
-	motors[3]->run((motor4 > 0) ? FORWARD : BACKWARD);
+	_lastDir[0] = (motor1 > 0) ? FORWARD : BACKWARD;
+	_lastDir[1] = (motor2 > 0) ? FORWARD : BACKWARD;
+	_lastDir[2] = (motor3 > 0) ? FORWARD : BACKWARD;
+	_lastDir[3] = (motor4 > 0) ? FORWARD : BACKWARD;
+	motors[0]->run(_lastDir[0]);
+	motors[1]->run(_lastDir[1]);
+	motors[2]->run(_lastDir[2]);
+	motors[3]->run(_lastDir[3]);
 
-	motors[0]->setSpeed(abs(motor1));
-	motors[1]->setSpeed(abs(motor2));
-	motors[2]->setSpeed(abs(motor3));
-	motors[3]->setSpeed(abs(motor4));
+	_lastSpeed[0] = abs(motor1);
+	_lastSpeed[1] = abs(motor2);
+	_lastSpeed[2] = abs(motor3);
+	_lastSpeed[3] = abs(motor4);
+	motors[0]->setSpeed(_lastSpeed[0]);
+	motors[1]->setSpeed(_lastSpeed[1]);
+	motors[2]->setSpeed(_lastSpeed[2]);
+	motors[3]->setSpeed(_lastSpeed[3]);
 }
 
 // input magnitude has to be between -1 and 1
@@ -42,10 +53,10 @@ void Mecanum::mecRun(double magnitude, double angle, double rotation) {
   
   // Calculating the voltage multiplier
 	double voltages[4] = {
-		magnitude*_mag[0]+rotation,
-		magnitude*_mag[1]-rotation,
-		magnitude*_mag[2]+rotation,
-		magnitude*_mag[3]-rotation
+		magnitude*_mag[0] + rotation,
+		magnitude*_mag[1] - rotation,
+		magnitude*_mag[2] + rotation,
+		magnitude*_mag[3] - rotation
 	};
 
 	// Keep voltages in range of [-1, 1]
@@ -67,19 +78,25 @@ void Mecanum::mecRun(double magnitude, double angle, double rotation) {
 		voltages[i] *= SCALE;
 
 		// Set the direction of the motor
-		if (voltages[i] > 0) {
-			motors[i]->run(FORWARD);
-		} else if (voltages[i] < 0) {
-			motors[i]->run(BACKWARD);
+		uint8_t dir = (voltages[i] > 0) ? FORWARD : BACKWARD;
+		if (dir != _lastDir[i]) {
+			_lastDir[i] = dir;
+			motors[i]->run(_lastDir[i]);
 		}
 
 		// Set the motor speed
-		motors[i]->setSpeed(abs(voltages[i]));
+		if (abs(voltages[i]) != _lastSpeed[i])
+		{
+			_lastSpeed[i] = abs(voltages[i]);
+			motors[i]->setSpeed(_lastSpeed[i]);
+		}
 	}
 }
 
 void Mecanum::set_angle(double angle)
 {
+	_angle = angle;
+
 	_mag[0] = sin(angle+PI_4);
 	_mag[1] = cos(angle+PI_4);
 	_mag[2] = _mag[1];

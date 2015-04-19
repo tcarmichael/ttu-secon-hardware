@@ -27,5 +27,7 @@ class Mecanum
 
 		double _angle;
 		double _mag[4];
+		uint8_t _lastDir[4];
+		uint8_t _lastSpeed[4];
 };
 #endif
