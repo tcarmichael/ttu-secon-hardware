@@ -407,9 +407,9 @@ void SimonControl::Grab()
 
 	// Squeeze together
 	double A[6] = { 8.5, 0, -4.4, GripConstant, 92, -105 };
-	double B[6] = { 8.5, 1.6, -4.4, GripConstant, 92, -105 };
+	double B[6] = { 8.5, 1.4, -4.4, GripConstant, 92, -105 };
 	double M[6] = { -8.5, 0, -5.6, 0, 180, -87 };
-	double N[6] = { -8.5, .5, -5.6, 0, 180, -87 };
+	double N[6] = { -8.5, .8, -5.6, 0, 180, -87 };
 
 
 	parent->Both_Smooth_Move(A, B, M, N, 0.4);
