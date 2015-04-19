@@ -14,6 +14,7 @@ Mecanum	KEYWORD1
 
 begin	KEYWORD2
 mecRun	KEYWORD2
+set_angle	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
