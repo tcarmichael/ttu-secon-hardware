@@ -7,6 +7,7 @@
 #include "Adafruit_Light_Sensor\Adafruit_TSL2561_U.h"
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
 #include "Robot.h"
+#include <ArduinoJson.h>
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
@@ -24,7 +25,7 @@ LEDController leds;
 ArmControl arm;
 
 void setup() {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	// Used to initialize the LEDs :)
 
 
@@ -50,49 +51,52 @@ void setup() {
 	
 
 	/*****Robot is initialized and ready to run at this point*****/
-	//arm.Simon.Grab();
-	//arm.Simon.Play();
-	//arm.Etch.Release();
-	//arm.Etch.Play();
-	//arm.Rubiks.Play();
-	//arm.Rubiks.Release();
-	//arm.Card.Play();
 
-	//arm.Rubiks.Play();
-	//delay(15000);
 
-	// Wait for start signal
-	Serial.println("Waiting for LED");
-	WaitForLed();
-	leds.Blue_Off();
-	leds.Green_Off();
-	leds.White_Off();
 
-	// Begin line following
-	Serial.println("Starting line following");
-	FollowLine();
+
+	
+	
 }
 
 void loop() {
-	//arm.Rubiks.Grab();
-	//arm.Rubiks.Rotate();
-	//arm.Rubiks.Release();
-	/*Serial.println("f");
-	lineFollowerControl.setSide(LineFollowControl::FRONT);
-	ReadSensorData();
-	Serial.println("l");
-	lineFollowerControl.setSide(LineFollowControl::LEFT);
-	ReadSensorData();
-	Serial.println("r");
-	lineFollowerControl.setSide(LineFollowControl::RIGHT);
-	ReadSensorData();*/
-	//FollowSide(LineFollowControl::RIGHT);
-	//SpeedRamping();
-	//MoveInSquare(true);
-	//Strafe();
 	
+	if (Serial.available() > 0) {
+		
+	//{"magnitude":0.2,"translation":0.0,"rotation":0.0}
+		//
+		// Step 1: Reserve memory space
+		//
+		StaticJsonBuffer<200> jsonBuffer;
+		char json[200];
+		Serial.readBytesUntil('\n', json,200);
+		
+		//
+		// Step 2: Deserialize the JSON string
+		//
+		JsonObject& root = jsonBuffer.parseObject(json);
 
+		if (!root.success())
+		{
+			//Serial.println("parseObject() failed");
+			return;
+		}
+
+		//
+		// Step 3: Retrieve the values
+		//
+		const double magnitude= root["magnitude"];
+		const double translation = root["translation"];
+		const double rotation = root["rotation"];
+		
+		mecanum.mecRun(magnitude, translation, rotation);
+		
+	}
 }
+
+
+
+
 
 void WaitForLed()
 {
