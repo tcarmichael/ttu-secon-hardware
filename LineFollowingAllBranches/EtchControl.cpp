@@ -3,11 +3,12 @@
 
 void EtchControl::Play()
 {
-	Pull();
+	//Pull();
 	Grasp();
 	delay(timing);
-	draw();
-	Release();
+	draw_savannah();
+	//draw();
+	//Release();
 }
 void EtchControl::draw()
 {
@@ -23,53 +24,490 @@ void EtchControl::draw()
 
 }
 
+void EtchControl::draw_savannah()
+{
+	letterSdown();
+	makeSpace();
+	letterCdown();
+
+	/*letterSdown();
+	letterAup();
+	makeSpace();
+	letterVdown();
+	makeSpace();
+	letterAup();
+	makeSpace();
+	letterNdown();
+	makeSpace();
+	letterNup();
+	makeSpace();
+	letterAup();
+	makeSpace();
+	letterHdown();*/
+
+
+}
+
+void EtchControl::letterAup()
+{
+	resetRearRight();
+	resetFrontRight();
+	//make first leg
+	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move511[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+	double JusFrontEnd_Move5[6] = { 5.8, 1.6, -4, closeFrontGripper, 130, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+	//reset arms
+	double JusRearStart_Move51[6] = { -6, 0.25, -4.4, openRearGripper, 90, -110 };
+	double JusRearEnd_Move51[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move5111[6] = { 5.8, 1.6, -4, openFrontGripper, 130, -104 };
+	double JusFrontEnd_Move51[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move51, JusRearEnd_Move51, JusFrontStart_Move5111, JusFrontEnd_Move51, 0.5);
+	//make first leg
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+
+	//go back to middle
+	double JusRearStart_Move52[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusRearEnd_Move52[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move5112[6] = { 5.8, 1.6, -4, closeFrontGripper, 130, -104 };
+	double JusFrontEnd_Move52[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move52, JusRearEnd_Move52, JusFrontStart_Move5112, JusFrontEnd_Move52, 0.5);
+
+	//cross of A
+	resetRearLeft();
+	delay(timing * 4);
+	parent->setPosition(parent->Rear_Arm[4], 100);
+	delay(timing * 3);
+	resetRearRight();
+
+
+	//move to top of A
+	resetFrontLeft();
+	double JusRearStart_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusRearEnd_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move5113[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+	double JusFrontEnd_Move53[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move53, JusRearEnd_Move53, JusFrontStart_Move5113, JusFrontEnd_Move53, 0.5);
+
+	//move back to middle of right of A
+	double JusRearStart_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusRearEnd_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move51131[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+	double JusFrontEnd_Move531[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+	//reset arms
+	double JusRearStart_Move88[6] = { -6, 0.25, -4.4, openRearGripper, 40, -110 };
+	double JusRearEnd_Move88[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move88[6] = { 5.8, 1.6, -4, openFrontGripper, 175, -104 };
+	double JusFrontEnd_Move88[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move88, JusRearEnd_Move88, JusFrontStart_Move88, JusFrontEnd_Move88, 0.5);
+
+	//finish A
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+
+}
+
+void EtchControl::letterAdown()
+{
+	resetRearLeft();
+	resetFrontLeft();
+	//make first leg
+	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 130, -110 };
+	double JusFrontStart_Move511[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+	double JusFrontEnd_Move5[6] = { 5.8, 1.6, -4, closeFrontGripper, 59, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+	//reset arms
+	double JusRearStart_Move51[6] = { -6, 0.25, -4.4, openRearGripper, 130, -110 };
+	double JusRearEnd_Move51[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusFrontStart_Move5111[6] = { 5.8, 1.6, -4, openFrontGripper, 59, -104 };
+	double JusFrontEnd_Move51[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move51, JusRearEnd_Move51, JusFrontStart_Move5111, JusFrontEnd_Move51, 0.5);
+	//make first leg
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+
+	//go back to middle
+	double JusRearStart_Move52[6] = { -6, 0.25, -4.4, closeRearGripper, 130, -110 };
+	double JusRearEnd_Move52[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusFrontStart_Move5112[6] = { 5.8, 1.6, -4, closeFrontGripper, 59, -104 };
+	double JusFrontEnd_Move52[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move52, JusRearEnd_Move52, JusFrontStart_Move5112, JusFrontEnd_Move52, 0.5);
+
+	//cross of A
+	resetRearLeft();
+	delay(timing * 2);
+	parent->setPosition(parent->Rear_Arm[4], 100);
+	delay(timing * 3);
+	resetRearRight();
+
+
+	//move to top of A
+	resetFrontLeft();
+	double JusRearStart_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusRearEnd_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move5113[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+	double JusFrontEnd_Move53[6] = { 5.8, 1.6, -4, closeFrontGripper, 70, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move53, JusRearEnd_Move53, JusFrontStart_Move5113, JusFrontEnd_Move53, 0.5);
+
+	//move back to middle of right of A
+	double JusRearStart_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusRearEnd_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move51131[6] = { 5.8, 1.6, -4, closeFrontGripper, 70, -104 };
+	double JusFrontEnd_Move531[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+	//reset arms
+	double JusRearStart_Move88[6] = { -6, 0.25, -4.4, openRearGripper, 40, -110 };
+	double JusRearEnd_Move88[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move88[6] = { 5.8, 1.6, -4, openFrontGripper, 175, -104 };
+	double JusFrontEnd_Move88[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move88, JusRearEnd_Move88, JusFrontStart_Move88, JusFrontEnd_Move88, 0.5);
+
+	//finish A
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+
+}
+
+void EtchControl::letterBdown()
+{
+	resetRearLeft();
+	resetFrontLeft();
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 60);
+	for (int i = 0; i < 2; i++)
+	{
+		up();
+		delay(timing );
+		parent->setPosition(parent->Rear_Arm[4], 100);
+		delay(timing);
+		parent->setPosition(parent->Rear_Arm[4], 180);
+		delay(timing);
+		parent->setPosition(parent->Rear_Arm[4], 100);
+		delay(timing);
+		parent->setPosition(parent->Rear_Arm[4], 60);
+		if (i == 0)
+		{
+			up();
+			delay(timing);
+		}
+	}
+	delay(timing);
+}
+
+void EtchControl::letterBup()
+{
+	resetRearLeft();
+	resetFrontLeft();
+	for (int i = 0; i < 2; i++)
+	{
+		parent->setPosition(parent->Rear_Arm[4], 60);
+		down();
+		parent->setPosition(parent->Rear_Arm[4], 100);
+		delay(timing);
+		parent->setPosition(parent->Rear_Arm[4], 180);
+		delay(timing*2);
+	}
+	up();
+	delay(timing*2);
+	up();
+	delay(timing*2);
+	up();
+	parent->setPosition(parent->Front_Arm[4], 25);
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing);
+}
+
+void EtchControl::letterCdown()
+{
+	resetRearLeft();
+	delay(timing);
+	resetFrontLeft();
+	delay(timing*2);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing*2);
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing*2);
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing);
+
+
+}
+
+void EtchControl::letterCup()
+{
+	resetRearLeft();
+	delay(timing);
+	resetFrontRight();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing*2);
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing*2);
+	up();
+	delay(timing);
+	up();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing);
+
+
+}
+void EtchControl::letterDdown()
+{
+	resetRearLeft();
+	delay(timing);
+	resetFrontLeft();
+	delay(timing * 2);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing * 2);
+	down();
+	delay(timing);
+	down();
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing);
+	up();
+	delay(timing);
+	up();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing * 2);
+
+
+
+}
+
+void EtchControl::letterDup()
+{
+	resetRearLeft();
+	delay(timing);
+	resetFrontRight();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	up();
+	delay(timing);
+	up();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing);
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing * 2);
+
+
+
+}
+
+void EtchControl::letterSdown()
+{
+	resetRearLeft();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing*2);
+	resetRearLeft();
+	count = 1;
+	down();
+	resetRearRight();
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing);
+	count = 1;
+	down();
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing * 2);
+	resetRearLeft();
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing * 2);
+	resetRearLeft();
+
+}
+
+
+
+void EtchControl::letterVdown()
+{
+	//move to top of V
+	resetFrontLeft();
+	resetRearRight();
+	double JusRearStart_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusRearEnd_Move53[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move5113[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+	double JusFrontEnd_Move53[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move53, JusRearEnd_Move53, JusFrontStart_Move5113, JusFrontEnd_Move53, 0.5);
+
+	//reset arms
+	double JusRearStart_Move88[6] = { -6, 0.25, -4.4, openRearGripper, 90, -110 };
+	double JusRearEnd_Move88[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move88[6] = { 5.8, 1.6, -4, openFrontGripper, 75, -104 };
+	double JusFrontEnd_Move88[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move88, JusRearEnd_Move88, JusFrontStart_Move88, JusFrontEnd_Move88, 0.5);
+
+	//move to top of V
+	parent->Both_Smooth_Move(JusRearStart_Move53, JusRearEnd_Move53, JusFrontStart_Move5113, JusFrontEnd_Move53, 0.5);
+
+	//move back to middle of right of V
+	double JusRearStart_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusRearEnd_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 40, -110 };
+	double JusFrontStart_Move51131[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+	double JusFrontEnd_Move531[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+	//reset arms
+	double JusRearStart_Move889[6] = { -6, 0.25, -4.4, openRearGripper, 40, -110 };
+	double JusRearEnd_Move889[6] = { -6, 0.25, -4.4, closeRearGripper, 90, -110 };
+	double JusFrontStart_Move889[6] = { 5.8, 1.6, -4, openFrontGripper, 175, -104 };
+	double JusFrontEnd_Move889[6] = { 5.8, 1.6, -4, closeFrontGripper, 75, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move889, JusRearEnd_Move889, JusFrontStart_Move889, JusFrontEnd_Move889, 0.5);
+
+	//finish first side of V
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+
+	//start next side of V
+	resetRearLeft();
+	resetFrontLeft();
+
+	//make first leg of trip
+	double JusRearStart_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusRearEnd_Move5[6] = { -6, 0.25, -4.4, closeRearGripper, 130, -110 };
+	double JusFrontStart_Move511[6] = { 5.8, 1.6, -4, closeFrontGripper, 175, -104 };
+	double JusFrontEnd_Move5[6] = { 5.8, 1.6, -4, closeFrontGripper, 59, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+	//reset arms
+	double JusRearStart_Move51[6] = { -6, 0.25, -4.4, openRearGripper, 130, -110 };
+	double JusRearEnd_Move51[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusFrontStart_Move5111[6] = { 5.8, 1.6, -4, openFrontGripper, 59, -104 };
+	double JusFrontEnd_Move51[6] = { 5.8, 1.6, -4, closeFrontGripper, 155, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move51, JusRearEnd_Move51, JusFrontStart_Move5111, JusFrontEnd_Move51, 0.5);
+	//finish
+	parent->Both_Smooth_Move(JusRearStart_Move5, JusRearEnd_Move5, JusFrontStart_Move511, JusFrontEnd_Move5, 0.5);
+	
+
+
+}
+void EtchControl::letterHdown()
+{
+	resetRearLeft();
+	resetFrontLeft();
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	up();
+	delay(timing);
+	parent->setPosition(parent->Rear_Arm[4], 120);
+	delay(timing);
+	up();
+	delay(timing);
+	resetFrontLeft();
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+
+
+}
+
+void EtchControl::letterNdown()
+{
+	resetRearLeft();
+	resetFrontLeft();
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Front_Arm[4], 0);
+	delay(timing);
+	diagonalUpLtR();
+	delay(timing);
+	resetFrontRight();
+	delay(timing);
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Front_Arm[4], 0);
+	delay(timing);
+
+}
+
+void EtchControl::letterNup()
+{
+	resetRearLeft();
+	resetFrontRight();
+	up();
+	delay(timing);
+	resetFrontRight();
+	up();
+	delay(timing);
+	resetFrontLeft();
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Front_Arm[4], 0);
+	delay(timing);
+	diagonalUpLtR();
+	delay(timing);
+	resetFrontRight();
+	delay(timing);
+	down();
+	delay(timing);
+	down();
+	delay(timing);
+	parent->setPosition(parent->Front_Arm[4], 0);
+	delay(timing);
+	
+
+}
+
 void EtchControl::makeSpace()
 {
 	// new letter
 
-	// Release knob
-	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
-	delay(Clawtiming);
-
-	// Rotate wrist
-	parent->setPosition(parent->Rear_Arm[4], 175);
-	delay(timing);
-
-	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
-	delay(Clawtiming);
+	resetRearLeft();
 
 	// Scroll over
-	parent->setPosition(parent->Rear_Arm[4], 14);
+	parent->setPosition(parent->Rear_Arm[4], 110);
 	delay(timing);
 
-	// Release knob
-	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
-	delay(Clawtiming);
-
-	// Rotate wrist
-	parent->setPosition(parent->Rear_Arm[4], 180);
-	delay(timing);
-
-	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
-	delay(Clawtiming);
+	resetRearLeft();
 
 	// Scroll over
-	parent->setPosition(parent->Rear_Arm[4], 14);
+	parent->setPosition(parent->Rear_Arm[4], 110);
 	delay(timing);
 
-	// Release knob
-	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
-	delay(Clawtiming);
-
-	// Rotate wrist
-	parent->setPosition(parent->Rear_Arm[4], 180);
-	delay(timing);
-
-	// Grab knob
-	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
-	delay(Clawtiming);
+	resetRearLeft();
 
 }
 
@@ -137,7 +575,7 @@ void EtchControl::letterEdown()
 
 void EtchControl::down()
 {
-	int rotate = 175;
+	int rotate = 180;
 	if (count == 1)
 	{
 		rotate = 120;
@@ -158,7 +596,7 @@ void EtchControl::down()
 	delay(Clawtiming);
 
 	// Scroll over
-	parent->setPosition(parent->Front_Arm[4], 14);
+	parent->setPosition(parent->Front_Arm[4], 7);
 	delay(timing);
 
 
@@ -185,7 +623,7 @@ void EtchControl::up()
 	delay(Clawtiming);
 
 	// Scroll over
-	parent->setPosition(parent->Front_Arm[4], 14);
+	parent->setPosition(parent->Front_Arm[4], 7);
 	delay(timing);
 
 	// Grab knob
@@ -193,6 +631,93 @@ void EtchControl::up()
 	delay(Clawtiming);
 
 
+}
+void EtchControl::resetRearLeft()
+{
+	// Release knob
+	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
+	delay(Clawtiming);
+
+	// Rotate wrist
+	parent->setPosition(parent->Rear_Arm[4], 180);
+	delay(timing+50);
+
+	// Grab knob
+	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
+	delay(Clawtiming);
+
+}
+
+void EtchControl::resetRearRight()
+{
+	// Release knob
+	parent->setPosition(parent->Rear_Arm[5], openRearGripper);
+	delay(Clawtiming);
+
+	// Rotate wrist
+	parent->setPosition(parent->Rear_Arm[4], 40);
+	delay(timing);
+
+	// Grab knob
+	parent->setPosition(parent->Rear_Arm[5], closeRearGripper);
+	delay(Clawtiming);
+
+}
+
+void EtchControl::resetFrontRight()
+{
+
+	// Release knob
+	parent->setPosition(parent->Front_Arm[5], openFrontGripper);
+	delay(Clawtiming);
+
+	// Rotate wrist
+	parent->setPosition(parent->Front_Arm[4], 0);
+	delay(timing);
+
+	// Grab knob
+	parent->setPosition(parent->Front_Arm[5], closeFrontGripper);
+	delay(Clawtiming);
+
+}
+
+void EtchControl::resetFrontLeft()
+{
+
+	// Release knob
+	parent->setPosition(parent->Front_Arm[5], openFrontGripper);
+	delay(Clawtiming);
+
+	// Rotate wrist
+	parent->setPosition(parent->Front_Arm[4], 175);
+	delay(timing+50);
+
+	// Grab knob
+	parent->setPosition(parent->Front_Arm[5], closeFrontGripper);
+	delay(Clawtiming);
+
+}
+
+void EtchControl::diagonalUpLtR()
+{
+	resetRearLeft();
+	resetFrontRight();
+	//move down the cross part
+	double JusRearStart_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusRearEnd_Move531[6] = { -6, 0.25, -4.4, closeRearGripper, 130, -110 };
+	double JusFrontStart_Move51131[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+	double JusFrontEnd_Move531[6] = { 5.8, 1.6, -4, closeFrontGripper, 112, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
+	//reset arms
+	double JusRearStart_Move889[6] = { -6, 0.25, -4.4, openRearGripper, 130, -110 };
+	double JusRearEnd_Move889[6] = { -6, 0.25, -4.4, closeRearGripper, 180, -110 };
+	double JusFrontStart_Move889[6] = { 5.8, 1.6, -4, openFrontGripper, 112, -104 };
+	double JusFrontEnd_Move889[6] = { 5.8, 1.6, -4, closeFrontGripper, 14, -104 };
+
+	parent->Both_Smooth_Move(JusRearStart_Move889, JusRearEnd_Move889, JusFrontStart_Move889, JusFrontEnd_Move889, 0.5);
+	//finish cross
+	parent->Both_Smooth_Move(JusRearStart_Move531, JusRearEnd_Move531, JusFrontStart_Move51131, JusFrontEnd_Move531, 0.5);
 }
 
 
