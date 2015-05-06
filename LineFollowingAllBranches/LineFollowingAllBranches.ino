@@ -7,7 +7,7 @@
 #include "Adafruit_Light_Sensor\Adafruit_TSL2561_U.h"
 #include "Adafruit_Sensor\Adafruit_Sensor.h"
 #include "Robot.h"
-#include <ArduinoJson.h>
+#include "ArduinoJson.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
@@ -78,19 +78,23 @@ void loop() {
 
 		if (!root.success())
 		{
-			//Serial.println("parseObject() failed");
+			Serial.println("parseObject() failed");
 			return;
 		}
 
 		//
 		// Step 3: Retrieve the values
 		//
-		const double magnitude= root["magnitude"];
-		const double translation = root["translation"];
-		const double rotation = root["rotation"];
-		
-		mecanum.mecRun(magnitude, translation, rotation);
-		
+		const char* id = root["id"];
+		Serial.println(id);
+		if (strcmp(id, "navigation")==0){
+			Serial.println("Inner Loop");
+			const double magnitude = root["magnitude"];
+			const double translation = root["translation"];
+			const double rotation = root["rotation"];
+
+			mecanum.mecRun(magnitude, translation, rotation);
+		}
 	}
 }
 
