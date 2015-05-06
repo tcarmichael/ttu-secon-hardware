@@ -24,8 +24,13 @@ LEDController leds;
 // Controls the arm movements
 ArmControl arm;
 
+char readBuffer[200];
+int readBufferIndex = 0;
+int maxReadBuffer = 200;
+int bracketCount = 0;
+
 void setup() {
-	Serial.begin(115200);
+	Serial.begin(9600);
 	// Used to initialize the LEDs :)
 
 
@@ -60,40 +65,89 @@ void setup() {
 }
 
 void loop() {
-	
-	if (Serial.available() > 0) {
-		
-	//{"magnitude":0.2,"translation":0.0,"rotation":0.0}
-		//
-		// Step 1: Reserve memory space
-		//
-		StaticJsonBuffer<200> jsonBuffer;
-		char json[200];
-		Serial.readBytesUntil('\n', json,200);
-		
-		//
-		// Step 2: Deserialize the JSON string
-		//
-		JsonObject& root = jsonBuffer.parseObject(json);
 
-		if (!root.success())
-		{
-			Serial.println("parseObject() failed");
-			return;
+	//{"id":"nav","m":1.0,"t":0.0,"r":0.0}
+	while (Serial.available() > 0) {
+		char c = Serial.read();
+		Serial.println("input");
+		if (readBufferIndex < maxReadBuffer - 1) {
+			readBuffer[readBufferIndex++] = c;
 		}
 
-		//
-		// Step 3: Retrieve the values
-		//
-		const char* id = root["id"];
-		Serial.println(id);
-		if (strcmp(id, "navigation")==0){
-			Serial.println("Inner Loop");
-			const double magnitude = root["magnitude"];
-			const double translation = root["translation"];
-			const double rotation = root["rotation"];
+		if (c == '{') {
+			bracketCount++;
+		}
+		else if (c == '}') {
+			if (--bracketCount < 1) {
+				bracketCount = 0;
 
-			mecanum.mecRun(magnitude, translation, rotation);
+				if (readBufferIndex < maxReadBuffer) {
+					readBuffer[readBufferIndex++] = 0;
+
+					Serial.println(readBuffer);
+					StaticJsonBuffer<200> jsonBuffer;
+					//char json[50];
+					//	Serial.readBytesUntil('\n', json, 65);
+					//mecanum.mecRun(.2, 0, 0);
+					//
+					// Step 2: Deserialize the JSON string
+					//
+					JsonObject& root = jsonBuffer.parseObject(readBuffer);
+
+					if (!root.success())
+					{
+						Serial.println("parseObject() failed");
+						return;
+					}
+
+					//
+					// Step 3: Retrieve the values
+					//
+					const char* id = root["id"];
+					Serial.println(id);
+					if (strcmp(id, "nav") == 0){
+						Serial.println("Inner Loop");
+						double magnitude = root["m"];
+						double translation = root["t"];
+						double rotation = root["r"];
+
+						mecanum.mecRun(magnitude, translation, rotation);
+					}
+					if (strcmp(id, "etch") == 0)
+					{
+						const char *name = root["etchname"];
+						int count = 0;
+						int number_of_letters = strlen(name);
+						Serial.println(number_of_letters);
+						Serial.println(name);
+							while (count < number_of_letters)
+						{
+							if (count % 2 == 0)
+							{
+								//do even letter functions
+								Serial.println(name[count]);
+								Serial.println("up");
+
+							}
+							if (count % 2 == 1)
+							{
+								//do down letters
+								Serial.println(name[count]);
+								Serial.println("down");
+							}
+							count++;
+						}
+
+
+					}
+
+
+					readBufferIndex = 0;
+					break;
+				}
+			}
+
+			readBufferIndex = 0;
 		}
 	}
 }
