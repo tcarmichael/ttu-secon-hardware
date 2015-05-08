@@ -67,9 +67,10 @@ void setup() {
 void loop() {
 
 	//{"id":"nav","m":1.0,"t":0.0,"r":0.0}
+	//{"id":"etch","etchname":"Savannah"}
 	while (Serial.available() > 0) {
 		char c = Serial.read();
-		Serial.println("input");
+		
 		if (readBufferIndex < maxReadBuffer - 1) {
 			readBuffer[readBufferIndex++] = c;
 		}
